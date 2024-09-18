@@ -7,7 +7,7 @@ A custom version of minicraft for your TI-84 plus CE calculator.
 To install the game on your calculator, you will need to have [TI connect CE](https://education.ti.com/en/products/computer-software/ti-connect-ce-sw) and you also need to install the [CE C 'Standard' Libraries](https://github.com/CE-Programming/libraries/releases/).
 
 # BUILDING
-If you would like to build CALCPONG yourself, be sure you have the latest LLVM [CE C Toolchain](https://github.com/CE-Programming/toolchain/releases/latest) installed.
+If you would like to build MinicraftCE yourself, be sure you have the latest LLVM [CE C Toolchain](https://github.com/CE-Programming/toolchain/releases/latest) installed.
 
 Simply clone or download the repository from above. 
 Don't forget to copy one of the makefiles that belongs to your OS (from the makefiles folder) to the root of the project.
