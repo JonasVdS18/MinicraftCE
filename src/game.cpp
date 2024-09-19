@@ -1,8 +1,13 @@
 #include "game.hpp"
 #include "gfx/gfx.h"
+#include <debug.h>
 #include <graphx.h>
 #include <sys/rtc.h>
 #include <time.h>
+
+// Amount of ticks per second.
+const clock_t TICK_RATE{60};
+const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
 
 Game::Game()
 {
@@ -19,9 +24,7 @@ Game::Game()
 void Game::run()
 {
     clock_t last_clock{clock()};
-    double unprocessed{0};
-    // amount of seconds per tick.
-    const double seconds_per_tick{1 / 60};
+    clock_t clockdiff{0};
     int frames{0};
     int ticks{0};
 
@@ -30,17 +33,16 @@ void Game::run()
     while (running)
     {
         clock_t now_clock{clock()};
-        //((now_clock - last_clock) / CLOCKS_PER_SEC) gives the aount of seconds that have passed
-        unprocessed += ((now_clock - last_clock) / CLOCKS_PER_SEC) / seconds_per_tick;
+        clockdiff += now_clock - last_clock;
         last_clock = now_clock;
 
         bool should_render{false};
 
-        while (unprocessed > 1)
+        while (clockdiff > CLOCKS_PER_TICK)
         {
             ticks++;
             tick();
-            unprocessed -= 1;
+            clockdiff -= CLOCKS_PER_TICK;
             should_render = true;
         }
 
