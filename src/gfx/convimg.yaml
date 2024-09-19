@@ -22,7 +22,7 @@ converts:
     palette: global_palette
     prefix: rlet_
     transparent-color-index: 1
-    mode: rlet
+    style: rlet
     images:
       - logo.png
       - player_back.png
@@ -41,7 +41,7 @@ converts:
     palette: global_palette
     transparent-color-index: 1
     flip-y: true
-    mode: rlet
+    style: rlet
     images:
       - player_back.png
       - player_back_hold
