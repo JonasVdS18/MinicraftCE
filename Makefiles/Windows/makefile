@@ -2,7 +2,7 @@
 # Makefile Options
 # ----------------------------
 
-NAME = MinicraftCE
+NAME = MiniCE
 ICON = icon.png
 DESCRIPTION = "A version of minicraft for your calculator"
 COMPRESSED = YES

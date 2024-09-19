@@ -2,19 +2,46 @@ palettes:
   - name: global_palette
     fixed-entries:
       - color: {index: 0, r: 255, g: 255, b: 255}
-      - color: {index: 1, r: 255, g: 0, b: 128}
-      - color: {index: 2, r: 0, g: 0, b: 0}
-      - color: {index: 3, r: 182, g: 182, b: 182}
+      - color: {index: 1, r: 255, g: 0, b: 128} # transparent color
     images: automatic
 
 converts:
-  - name: sprites
+#  - name: sprites
+#    palette: global_palette
+#    transparent-color-index: 1
+#    images:
+
+#  - name: sprites_flipped
+#    suffix: _flipped
+#    palette: global_palette
+#    transparent-color-index: 1
+#    flip-y: true
+#    images:
+
+  - name: rlet_sprites
     palette: global_palette
+    prefix: rlet_
     transparent-color-index: 1
     images:
-      - Paddle.png
-      - Ballimg.png
-      - Line.png
+      - player_back.png
+      - player_front.png
+      - player_front_hold.png
+      - player_side_0.png
+      - player_side_1.png
+
+
+  - name: rlet_sprites_flipped
+    prefix: rlet_
+    suffix: _flipped
+    palette: global_palette
+    transparent-color-index: 1
+    flip-y: true
+    images:
+      - player_back.png
+      - player_front.png
+      - player_front_hold.png
+      - player_side_0.png
+      - player_side_1.png
 
 outputs:
   - type: c
@@ -22,4 +49,8 @@ outputs:
     palettes:
       - global_palette
     converts:
-      - sprites
+#      - sprites
+#      - sprites_flipped
+      - rlet_sprites
+      - rlet_sprites_flipped
+    const: true
