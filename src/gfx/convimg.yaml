@@ -1,7 +1,7 @@
 palettes:
   - name: global_palette
     fixed-entries:
-      - color: {index: 0, r: 255, g: 255, b: 255}
+      - color: {index: 0, r: 10, g: 10, b: 10} #background color
       - color: {index: 1, r: 255, g: 0, b: 128} # transparent color
     images: automatic
 
@@ -25,6 +25,10 @@ converts:
     style: rlet
     images:
       - logo.png
+      - heart_full
+      - heart_empty
+      - stamina_full
+      - stamina_empty
       - player_back.png
       - player_back_hold
       - player_front.png
