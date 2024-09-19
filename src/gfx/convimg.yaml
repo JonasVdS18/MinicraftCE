@@ -22,12 +22,17 @@ converts:
     palette: global_palette
     prefix: rlet_
     transparent-color-index: 1
+    mode: rlet
     images:
+      - logo.png
       - player_back.png
+      - player_back_hold
       - player_front.png
       - player_front_hold.png
       - player_side_0.png
       - player_side_1.png
+      - player_side_hold_0.png
+      - player_side_hold_1.png
 
 
   - name: rlet_sprites_flipped
@@ -36,12 +41,16 @@ converts:
     palette: global_palette
     transparent-color-index: 1
     flip-y: true
+    mode: rlet
     images:
       - player_back.png
+      - player_back_hold
       - player_front.png
       - player_front_hold.png
       - player_side_0.png
       - player_side_1.png
+      - player_side_hold_0.png
+      - player_side_hold_1.png
 
 outputs:
   - type: c
