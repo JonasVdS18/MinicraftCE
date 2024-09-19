@@ -9,10 +9,10 @@ class Menu
 {
   protected:
     Game* game;
-    input_handler* input;
+    Input_handler* input;
 
   public:
-    Menu(Game* game, input_handler* input);
+    Menu(Game* game, Input_handler* input);
     void tick();
     void render();
 };

@@ -2,7 +2,7 @@
 #include "../game.hpp"
 #include "../input_handler.hpp"
 
-Menu::Menu(Game* game, input_handler* input)
+Menu::Menu(Game* game, Input_handler* input)
 {
     this->input = input;
     this->game = game;
