@@ -4,7 +4,6 @@
 #include "../game.hpp"
 #include "../input_handler.hpp"
 
-// #include "../Game.hpp"
 class Menu
 {
   protected:
@@ -13,7 +12,7 @@ class Menu
 
   public:
     Menu(Game* game, Input_handler* input);
-    void tick();
-    void render();
+    virtual void tick();
+    virtual void render();
 };
 #endif

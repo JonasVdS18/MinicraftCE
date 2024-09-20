@@ -1,5 +1,11 @@
 #include "game.hpp"
+#include "fonts/fonts.c"
 #include "gfx/gfx.h"
+<<<<<<< HEAD
+=======
+#include <debug.h>
+#include <fontlibc.h>
+>>>>>>> 7040248 (created a font and worked on the menus)
 #include <graphx.h>
 #include <sys/rtc.h>
 #include <time.h>
@@ -7,6 +13,11 @@
 // Amount of ticks per second.
 const clock_t TICK_RATE{60};
 const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
+
+void Game::set_menu(Menu* menu)
+{
+    this->menu = menu;
+}
 
 Game::Game()
 {
@@ -58,6 +69,8 @@ void Game::init()
 {
     gfx_Begin();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
+    fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT_data), static_cast<fontlib_load_options_t>(0));
+    fontlib_SetTransparency(true);
     srand(rtc_Time());
 }
 
