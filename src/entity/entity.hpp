@@ -1,13 +1,12 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include "level/level.hpp"
-
 class Mob;
 class Item_entity;
 class Player;
 class Item;
 class Tile;
+class Level;
 
 class Entity
 {

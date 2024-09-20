@@ -1,6 +1,8 @@
 #include "game.hpp"
 #include "fonts/fonts.c"
 #include "gfx/gfx.h"
+#include "screen/menu.hpp"
+#include "screen/title_menu.hpp"
 #include <debug.h>
 #include <fontlibc.h>
 #include <graphx.h>
@@ -13,6 +15,10 @@ const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
 
 void Game::set_menu(Menu* menu)
 {
+    if (menu != NULL)
+    {
+        delete menu;
+    }
     this->menu = menu;
 }
 
@@ -69,6 +75,8 @@ void Game::init()
     fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT_data), static_cast<fontlib_load_options_t>(0));
     fontlib_SetTransparency(true);
     srand(rtc_Time());
+
+    set_menu(new Title_menu(this, input));
 }
 
 void Game::reset()
@@ -92,16 +100,22 @@ void Game::start()
 void Game::stop()
 {
     running = false;
+    delete menu;
 }
 
 void Game::tick()
 {
     tick_count++;
     input->tick();
+    if (menu != NULL)
+    {
+        menu->tick();
+    }
 }
 
 void Game::render()
 {
+    render_GUI();
 }
 
 void Game::schedule_level_change(int dir)
@@ -117,4 +131,8 @@ void Game::won()
 
 void Game::render_GUI()
 {
+    if (menu != NULL)
+    {
+        menu->render();
+    }
 }

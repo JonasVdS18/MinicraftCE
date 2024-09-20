@@ -1,8 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
-#include "screen/menu.hpp"
 
 #include "input_handler.hpp"
+
+class Menu;
 
 class Game
 {

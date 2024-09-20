@@ -1,6 +1,7 @@
 #include "entity.hpp"
 #include "item/item.hpp"
 #include "item_entity.hpp"
+#include "level/level.hpp"
 #include "level/tile/tile.hpp"
 #include "mob.hpp"
 #include "player.hpp"
