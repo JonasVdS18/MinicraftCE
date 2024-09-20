@@ -2,12 +2,12 @@
 #define ENTITY_HPP
 
 #include "level/level.hpp"
-#include "level/tile/tile.hpp"
 
 class Mob;
 class Item_entity;
 class Player;
 class Item;
+class Tile;
 
 class Entity
 {
