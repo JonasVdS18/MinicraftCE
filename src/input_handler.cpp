@@ -44,6 +44,7 @@ void Input_handler::tick()
     right->toggle(kb_IsDown(kb_KeyRight));
     attack->toggle(kb_IsDown(kb_Key2nd));
     up->toggle(kb_IsDown(kb_KeyAlpha));
+    quit->toggle(kb_IsDown(kb_KeyDel));
 
     up->tick();
     down->tick();
@@ -51,4 +52,5 @@ void Input_handler::tick()
     right->tick();
     attack->tick();
     menu->tick();
+    quit->tick();
 }

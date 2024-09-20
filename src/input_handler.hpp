@@ -22,6 +22,7 @@ class Input_handler
     Key* right;
     Key* attack;
     Key* menu;
+    Key* quit;
 
     Input_handler();
     void tick();
