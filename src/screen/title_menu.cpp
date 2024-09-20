@@ -6,9 +6,6 @@
 // Call the Menu constructor in the initializer list
 Title_menu::Title_menu(Game* game, Input_handler* input) : Menu(game, input), selected{0}
 {
-    options[0] = "Start game";
-    options[1] = "How to play";
-    options[2] = "About";
 }
 
 void Title_menu::tick()
