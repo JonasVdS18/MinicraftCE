@@ -1,6 +1,5 @@
 #include "game.hpp"
 #include "gfx/gfx.h"
-#include <debug.h>
 #include <graphx.h>
 #include <sys/rtc.h>
 #include <time.h>
@@ -19,6 +18,7 @@ Game::Game()
     wontimer = 0;
     has_won = false;
     current_level = 3;
+    input = new Input_handler();
 }
 
 void Game::run()
@@ -86,6 +86,8 @@ void Game::stop()
 
 void Game::tick()
 {
+    tick_count++;
+    input->tick();
 }
 
 void Game::render()

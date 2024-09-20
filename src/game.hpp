@@ -1,11 +1,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "input_handler.hpp"
+
 class Game
 {
   public:
     int game_time;
     bool has_won;
+
     Game();
     void run();
     void reset();
@@ -23,6 +26,8 @@ class Game
     int pending_level_change;
     int wontimer;
     int current_level;
+    Input_handler* input;
+
     void init();
     void render_GUI();
 };
