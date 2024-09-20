@@ -72,14 +72,15 @@ void Game::run()
 void Game::init()
 {
     gfx_Begin();
+    gfx_SetDrawBuffer();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
     fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT), static_cast<fontlib_load_options_t>(0));
     fontlib_SetTransparency(true);
+    fontlib_SetLineSpacing(1, 1);
+    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
     srand(rtc_Time());
 
-    static Title_menu* title_menu{new Title_menu(this, input)};
-
-    set_menu(title_menu);
+    set_menu(new Title_menu(this, input));
 }
 
 void Game::reset()
@@ -127,7 +128,11 @@ void Game::tick()
 
 void Game::render()
 {
+    gfx_ZeroScreen();
+
     render_GUI();
+
+    gfx_SwapDraw();
 }
 
 void Game::schedule_level_change(int dir)

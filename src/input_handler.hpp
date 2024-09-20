@@ -3,8 +3,10 @@
 
 class Key
 {
+  private:
+    bool clickable;
+
   public:
-    int presses, absorbs; // presses determine how long you held it down, absorbs will determined if you clicked
     bool down, clicked;
     Key();
     ~Key() = default;

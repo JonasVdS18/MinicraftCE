@@ -3,34 +3,30 @@
 
 Key::Key()
 {
-    presses = 0;
-    absorbs = 0;
-    down = false;
-    clicked = false;
+    this->clicked = false;
+    this->down = false;
+    this->clickable = true;
 }
 
 void Key::toggle(bool pressed)
 {
-    if (pressed != down)
-    {
-        down = pressed; // If the key is being pressed, then down is true.
-    }
-    if (pressed)
-    {
-        presses++;
-    }
+    down = pressed;
 }
 void Key::tick()
 {
 
-    if (absorbs < presses)
-    {
-        absorbs++;
-        clicked = true;
-    }
-    else
+    if (down && clicked)
     {
         clicked = false;
+    }
+    if (down && clickable)
+    {
+        clicked = true;
+        clickable = false;
+    }
+    if (!down)
+    {
+        clickable = true;
     }
 }
 
