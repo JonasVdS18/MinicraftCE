@@ -9,11 +9,7 @@ class Game
   public:
     int game_time;
     bool has_won;
-<<<<<<< HEAD
-
-=======
     Menu* menu;
->>>>>>> 7040248 (created a font and worked on the menus)
     Game();
     void set_menu(Menu* menu);
     void run();

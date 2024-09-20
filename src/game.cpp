@@ -1,11 +1,8 @@
 #include "game.hpp"
 #include "fonts/fonts.c"
 #include "gfx/gfx.h"
-<<<<<<< HEAD
-=======
 #include <debug.h>
 #include <fontlibc.h>
->>>>>>> 7040248 (created a font and worked on the menus)
 #include <graphx.h>
 #include <sys/rtc.h>
 #include <time.h>
