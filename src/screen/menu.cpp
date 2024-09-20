@@ -7,3 +7,11 @@ Menu::Menu(Game* game, Input_handler* input)
     this->input = input;
     this->game = game;
 }
+
+void Menu::tick()
+{
+}
+
+void Menu::render()
+{
+}

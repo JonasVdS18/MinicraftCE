@@ -1,9 +1,8 @@
 #include "game.hpp"
-#include "fonts/fonts.c"
+#include "fonts/fonts.h"
 #include "gfx/gfx.h"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
-#include <debug.h>
 #include <fontlibc.h>
 #include <graphx.h>
 #include <sys/rtc.h>
@@ -15,9 +14,9 @@ const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
 
 void Game::set_menu(Menu* menu)
 {
-    if (menu != NULL)
+    if (this->menu != NULL)
     {
-        delete menu;
+        delete this->menu;
     }
     this->menu = menu;
 }
@@ -33,6 +32,7 @@ Game::Game()
     has_won = false;
     current_level = 3;
     input = new Input_handler();
+    menu = NULL;
 }
 
 void Game::run()
@@ -46,6 +46,7 @@ void Game::run()
 
     while (running)
     {
+
         clock_t now_clock{clock()};
         clockdiff += now_clock - last_clock;
         last_clock = now_clock;
@@ -72,11 +73,13 @@ void Game::init()
 {
     gfx_Begin();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
-    fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT_data), static_cast<fontlib_load_options_t>(0));
+    fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT), static_cast<fontlib_load_options_t>(0));
     fontlib_SetTransparency(true);
     srand(rtc_Time());
 
-    set_menu(new Title_menu(this, input));
+    static Title_menu* title_menu{new Title_menu(this, input)};
+
+    set_menu(title_menu);
 }
 
 void Game::reset()
@@ -100,13 +103,22 @@ void Game::start()
 void Game::stop()
 {
     running = false;
-    delete menu;
+    gfx_End();
+    if (menu != NULL)
+    {
+        delete menu;
+    }
+    delete input;
 }
 
 void Game::tick()
 {
     tick_count++;
     input->tick();
+    if (input->quit->clicked)
+    {
+        stop();
+    }
     if (menu != NULL)
     {
         menu->tick();

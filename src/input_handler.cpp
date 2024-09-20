@@ -1,4 +1,13 @@
 #include "input_handler.hpp"
+#include <keypadc.h>
+
+Key::Key()
+{
+    presses = 0;
+    absorbs = 0;
+    down = false;
+    clicked = false;
+}
 
 void Key::toggle(bool pressed)
 {
@@ -13,6 +22,7 @@ void Key::toggle(bool pressed)
 }
 void Key::tick()
 {
+
     if (absorbs < presses)
     {
         absorbs++;
@@ -32,6 +42,7 @@ Input_handler::Input_handler()
     right = new Key();
     attack = new Key();
     menu = new Key();
+    quit = new Key();
 }
 
 void Input_handler::tick()
@@ -43,7 +54,7 @@ void Input_handler::tick()
     left->toggle(kb_IsDown(kb_KeyLeft));
     right->toggle(kb_IsDown(kb_KeyRight));
     attack->toggle(kb_IsDown(kb_Key2nd));
-    up->toggle(kb_IsDown(kb_KeyAlpha));
+    menu->toggle(kb_IsDown(kb_KeyAlpha));
     quit->toggle(kb_IsDown(kb_KeyDel));
 
     up->tick();

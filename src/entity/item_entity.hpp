@@ -3,7 +3,7 @@
 
 #include "entity.hpp"
 
-class Item_entity : Entity
+class Item_entity : public Entity
 {
 };
 #endif

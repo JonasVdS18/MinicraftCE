@@ -1,9 +1,9 @@
 #ifndef TILE_HPP
 #define TILE_HPP
-#include "entity/entity.hpp"
-#include "entity/mob.hpp"
-#include "entity/player.hpp"
-#include "level/level.hpp"
+#include "../../entity/entity.hpp"
+#include "../../entity/mob.hpp"
+#include "../../entity/player.hpp"
+#include "../level.hpp"
 #include <stdint.h>
 
 class Tile

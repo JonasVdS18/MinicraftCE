@@ -1,6 +1,6 @@
 #include "item.hpp"
-#include "entity/entity.hpp"
-#include "entity/player.hpp"
+#include "../entity/entity.hpp"
+#include "../entity/player.hpp"
 
 void Item::render_inventory(int x, int y)
 {

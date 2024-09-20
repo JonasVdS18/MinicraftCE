@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include "input_handler.hpp"
+#include "screen/menu.hpp"
 
 class Menu;
 

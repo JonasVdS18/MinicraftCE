@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include <keypadc.h>
 
 int main()
 {

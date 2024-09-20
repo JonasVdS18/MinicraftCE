@@ -6,6 +6,14 @@
 #include "mob.hpp"
 #include "player.hpp"
 
+void Entity::render()
+{
+}
+
+void Entity::tick()
+{
+}
+
 void Entity::remove()
 {
     removed = true;
@@ -35,6 +43,14 @@ bool Entity::blocks(Entity* e)
     return false;
 }
 
+void Entity::hurt(Mob* mob, int dmg, int attack_dir)
+{
+}
+
+void Entity::hurt(Tile* tile, int x, int y, int dmg)
+{
+}
+
 bool Entity::move(int xa, int ya)
 {
     // has to be implemented
@@ -48,6 +64,10 @@ bool Entity::move2(int xa, int ya)
 bool Entity::is_blockable_by(Mob* mob)
 {
     return true;
+}
+
+void Entity::touch_item(Item_entity* item_entity)
+{
 }
 
 bool Entity::can_swim()

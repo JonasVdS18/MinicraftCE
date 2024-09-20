@@ -1,5 +1,7 @@
 #include "title_menu.hpp"
-#include "gfx/gfx.h"
+#include "../game.hpp"
+#include "../gfx/gfx.h"
+#include "../input_handler.hpp"
 #include <fontlibc.h>
 #include <graphx.h>
 
@@ -32,7 +34,7 @@ void Title_menu::tick()
 void Title_menu::render()
 {
     gfx_RLETSprite_NoClip(rlet_logo, (GFX_LCD_WIDTH - rlet_logo_width) / 2, 24);
-    fontlib_SetWindow(0, (24 + rlet_logo_width), GFX_LCD_WIDTH, (GFX_LCD_HEIGHT - 24 + rlet_logo_width));
+    fontlib_SetWindow(0, (24 + rlet_logo_width), GFX_LCD_WIDTH, (GFX_LCD_HEIGHT - (24 + rlet_logo_width)));
     switch (selected)
     {
     case 0:

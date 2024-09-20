@@ -1,9 +1,9 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
-#include "entity/entity.hpp"
-#include "entity/player.hpp"
-#include "screen/list_item.hpp"
+#include "../entity/entity.hpp"
+#include "../entity/player.hpp"
+#include "../screen/list_item.hpp"
 
 class Item : public List_item
 {

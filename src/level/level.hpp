@@ -1,7 +1,7 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include "entity/entity.hpp"
+#include "../entity/entity.hpp"
 #include <stdint.h>
 
 class Level
