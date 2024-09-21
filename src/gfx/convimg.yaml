@@ -5,6 +5,7 @@ palettes:
       - color: {index: 1, r: 255, g: 0, b: 128} # transparent color
       - color: {index: 2, r: 240, g: 240, b: 240} # text white color
       - color: {index: 3, r: 102, g: 102, b: 102} # text grey color
+      - color: {index: 4, r: 154, g: 154, b: 154} # text grey/white color
     images: automatic
 
 converts:

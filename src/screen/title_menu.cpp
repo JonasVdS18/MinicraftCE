@@ -2,6 +2,8 @@
 #include "../game.hpp"
 #include "../gfx/gfx.h"
 #include "../input_handler.hpp"
+#include "about_menu.hpp"
+#include "instructions_menu.hpp"
 #include "menu.hpp"
 #include <fontlibc.h>
 #include <graphx.h>
@@ -40,6 +42,15 @@ void Title_menu::tick()
         {
             game->reset();
             game->set_menu(NULL);
+        }
+
+        if (selected == 1)
+        {
+            game->set_menu(new Instructions_menu(this->game, this->input));
+        }
+        if (selected == 2)
+        {
+            game->set_menu(new About_menu(this->game, this->input));
         }
     }
 }
@@ -86,5 +97,8 @@ void Title_menu::render()
     default:
         break;
     }
+    fontlib_SetColors(3, 0);
+    fontlib_SetCursorPosition(0, GFX_LCD_HEIGHT - fontlib_GetCurrentFontHeight());
+    fontlib_DrawString("(D-PAD, 2ND, ALPHA)");
     gfx_RLETSprite_NoClip(rlet_logo, (GFX_LCD_WIDTH - rlet_logo_width) / 2, 48);
 }
