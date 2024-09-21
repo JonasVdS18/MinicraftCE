@@ -8,10 +8,11 @@ palettes:
     images: automatic
 
 converts:
-#  - name: sprites
-#    palette: global_palette
-#    transparent-color-index: 1
-#    images:
+  - name: sprites
+    palette: global_palette
+    transparent-color-index: 1
+    images:
+      - tile_placeholder
 
 #  - name: sprites_flipped
 #    suffix: _flipped
@@ -64,7 +65,7 @@ outputs:
     palettes:
       - global_palette
     converts:
-#      - sprites
+      - sprites
 #      - sprites_flipped
       - rlet_sprites
       - rlet_sprites_flipped
