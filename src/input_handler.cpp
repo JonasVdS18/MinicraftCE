@@ -41,6 +41,17 @@ Input_handler::Input_handler()
     quit = new Key();
 }
 
+Input_handler::~Input_handler()
+{
+    delete up;
+    delete down;
+    delete left;
+    delete right;
+    delete attack;
+    delete menu;
+    delete quit;
+}
+
 void Input_handler::tick()
 {
     kb_Scan();

@@ -35,6 +35,12 @@ Game::Game()
     menu = NULL;
 }
 
+Game::~Game()
+{
+    delete menu;
+    delete input;
+}
+
 void Game::run()
 {
     clock_t last_clock{clock()};
@@ -104,12 +110,6 @@ void Game::start()
 void Game::stop()
 {
     running = false;
-    gfx_End();
-    if (menu != NULL)
-    {
-        delete menu;
-    }
-    delete input;
 }
 
 void Game::tick()

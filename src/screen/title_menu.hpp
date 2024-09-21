@@ -13,7 +13,7 @@ class Title_menu : public Menu
 
   public:
     Title_menu(Game* game, Input_handler* input);
-    virtual ~Title_menu() = default;
+    virtual ~Title_menu();
     void tick() override;
     void render() override;
 };

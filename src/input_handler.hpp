@@ -27,7 +27,7 @@ class Input_handler
     Key* quit;
 
     Input_handler();
-    ~Input_handler() = default;
+    ~Input_handler();
     void tick();
 };
 

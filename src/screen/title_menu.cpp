@@ -19,6 +19,10 @@ Title_menu::Title_menu(Game* game, Input_handler* input) : Menu(game, input), se
 {
 }
 
+Title_menu::~Title_menu()
+{
+}
+
 void Title_menu::tick()
 {
     if (input->up->clicked && selected > 0)

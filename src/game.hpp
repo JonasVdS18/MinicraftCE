@@ -13,7 +13,7 @@ class Game
     bool has_won;
     Menu* menu;
     Game();
-    ~Game() = default;
+    ~Game();
     void set_menu(Menu* menu);
     void run();
     void reset();
