@@ -82,8 +82,5 @@ void Title_menu::render()
     default:
         break;
     }
-    fontlib_SetColors(3, 0);
-    fontlib_SetCursorPosition(0, GFX_LCD_HEIGHT - fontlib_GetCurrentFontHeight());
-    fontlib_DrawString("(ARROW KEYS, 2ND AND ALPHA)");
     gfx_RLETSprite_NoClip(rlet_logo, (GFX_LCD_WIDTH - rlet_logo_width) / 2, 48);
 }
