@@ -40,7 +40,13 @@ void About_menu::render()
     fontlib_Newline();
     fontlib_DrawString("DECEMBER 2011.");
     fontlib_Newline();
-    fontlib_DrawString("IT IS DEDICATED TO");
+    fontlib_DrawString("IT IS PORTED TO");
     fontlib_Newline();
-    fontlib_DrawString("MY FATHER <3");
+    fontlib_DrawString("THE TI-84 CALCULATOR");
+    fontlib_Newline();
+    fontlib_DrawString("BY JONASVDS18 AND");
+    fontlib_Newline();
+    fontlib_DrawString("WOLFVDS. IT IS");
+    fontlib_Newline();
+    fontlib_DrawString("AVAILABLE AT GITHUB.");
 }
