@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "fonts/fonts.h"
 #include "gfx/gfx.h"
+#include "level/level.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
 #include <fontlibc.h>
@@ -33,12 +34,14 @@ Game::Game()
     current_level = 3;
     input = new Input_handler();
     menu = NULL;
+    level = NULL;
 }
 
 Game::~Game()
 {
     delete menu;
     delete input;
+    delete level;
 }
 
 void Game::run()
@@ -99,6 +102,9 @@ void Game::reset()
     wontimer = 0;
     has_won = false;
     current_level = 3;
+
+    // placeholder level
+    level = new Level(16, 16, 0, NULL);
 }
 
 void Game::start()
@@ -120,9 +126,18 @@ void Game::tick()
     {
         stop();
     }
+
     if (menu != NULL)
     {
         menu->tick();
+    }
+    else
+    {
+        if (level != NULL)
+        {
+            level->tick();
+        }
+        Tile::tick_count++;
     }
 }
 
@@ -130,6 +145,10 @@ void Game::render()
 {
     gfx_ZeroScreen();
 
+    if (level != NULL)
+    {
+        level->render_background(-16, -16);
+    }
     render_GUI();
 
     gfx_SwapDraw();

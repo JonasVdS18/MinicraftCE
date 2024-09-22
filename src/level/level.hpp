@@ -26,6 +26,7 @@ class Level
     Player* player;
 
     Level(int width, int height, int level, Level* parent_level);
+    ~Level();
 
     void render_background(int x_scroll, int y_scroll);
     Tile* get_tile(int x, int y);

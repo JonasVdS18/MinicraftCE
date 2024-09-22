@@ -20,8 +20,8 @@ class Item : public List_item
     // boolean interactOn(Tile tile, Level level, int xt, int yt, Player player, int attackDir)
     virtual bool is_depleted();
     virtual bool can_attack();
-    virtual int getAttackDamageBonus(Entity entity);
+    virtual int getAttackDamageBonus(Entity* entity);
     virtual const char* get_name();
-    virtual bool matches(Item item);
+    virtual bool matches(Item* item);
 };
 #endif

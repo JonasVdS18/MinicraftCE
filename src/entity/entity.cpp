@@ -69,6 +69,10 @@ bool Entity::move2(int xa, int ya)
     // has to be implemented
 }
 
+void Entity::touched_by(Entity* entity)
+{
+}
+
 bool Entity::is_blockable_by(Mob* mob)
 {
     return true;

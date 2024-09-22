@@ -37,7 +37,7 @@ bool Item::can_attack()
     return false;
 }
 
-int getAttackDamageBonus(Entity entity)
+int getAttackDamageBonus(Entity* entity)
 {
     return 0;
 }
@@ -47,7 +47,7 @@ const char* Item::get_name()
     return static_cast<const char*>("");
 }
 
-bool Item::matches(Item item)
+bool Item::matches(Item* item)
 {
-    return this->get_name() == item.get_name();
+    return this->get_name() == item->get_name();
 }

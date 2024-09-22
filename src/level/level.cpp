@@ -28,8 +28,23 @@ Level::Level(int width, int height, int level, Level* parent_level)
     }
     else
     {
+        /*
         tiles = NULL;
-        data = NULL;
+        data = NULL;*/
+
+        // placeholder level
+        tiles = new uint8_t[width * height];
+        data = new uint8_t[width * height];
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int i = x + y * width;
+                tiles[i] = Tile::rock->id;
+                data[i] = 0;
+            }
+        }
     }
 
     entities_in_tiles = new Linked_list<Entity>*[width * height]();
@@ -43,6 +58,26 @@ Level::Level(int width, int height, int level, Level* parent_level)
     // Air Wizard code needs to be implemented.
 }
 
+Level::~Level()
+{
+    if (entities != nullptr)
+    {
+        delete entities;
+    }
+    if (tiles != nullptr)
+    {
+        delete[] tiles;
+    }
+    if (data != nullptr)
+    {
+        delete[] data;
+    }
+    if (entities_in_tiles != nullptr)
+    {
+        delete[] entities_in_tiles;
+    }
+}
+
 /* This method renders all the tiles in the game */
 void Level::render_background(int x_scroll, int y_scroll)
 {
@@ -51,11 +86,13 @@ void Level::render_background(int x_scroll, int y_scroll)
     int w = (GFX_LCD_WIDTH + 31) >> 5;  // width of the screen being rendered in tile coordinates
     int h = (GFX_LCD_HEIGHT + 31) >> 5; // height of the screen being rendered in tile coordinates
     for (int y = yo; y <= h + yo; y++)
-    { // loops through the vertical positions
+    {
         for (int x = xo; x <= w + xo; x++)
-        { // loops through the horizontal positions
+        {
             // x * 32 - x_scroll is the screen coordinate.
-            get_tile(x, y)->render(this, x * 32 - x_scroll, y * 32 - y_scroll); // renders the tile on the screen
+            get_tile(x, y)->render(
+                this, x * 32 - x_scroll,
+                y * 32 - y_scroll); // renders the tile on the screen using screen cooridinates not tile coordinates.
         }
     }
 }
@@ -159,7 +196,7 @@ void Level::try_spawn(int count)
             min_level = max_level = 4;
         }
         // Not max_level - min_level + 1, because randInt is inclusive.
-        int lvl{static_cast<int>(0, max_level - min_level) + min_level};
+        int lvl{static_cast<int>(randInt(0, max_level - min_level) + min_level)};
         if (randInt(0, 1) == 0)
         {
             mob = new Slime(lvl);

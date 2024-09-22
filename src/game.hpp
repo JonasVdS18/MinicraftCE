@@ -5,6 +5,7 @@
 #include "screen/menu.hpp"
 
 class Menu;
+class Level;
 
 class Game
 {
@@ -26,6 +27,7 @@ class Game
 
   private:
     bool running;
+    Level* level;
     int tick_count;
     int player_dead_time;
     int pending_level_change;
