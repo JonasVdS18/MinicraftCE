@@ -51,11 +51,11 @@ bool Entity::blocks(Entity* entity)
     return false;
 }
 
-void Entity::hurt(Mob* mob, int dmg, int attack_dir)
+void Entity::hurt(Mob* mob, int damage, int attack_dir)
 {
 }
 
-void Entity::hurt(Tile* tile, int x, int y, int dmg)
+void Entity::hurt(Tile* tile, int x, int y, int damage)
 {
 }
 

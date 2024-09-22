@@ -28,8 +28,8 @@ class Entity
     // Checks if the entity intersects 4 points
     virtual bool intersects(int x0, int y0, int x1, int y1);
     virtual bool blocks(Entity* entity);
-    virtual void hurt(Mob* mob, int dmg, int attack_dir);
-    virtual void hurt(Tile* tile, int x, int y, int dmg);
+    virtual void hurt(Mob* mob, int damage, int attack_dir);
+    virtual void hurt(Tile* tile, int x, int y, int damage);
     virtual bool move(int xa, int ya);
     virtual bool move2(int xa, int ya);
     virtual bool is_blockable_by(Mob* mob);

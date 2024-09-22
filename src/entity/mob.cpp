@@ -47,12 +47,113 @@ bool Mob::move(int xa, int ya)
     if (is_swimming())
     {
         swim_timer++;
-        if ((swim_timer % 2) == 0)
+        if ((swim_timer % 2) == 0) // halves the swim speed by only moving half the time
         {
-            swim_timer = 2;
             return true;
         }
     }
+    if (x_knockback < 0)
+    {
+        move2(-1, 0);
+        x_knockback++; // increases so it reaches 0 and the mob will not be knocked back any further;
+    }
+    if (x_knockback > 0)
+    {
+        move2(1, 0);
+        x_knockback--;
+    }
+    if (y_knockback < 0)
+    {
+        move2(0, -1);
+        y_knockback++;
+    }
+    if (x_knockback > 0)
+    {
+        move2(0, 1);
+        y_knockback--;
+    }
+
+    if (hurt_time > 0) // If we have been hurt recently and haven't yet cooled down, don't continue with the movement
+                       // (so only knockback will be performed)
+    {
+        return true;
+    }
+
+    if (xa != 0 || ya != 0) // Only if horizontal or vertical movement is actually happening
+    {
+        walk_dist++;
+        if (xa < 0)
+            dir = 2; // Set the mob's direction based on movement: left
+        if (xa > 0)
+            dir = 3; // right
+        if (ya < 0)
+            dir = 1; // up
+        if (ya > 0)
+            dir = 0; // down
+    }
+
+    return Entity::move(xa, ya);
+}
+
+bool Mob::is_swimming()
+{
+    Tile* tile = level->get_tile(x >> 5, y >> 5);
+    return (tile == Tile::water || tile == Tile::lava);
+}
+
+bool Mob::blocks(Entity* entity)
+{
+    return entity->is_blockable_by(this);
+}
+
+void Mob::hurt(Mob* mob, int damage, int attack_dir)
+{
+    do_hurt(damage, attack_dir);
+}
+
+void Mob::hurt(Tile* tile, int x, int y, int damage)
+{
+    uint8_t attack_dir =
+        dir ^ 1; // Set attackDir to our own direction, inverted. XORing it with 1 flips the rightmost bit in the
+                 // variable, this effectively adds one when even, and subtracts one when odd
+    do_hurt(damage, attack_dir);
+}
+
+void Mob::heal(uint8_t heal)
+{
+    if (hurt_time > 0)
+    {
+        return;
+    }
+
+    //!!!!!!!!!! level->add(new Text_particle("" + heal, x, y, green));
+
+    health += heal;
+    if (health > maxhealth)
+    {
+        health = maxhealth;
+    }
+}
+
+void Mob::do_hurt(uint8_t damage, uint8_t attack_dir)
+{
+    if (hurt_time > 0)
+    {
+        return;
+    }
+
+    //!!!!!!!!!! level->add(new TextParticle("" + damage, x, y, red));
+
+    health -= damage;
+    if (attack_dir == 0)
+        y_knockback = 6; // If the direction is downwards, add positive vertical knockback
+    if (attack_dir == 1)
+        y_knockback = -6; // If the direction is upwards, add negative vertical knockback
+    if (attack_dir == 2)
+        x_knockback = -6; // If the direction is to the left, add negative horizontal knockback
+    if (attack_dir == 3)
+        x_knockback = 6; // If the direction is to the right, add positive horizontal knockback
+    hurt_time = 10;      // Set a delay before we can be hurt again
 }
 
 bool Mob::find_start_pos(Level* level)

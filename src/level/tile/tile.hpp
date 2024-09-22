@@ -15,6 +15,7 @@ class Tile
     static int tick_count;
     static Tile* tiles[256];
     static Tile* rock;
+    static Tile* water;
     static Tile* lava;
 
     const uint8_t id;
@@ -29,7 +30,7 @@ class Tile
     virtual void render(Level* level, int x, int y);
     virtual bool may_pass(Level* level, int x, int y, Entity* e);
     virtual int get_light_radius(Level* level, int x, int y);
-    virtual void hurt(Level* level, int x, int y, Mob* source, int dmg, int attack_dir);
+    virtual void hurt(Level* level, int x, int y, Mob* source, int damage, int attack_dir);
     virtual void bumped_into(Level* level, int xt, int yt, Entity* entity);
     virtual void tick(Level* level, int xt, int yt);
     virtual void stepped_on(Level* level, int xt, int yt, Entity* entity);
