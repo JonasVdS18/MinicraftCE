@@ -18,10 +18,10 @@ class Mob : public Entity
     virtual void do_hurt(uint8_t damage, uint8_t attack_dir);
 
   public:
-    int hurt_time;
+    uint128_t hurt_time;
     uint8_t maxhealth;
     uint8_t health;
-    int swim_timer;
+    uint8_t swim_timer;
     int tick_time;
     Mob();
     ~Mob();

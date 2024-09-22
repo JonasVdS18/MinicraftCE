@@ -1,15 +1,58 @@
 #include "mob.hpp"
 #include "../entity/player.hpp"
 #include "../level/level.hpp"
+#include "../level/tile/tile.hpp"
 #include <sys/util.h>
 
 class Level;
 
-Mob::Mob() : Mob::Entity()
+Mob::Mob()
+    : Mob::Entity(), walk_dist{0}, dir{0}, hurt_time{0}, x_knockback{0}, y_knockback{0}, maxhealth{10},
+      health{maxhealth}, swim_timer{0}, tick_time{0}
 {
-    x = y = 8;
+    x = 8;
+    y = 8;
     radius_x = 4;
     radius_y = 3;
+}
+
+Mob::~Mob()
+{
+}
+
+void Mob::tick()
+{
+    tick_time++;
+    if (level->get_tile(x >> 5, y >> 5) == Tile::lava) // >> 5 = divides by 32
+    {
+        hurt(this, 4, dir ^ 1);
+    }
+    if (health <= 0)
+    {
+        die();
+    }
+    if (hurt_time > 0)
+    {
+        hurt_time--;
+    }
+}
+
+void Mob::die()
+{
+    remove();
+}
+
+bool Mob::move(int xa, int ya)
+{
+    if (is_swimming())
+    {
+        swim_timer++;
+        if ((swim_timer % 2) == 0)
+        {
+            swim_timer = 2;
+            return true;
+        }
+    }
 }
 
 bool Mob::find_start_pos(Level* level)

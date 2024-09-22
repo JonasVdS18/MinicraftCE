@@ -12,9 +12,10 @@ class Item;
 class Tile
 {
   public:
-    static int tickCount;
+    static int tick_count;
     static Tile* tiles[256];
     static Tile* rock;
+    static Tile* lava;
 
     const uint8_t id;
 
