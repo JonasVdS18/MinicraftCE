@@ -40,6 +40,7 @@ void About_menu::render()
     fontlib_Newline();
     fontlib_DrawString("DECEMBER 2011.");
     fontlib_Newline();
+    fontlib_Newline();
     fontlib_DrawString("IT IS PORTED TO");
     fontlib_Newline();
     fontlib_DrawString("THE TI-84 CALCULATOR");
