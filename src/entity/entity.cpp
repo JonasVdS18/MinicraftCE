@@ -6,21 +6,12 @@
 #include "mob.hpp"
 #include "player.hpp"
 
-Entity::Entity()
+Entity::Entity() : x{0}, y{0}, radius_x{6}, radius_y{6}, removed{false}, level{NULL}
 {
-<<<<<<< HEAD
-    x = 0;
-    y = 0;
-    radius_x = 6;
-    radius_y = 6;
-    removed = false;
-    level = NULL;
-=======
 }
 
 Entity::~Entity()
 {
->>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
 }
 
 void Entity::render()

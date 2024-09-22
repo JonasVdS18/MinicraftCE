@@ -3,17 +3,12 @@
 
 #include "../level/level.hpp"
 #include "entity.hpp"
-#include <stdint.h>s
+#include <stdint.h>
 
 class Level;
 
 class Mob : public Entity
 {
-<<<<<<< HEAD
-  public:
-    Mob();
-    bool find_start_pos(Level* level);
-=======
   protected:
     int walk_dist;
     uint8_t dir;
@@ -37,7 +32,6 @@ class Mob : public Entity
     virtual void hurt(Tile* tile, int x, int y, int dmg) override;
     virtual void heal(uint8_t heal);
     virtual bool find_start_pos(Level* level);
->>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
 };
 
 #endif

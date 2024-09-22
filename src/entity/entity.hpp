@@ -19,14 +19,8 @@ class Entity
     int radius_x, radius_y;
     bool removed;
     Level* level;
-<<<<<<< HEAD
-
-    Entity();
-
-=======
     Entity();
     virtual ~Entity();
->>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
     virtual void render();
     virtual void tick();
     virtual void remove();

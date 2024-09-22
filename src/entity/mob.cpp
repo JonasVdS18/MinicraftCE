@@ -1,5 +1,4 @@
 #include "mob.hpp"
-<<<<<<< HEAD
 #include "../entity/player.hpp"
 #include "../level/level.hpp"
 #include <sys/util.h>
@@ -43,25 +42,4 @@ bool Mob::find_start_pos(Level* level)
     }
 
     return false;
-=======
-#include "../level/level.hpp"
-
-Mob::Mob()
-    : walk_dist{0}, dir{0}, hurt_time{0}, x_knockback{0}, y_knockback(0), maxhealth{10}, health{maxhealth},
-      swim_timer{0}, tick_time{0}
-{
-    x = 8;
-    y = 8;
-    radius_x = 4;
-    radius_y = 3;
-}
-Mob::~Mob()
-{
-}
-
-void Mob::tick()
-{
-    tick_time++;
-    if (level.)
->>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
 }
