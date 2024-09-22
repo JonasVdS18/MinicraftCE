@@ -1,16 +1,20 @@
 #ifndef TILE_HPP
 #define TILE_HPP
-#include "../../entity/entity.hpp"
-#include "../../entity/mob.hpp"
-#include "../../entity/player.hpp"
-#include "../level.hpp"
+
 #include <stdint.h>
+
+class Entity;
+class Level;
+class Mob;
+class Player;
+class Item;
 
 class Tile
 {
   public:
     static int tickCount;
     static Tile* tiles[256];
+    static Tile* rock;
 
     const uint8_t id;
 

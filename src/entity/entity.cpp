@@ -6,6 +6,16 @@
 #include "mob.hpp"
 #include "player.hpp"
 
+Entity::Entity()
+{
+    x = 0;
+    y = 0;
+    radius_x = 6;
+    radius_y = 6;
+    removed = false;
+    level = NULL;
+}
+
 void Entity::render()
 {
 }

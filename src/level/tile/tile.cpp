@@ -3,18 +3,21 @@
 #include "../../entity/mob.hpp"
 #include "../../entity/player.hpp"
 #include "../level.hpp"
+#include "rock_tile.hpp"
 #include <stdint.h>
 
 int Tile::tickCount = 0;
 Tile* Tile::tiles[256];
+Tile* Tile::rock = new Rock_tile(1);
 
 Tile::Tile(uint8_t _id) : id(_id)
 {
-    tiles[id] = this;
     connects_to_grass = false;
     connects_to_lava = false;
     connects_to_sand = false;
     connects_to_water = false;
+
+    tiles[id] = this;
 }
 
 void Tile::render(Level* level, int x, int y)

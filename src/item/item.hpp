@@ -1,9 +1,10 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
-#include "../entity/entity.hpp"
-#include "../entity/player.hpp"
 #include "../screen/list_item.hpp"
+
+class Entity;
+class Player;
 
 class Item : public List_item
 {

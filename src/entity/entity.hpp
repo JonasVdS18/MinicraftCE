@@ -1,6 +1,10 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+#include "../item/item.hpp"
+#include "../level/level.hpp"
+#include "../level/tile/tile.hpp"
+
 class Mob;
 class Item_entity;
 class Player;
@@ -15,6 +19,9 @@ class Entity
     int radius_x, radius_y;
     bool removed;
     Level* level;
+
+    Entity();
+
     virtual void render();
     virtual void tick();
     virtual void remove();
