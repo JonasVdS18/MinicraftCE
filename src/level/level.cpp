@@ -3,6 +3,7 @@
 #include "../entity/player.hpp"
 #include "../entity/slime.hpp"
 #include "../entity/zombie.hpp"
+#include "../gfx/gfx.h"
 #include "../linked_list.hpp"
 #include "tile/tile.hpp"
 #include <stdint.h>
@@ -25,10 +26,38 @@ Level::Level(int width, int height, int level, Level* parent_level)
         tiles = maps[0];
         data = maps[1];
     }
+    else
+    {
+        tiles = NULL;
+        data = NULL;
+    }
+
+    entities_in_tiles = new Linked_list<Entity>*[width * height]();
+    for (int i = 0; i < width * height; i++)
+    {
+        entities_in_tiles[i] = new Linked_list<Entity>();
+    }
 
     // Stair code needs to be implemented.
 
     // Air Wizard code needs to be implemented.
+}
+
+/* This method renders all the tiles in the game */
+void Level::render_background(int x_scroll, int y_scroll)
+{
+    int xo = x_scroll >> 5;             // the game's horizontal scroll offset in tile coordinates.
+    int yo = y_scroll >> 5;             // the game's vertical scroll offset in tile coordinates.
+    int w = (GFX_LCD_WIDTH + 31) >> 5;  // width of the screen being rendered in tile coordinates
+    int h = (GFX_LCD_HEIGHT + 31) >> 5; // height of the screen being rendered in tile coordinates
+    for (int y = yo; y <= h + yo; y++)
+    { // loops through the vertical positions
+        for (int x = xo; x <= w + xo; x++)
+        { // loops through the horizontal positions
+            // x * 32 - x_scroll is the screen coordinate.
+            get_tile(x, y)->render(this, x * 32 - x_scroll, y * 32 - y_scroll); // renders the tile on the screen
+        }
+    }
 }
 
 Tile* Level::get_tile(int x, int y)
@@ -84,11 +113,34 @@ void Level::add(Entity* entity)
     // add to entities
     entities->add(entity);
     entity->init(this);
+
+    // >> 5 to change to tile coordinates (divides by 32)
+    insert_entity(entity->x >> 5, entity->y >> 5, entity);
 }
 
 void Level::remove(Entity* e)
 {
     entities->remove(e);
+    // >> 5 to change to tile coordinates (divides by 32)
+    remove_entity(e->x >> 5, e->y >> 5, e);
+}
+
+void Level::insert_entity(int x, int y, Entity* e)
+{
+    if (x < 0 || y < 0 || x >= width || y >= height)
+    {
+        return;
+    }
+    entities_in_tiles[x + y * width]->add(e);
+}
+
+void Level::remove_entity(int x, int y, Entity* e)
+{
+    if (x < 0 || y < 0 || x >= width || y >= height)
+    {
+        return;
+    }
+    entities_in_tiles[x + y * width]->remove(e);
 }
 
 void Level::try_spawn(int count)
@@ -139,18 +191,56 @@ void Level::tick()
     for (int i = 0; i < entities->size(); i++)
     {
         Entity* e = entities->get(i);
+        // The original tile-coordinates of the entity before the tick.
+        int xto = e->x >> 5;
+        int yto = e->y >> 5;
 
         e->tick(); // calls the entity's tick() method.
 
         if (e->removed)
         {
             entities->remove(e);
+            remove_entity(e->x >> 5, e->y >> 5, e);
             delete e;
+        }
+        else
+        {
+            // The current tile-coordinates of the entity.
+            int xt = e->x >> 5; // gets the entity's x coordinate
+            int yt = e->y >> 5; // gets the entity's y coordinate
+
+            // If the entity changed tiles we have to update the entity_in_tile list.
+            if (xto != xt || yto != yt)
+            {
+                remove_entity(xto, yto, e);
+                insert_entity(xt, yt, e);
+            }
         }
     }
 }
 
+/* Gets all the entities from a square area of 4 points. */
 Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
-    return NULL;
+    Linked_list<Entity>* result{new Linked_list<Entity>()};
+    int xt0{(x0 >> 5) - 1}; // location of x0 in tile-coordinates.
+    int yt0{(y0 >> 5) - 1}; // location of y0 in tile-coordinates.
+    int xt1{(x1 >> 5) + 1}; // location of x1 in tile-coordinates.
+    int yt1{(y1 >> 5) + 1}; // location of y1 in tile-coordinates.
+    for (int y = yt0; y <= yt1; y++)
+    { // Loops through the difference between y0 and y1
+        for (int x = xt0; x <= xt1; x++)
+        { // Loops through the difference between x0 & x1
+            if (x < 0 || y < 0 || x >= width || y >= height)
+                continue; // if the x & y position is outside the world, then skip the rest of this loop.
+            Linked_list<Entity>* entities = entities_in_tiles[x + y * this->width];
+            for (int i = 0; i < entities->size(); i++)
+            {
+                Entity* e = entities->get(i);
+                if (e->intersects(x0, y0, x1, y1))
+                    result->add(e);
+            }
+        }
+    }
+    return result; // returns the result list of entities
 }

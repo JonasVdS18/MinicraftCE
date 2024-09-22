@@ -18,6 +18,8 @@ class Level
     // array of tile id's
     uint8_t* tiles;
     uint8_t* data;
+    // Array of of tiles containing lists of the entities in the tiles.
+    Linked_list<Entity>** entities_in_tiles;
     int monster_density;
     // List containing all the entities in the level
     Linked_list<Entity>* entities;
@@ -25,6 +27,7 @@ class Level
 
     Level(int width, int height, int level, Level* parent_level);
 
+    void render_background(int x_scroll, int y_scroll);
     Tile* get_tile(int x, int y);
     void set_tile(int x, int y, Tile* t, uint8_t dataval);
     uint8_t get_data(int x, int y);
@@ -37,6 +40,8 @@ class Level
 
   private:
     int depth;
+    void insert_entity(int x, int y, Entity* e);
+    void remove_entity(int x, int y, Entity* e);
 };
 
 #endif
