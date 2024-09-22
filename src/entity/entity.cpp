@@ -8,12 +8,19 @@
 
 Entity::Entity()
 {
+<<<<<<< HEAD
     x = 0;
     y = 0;
     radius_x = 6;
     radius_y = 6;
     removed = false;
     level = NULL;
+=======
+}
+
+Entity::~Entity()
+{
+>>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
 }
 
 void Entity::render()
@@ -48,7 +55,7 @@ bool Entity::intersects(int x0, int y0, int x1, int y1)
     return !(x + radius_x < x0 || y + radius_y < y0 || x - radius_x > x1 || y - radius_y > y1);
 }
 
-bool Entity::blocks(Entity* e)
+bool Entity::blocks(Entity* entity)
 {
     return false;
 }

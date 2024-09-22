@@ -19,16 +19,21 @@ class Entity
     int radius_x, radius_y;
     bool removed;
     Level* level;
+<<<<<<< HEAD
 
     Entity();
 
+=======
+    Entity();
+    virtual ~Entity();
+>>>>>>> 1ce7690 (stashing item, mob, player, entity, inventory, resource, resourceitem)
     virtual void render();
     virtual void tick();
     virtual void remove();
     virtual void init(Level* level) final;
     // Checks if the entity intersects 4 points
     virtual bool intersects(int x0, int y0, int x1, int y1);
-    virtual bool blocks(Entity* e);
+    virtual bool blocks(Entity* entity);
     virtual void hurt(Mob* mob, int dmg, int attack_dir);
     virtual void hurt(Tile* tile, int x, int y, int dmg);
     virtual bool move(int xa, int ya);
