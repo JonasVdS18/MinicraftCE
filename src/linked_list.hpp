@@ -10,8 +10,8 @@ template <typename T> class Linked_list
     void add(T* t);
     void add(int index, T* t);
     T* get(int index);
-    void remove(int index);
-    void remove(T* t);
+    T* remove(int index);
+    T* remove(T* t);
     int size();
 
   private:
@@ -111,11 +111,11 @@ template <typename T> T* Linked_list<T>::get(int index)
     }
 }
 
-template <typename T> void Linked_list<T>::remove(int index)
+template <typename T> T* Linked_list<T>::remove(int index)
 {
     if (index < 0)
     {
-        return;
+        return nullptr;
     }
 
     if (index == 0)
@@ -131,20 +131,31 @@ template <typename T> void Linked_list<T>::remove(int index)
             {
                 delete temp;
             }
+            return nullptr;
         }
         // We reached the end.
         else
         {
             item = nullptr;
+            return nullptr;
         }
     }
     else
     {
-        return next->remove(index - 1);
+        if (index == 1)
+        {
+            T* temp = next->item;
+            next->remove(index - 1);
+            return temp;
+        }
+        else
+        {
+            return next->remove(index - 1);
+        }
     }
 }
 
-template <typename T> void Linked_list<T>::remove(T* t)
+template <typename T> T* Linked_list<T>::remove(T* t)
 {
     if (item == t)
     {
@@ -159,16 +170,25 @@ template <typename T> void Linked_list<T>::remove(T* t)
             {
                 delete temp;
             }
+            return t;
         }
         // We reached the end.
         else
         {
             item = nullptr;
+            return t;
         }
     }
     else
     {
-        return next->remove(t);
+        if (next != nullptr)
+        {
+            return next->remove(t);
+        }
+        else
+        {
+            return nullptr;
+        }
     }
 }
 
