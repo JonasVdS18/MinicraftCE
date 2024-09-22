@@ -3,8 +3,8 @@
 
 #include "../game.hpp"
 #include "../input_handler.hpp"
+#include "../item/item.hpp"
 #include "inventory.hpp"
-#include "item.hpp"
 #include "mob.hpp"
 #include <stdint.h>
 
