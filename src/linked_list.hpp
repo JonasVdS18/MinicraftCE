@@ -8,6 +8,7 @@ template <typename T> class Linked_list
     Linked_list();
     ~Linked_list();
     void add(T* t);
+    void add(int index, T* t);
     T* get(int index);
     void remove(int index);
     void remove(T* t);
@@ -32,14 +33,14 @@ template <typename T> Linked_list<T>::Linked_list()
 
 template <typename T> Linked_list<T>::~Linked_list()
 {
-    if (next != nullptr)
-    {
-        delete next;
+    /*
+    if (next != nullptr) {
+      delete next;
     }
-    if (item != nullptr)
-    {
-        delete item;
+    if (item != nullptr) {
+      delete item;
     }
+    */
 }
 
 template <typename T> void Linked_list<T>::add(T* t)
@@ -58,6 +59,36 @@ template <typename T> void Linked_list<T>::add(T* t)
     else
     {
         next->add(t);
+    }
+}
+
+template <typename T> void Linked_list<T>::add(int index, T* t)
+{
+    if (index == 0)
+    {
+        if (next != nullptr)
+        {
+            T* temp = item;
+            item = t;
+            next->add(0, t);
+        }
+        else // end of the list.
+        {
+            T* temp = item;
+            item = t;
+            if (item != nullptr)
+            {
+                next = new Linked_list(temp);
+            }
+        }
+    }
+    else
+    {
+        if (next == nullptr)
+        {
+            next = new Linked_list();
+        }
+        next->add(index - 1, t);
     }
 }
 
