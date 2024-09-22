@@ -42,9 +42,9 @@ int getAttackDamageBonus(Entity entity)
     return 0;
 }
 
-char* Item::get_name()
+const char* Item::get_name()
 {
-    return "";
+    return static_cast<const char*>("");
 }
 
 bool Item::matches(Item item)

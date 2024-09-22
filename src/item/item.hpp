@@ -21,7 +21,7 @@ class Item : public List_item
     virtual bool is_depleted();
     virtual bool can_attack();
     virtual int getAttackDamageBonus(Entity entity);
-    virtual char* get_name();
+    virtual const char* get_name();
     virtual bool matches(Item item);
 };
 #endif
