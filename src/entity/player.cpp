@@ -411,7 +411,8 @@ void Player::render()
             display_sprite = rlet_player_side_1;
         }
     }
-    gfx_RLETSprite(display_sprite, x, y);
+    gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
+                          (GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
 }
 
 void Player::touch_item(Item_entity* item_entity)

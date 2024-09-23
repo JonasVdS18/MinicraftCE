@@ -151,7 +151,7 @@ void Game::render()
 
     if (level != NULL)
     {
-        level->render_background(-16, -16);
+        level->render_background(player->x, player->y);
         player->render();
     }
     render_GUI();
