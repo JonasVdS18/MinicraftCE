@@ -7,6 +7,7 @@ class Zombie : public Mob
 {
   public:
     Zombie(int lvl);
+    ~Zombie();
 
   private:
     int lvl;

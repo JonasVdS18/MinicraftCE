@@ -185,7 +185,7 @@ void Level::try_spawn(int count)
 {
     for (int i = 0; i < count; i++)
     {
-        Mob* mob;
+        Mob* mob{nullptr};
         int min_level{1}; // minimum level of the mob
         int max_level{1}; // maximum level of the mob
         if (depth < 0)
@@ -257,7 +257,7 @@ void Level::tick()
     }
 }
 
-/* Gets all the entities from a square area of 4 points. */
+/* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
 Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
     Linked_list<Entity>* result{new Linked_list<Entity>()};

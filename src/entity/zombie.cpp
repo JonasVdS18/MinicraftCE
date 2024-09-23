@@ -7,3 +7,7 @@ Zombie::Zombie(int lvl) : Mob()
     x = randInt(0, 64 * 16 - 1);
     y = randInt(0, 64 * 16 - 1);
 }
+
+Zombie::~Zombie()
+{
+}
