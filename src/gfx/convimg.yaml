@@ -44,6 +44,12 @@ converts:
       - player_side_hold_1.png
       - player_front_swimming.png
       - player_back_swimming.png
+      - zombie_back.png
+      - zombie_front.png
+      - zombie_side_0.png
+      - zombie_side_1.png
+      - slime.png
+      - slime_jump.png
 
 
   - name: rlet_sprites_flipped
@@ -64,6 +70,10 @@ converts:
       - player_side_hold_1.png
       - player_front_swimming.png
       - player_back_swimming.png
+      - zombie_back.png
+      - zombie_front.png
+      - zombie_side_0.png
+      - zombie_side_1.png
 
 outputs:
   - type: c
