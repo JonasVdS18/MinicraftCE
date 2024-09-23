@@ -18,6 +18,7 @@ Level::Level(int width, int height, int level, Level* parent_level)
     // 2D array
     uint8_t** maps = NULL;
     entities = new Linked_list<Entity>();
+    player = NULL;
 
     // Level gen needs to be imlemented here.
 

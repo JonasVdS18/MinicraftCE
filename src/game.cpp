@@ -35,6 +35,7 @@ Game::Game()
     input = new Input_handler();
     menu = NULL;
     level = NULL;
+    player = NULL;
 }
 
 Game::~Game()
@@ -104,7 +105,10 @@ void Game::reset()
     current_level = 3;
 
     // placeholder level
-    level = new Level(16, 16, 0, NULL);
+    level = new Level(10, 8, 0, NULL);
+    player = new Player(this, input);
+    player->find_start_pos(level);
+    level->add(player);
 }
 
 void Game::start()
@@ -148,6 +152,7 @@ void Game::render()
     if (level != NULL)
     {
         level->render_background(-16, -16);
+        player->render();
     }
     render_GUI();
 

@@ -193,6 +193,20 @@ bool Player::use(int x0, int y0, int x1, int y1)
     return false;
 }
 
+bool Player::interact(int x0, int y0, int x1, int y1)
+{
+    Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
+    for (int i = 0; i < entities->size(); i++)
+    {
+        Entity* entity = entities->get(i);
+        if (entity != this && entity->interact(this, active_item, attack_dir))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Player::attack()
 {
     walk_dist += 8; // increase the walkDist (changes the sprite)
@@ -334,20 +348,19 @@ uint8_t Player::get_attack_damage(Entity* entity)
     uint8_t damage = randInt(0, 3) + 1;
     if (attack_item != NULL)
     {
-        damage += attack_item->getAttackDamageBonus(entity);
+        damage += attack_item->get_attack_damage_bonus(entity);
     }
     return damage;
 }
 
 void Player::render()
 {
-
     bool flip = false;
-    if ((walk_dist >> 3) & 1 == 0)
+    if ((walk_dist % 32) < 16)
     {
         flip = false;
     }
-    if ((walk_dist >> 3) & 1 == 0)
+    else
     {
         flip = true;
     }
@@ -398,6 +411,7 @@ void Player::render()
             display_sprite = rlet_player_side_1;
         }
     }
+    gfx_RLETSprite(display_sprite, x, y);
 }
 
 void Player::touch_item(Item_entity* item_entity)

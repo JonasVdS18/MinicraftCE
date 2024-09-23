@@ -1,12 +1,12 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "../game.hpp"
 #include "../input_handler.hpp"
 #include "../item/item.hpp"
 #include "inventory.hpp"
 #include "mob.hpp"
 #include <stdint.h>
+class Game;
 
 class Player : public Mob
 {

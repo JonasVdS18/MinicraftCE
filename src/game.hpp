@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "entity/player.hpp"
 #include "input_handler.hpp"
 #include "screen/menu.hpp"
 
@@ -13,6 +14,7 @@ class Game
     int game_time;
     bool has_won;
     Menu* menu;
+    Player* player;
     Game();
     ~Game();
     void set_menu(Menu* menu);

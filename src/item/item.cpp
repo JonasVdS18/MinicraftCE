@@ -37,7 +37,7 @@ bool Item::can_attack()
     return false;
 }
 
-int getAttackDamageBonus(Entity* entity)
+int get_attack_damage_bonus(Entity* entity)
 {
     return 0;
 }
@@ -55,4 +55,19 @@ bool Item::matches(Item* item)
 bool Item::interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attackDir)
 {
     return false;
+}
+
+gfx_sprite_t* Item::get_sprite()
+{
+    return NULL;
+}
+
+bool Item::is_depleted()
+{
+    return false;
+}
+
+int Item::get_attack_damage_bonus(Entity* entity)
+{
+    return 0;
 }
