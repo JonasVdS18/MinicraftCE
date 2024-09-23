@@ -17,6 +17,8 @@ class Tile
     static Tile* rock;
     static Tile* water;
     static Tile* lava;
+    static Tile* stairs_down;
+    static Tile* stairs_up;
 
     const uint8_t id;
 

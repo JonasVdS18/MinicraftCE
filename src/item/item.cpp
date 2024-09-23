@@ -51,3 +51,8 @@ bool Item::matches(Item* item)
 {
     return this->get_name() == item->get_name();
 }
+
+bool Item::interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attackDir)
+{
+    return false;
+}

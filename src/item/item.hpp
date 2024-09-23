@@ -1,6 +1,7 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
+#include "../level/tile/tile.hpp"
 #include "../screen/list_item.hpp"
 #include <graphx.h>
 
@@ -23,5 +24,6 @@ class Item : public List_item
     virtual int getAttackDamageBonus(Entity* entity);
     virtual const char* get_name();
     virtual bool matches(Item* item);
+    virtual bool interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attackDir);
 };
 #endif

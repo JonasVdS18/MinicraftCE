@@ -5,6 +5,7 @@
 #include "../level.hpp"
 #include "lava_tile.hpp"
 #include "rock_tile.hpp"
+#include "stairs_tile.hpp"
 #include "water_tile.hpp"
 #include <stdint.h>
 
@@ -13,6 +14,8 @@ Tile* Tile::tiles[256];
 Tile* Tile::rock = new Rock_tile(1);
 Tile* Tile::water = new Water_tile(2);
 Tile* Tile::lava = new Lava_tile(13);
+Tile* Tile::stairs_down = new Stairs_tile(14, false);
+Tile* Tile::stairs_up = new Stairs_tile(15, true);
 
 Tile::Tile(uint8_t _id) : id(_id)
 {

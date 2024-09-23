@@ -97,7 +97,7 @@ bool Entity::use(Player* Player, int attack_dir)
     return false;
 }
 
-int Entity::get_light_radius()
+uint8_t Entity::get_light_radius()
 {
     return 0;
 }

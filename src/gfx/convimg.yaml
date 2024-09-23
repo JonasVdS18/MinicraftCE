@@ -29,18 +29,21 @@ converts:
     style: rlet
     images:
       - logo.png
-      - heart_full
-      - heart_empty
-      - stamina_full
-      - stamina_empty
+      - inventory_screen.png
+      - heart_full.png
+      - heart_empty.png
+      - stamina_full.png
+      - stamina_empty.png
       - player_back.png
-      - player_back_hold
+      - player_back_hold.png
       - player_front.png
       - player_front_hold.png
       - player_side_0.png
       - player_side_1.png
       - player_side_hold_0.png
       - player_side_hold_1.png
+      - player_front_swimming.png
+      - player_back_swimming.png
 
 
   - name: rlet_sprites_flipped
@@ -52,13 +55,15 @@ converts:
     style: rlet
     images:
       - player_back.png
-      - player_back_hold
+      - player_back_hold.png
       - player_front.png
       - player_front_hold.png
       - player_side_0.png
       - player_side_1.png
       - player_side_hold_0.png
       - player_side_hold_1.png
+      - player_front_swimming.png
+      - player_back_swimming.png
 
 outputs:
   - type: c

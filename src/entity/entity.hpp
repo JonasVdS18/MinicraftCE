@@ -37,9 +37,7 @@ class Entity
     virtual bool can_swim();
     virtual bool interact(Player* player, Item* item, int attack_dir);
     virtual bool use(Player* player, int attack_dir);
-    virtual int get_light_radius();
-
-  protected:
+    virtual uint8_t get_light_radius();
     virtual void touched_by(Entity* entity);
 };
 #endif
