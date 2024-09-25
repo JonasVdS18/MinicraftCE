@@ -14,13 +14,40 @@ converts:
     transparent-color-index: 1
     images:
       - tile_placeholder
+      - grass_tile_ur.png
+      - grass_tile_ul.png
+      - grass_tile_dr.png
+      - grass_tile_dl.png
+      - grass_tile_endpiece_0.png
+      - grass_tile_endpiece_1.png
 
-#  - name: sprites_flipped
-#    suffix: _flipped
-#    palette: global_palette
-#    transparent-color-index: 1
-#    flip-y: true
-#    images:
+  - name: sprites_flipped_x
+    suffix: _flipped_x
+    palette: global_palette
+    transparent-color-index: 1
+    flip-x: true
+    images:
+      - grass_tile_endpiece_0.png
+      - grass_tile_endpiece_1.png
+
+  - name: sprites_flipped_y
+    suffix: _flipped_y
+    palette: global_palette
+    transparent-color-index: 1
+    flip-y: true
+    images:
+      - grass_tile_endpiece_0.png
+      - grass_tile_endpiece_1.png
+
+  - name: sprites_flipped_xy
+    suffix: _flipped_xy
+    palette: global_palette
+    transparent-color-index: 1
+    flip-y: true
+    flip-x: true
+    images:
+      - grass_tile_endpiece_0.png
+      - grass_tile_endpiece_1.png
 
   - name: rlet_sprites
     palette: global_palette
