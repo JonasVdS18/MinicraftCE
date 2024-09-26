@@ -160,8 +160,8 @@ bool Mob::find_start_pos(Level* level)
 {
     int x = randInt(0, level->width - 1);
     int y = randInt(0, level->height - 1);
-    int xx = x * 16 + 8; // Get actual pixel coordinates from this tile coord
-    int yy = y * 16 + 8;
+    int xx = x * 32 + 16; // Get actual pixel coordinates from this tile coord
+    int yy = y * 32 + 16;
 
     if (level->player != NULL)
     {
@@ -173,7 +173,7 @@ bool Mob::find_start_pos(Level* level)
     }
 
     int r = level->monster_density *
-            16; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
+            32; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
 
     Linked_list<Entity>* entities_around_player{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
     if (entities_around_player->size() > 0)

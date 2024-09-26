@@ -1,11 +1,8 @@
 #include "input_handler.hpp"
 #include <keypadc.h>
 
-Key::Key()
+Key::Key() : clicked{false}, down{false}, clickable{true}
 {
-    this->clicked = false;
-    this->down = false;
-    this->clickable = true;
 }
 
 void Key::toggle(bool pressed)
@@ -31,14 +28,9 @@ void Key::tick()
 }
 
 Input_handler::Input_handler()
+    : up{new Key()}, down{new Key()}, left{new Key()}, right{new Key()}, attack{new Key()}, menu{new Key()},
+      quit{new Key()}
 {
-    up = new Key();
-    down = new Key();
-    left = new Key();
-    right = new Key();
-    attack = new Key();
-    menu = new Key();
-    quit = new Key();
 }
 
 Input_handler::~Input_handler()

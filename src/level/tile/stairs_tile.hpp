@@ -8,7 +8,7 @@ class Stairs_tile : public Tile
     bool leads_up;
 
   public:
-    Stairs_tile(int _id, bool _leads_up);
+    Stairs_tile(int id, bool leads_up);
     ~Stairs_tile();
 };
 

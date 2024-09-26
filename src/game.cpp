@@ -4,6 +4,7 @@
 #include "level/level.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
+// #include <debug.h>
 #include <fontlibc.h>
 #include <graphx.h>
 #include <sys/rtc.h>
@@ -23,19 +24,9 @@ void Game::set_menu(Menu* menu)
 }
 
 Game::Game()
+    : running{true}, tick_count{0}, game_time{0}, player_dead_time{0}, pending_level_change{0}, wontimer{0},
+      has_won{false}, current_level{3}, input{new Input_handler()}, menu{NULL}, level{NULL}, player{NULL}
 {
-    running = true;
-    tick_count = 0;
-    game_time = 0;
-    player_dead_time = 0;
-    pending_level_change = 0;
-    wontimer = 0;
-    has_won = false;
-    current_level = 3;
-    input = new Input_handler();
-    menu = NULL;
-    level = NULL;
-    player = NULL;
 }
 
 Game::~Game()
@@ -69,6 +60,11 @@ void Game::run()
             tick();
             clockdiff -= CLOCKS_PER_TICK;
             should_render = true;
+            /*
+            if (tick_count % 60 == 0)
+            {
+                dbg_printf("SECONDS: %i\n", static_cast<int>(tick_count / 60));
+            }*/
         }
 
         if (should_render)
@@ -105,7 +101,7 @@ void Game::reset()
     current_level = 3;
 
     // placeholder level
-    level = new Level(10, 8, 0, NULL);
+    level = new Level(128, 128, 0, NULL);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);
@@ -152,7 +148,7 @@ void Game::render()
     if (level != NULL)
     {
         level->render_background(player->x, player->y);
-        player->render();
+        player->render(player->x, player->y);
     }
     render_GUI();
 

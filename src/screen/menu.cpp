@@ -5,10 +5,8 @@
 #include "../linked_list.hpp"
 #include <fontlibc.h>
 
-Menu::Menu(Game* game, Input_handler* input)
+Menu::Menu(Game* game, Input_handler* input) : input{input}, game{game}
 {
-    this->input = input;
-    this->game = game;
 }
 
 void Menu::tick()
@@ -28,15 +26,16 @@ void Menu::render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height
         selected = -selected - 1;
         render_cursor = false;
     }
-    int i0 = 0;                  // Beginning variable of the list loop
-    int i1 = list_items->size(); // End variable of the list loop
+    int i0 = 0; // Beginning variable of the list loop
+    int list_items_size{list_items->size()};
+    int i1 = list_items_size; // End variable of the list loop
     int displayable_item_size = (box_height / fontlib_GetCurrentFontHeight());
     if (i1 > displayable_item_size) // if the last item to siplay is bigger than the window is able to display
         i1 = displayable_item_size;
     int io = selected - (displayable_item_size / 2); // Middle of the list, (selected item). For scrolling effect
-    if (io > list_items->size() - displayable_item_size)
+    if (io > list_items_size - displayable_item_size)
     {
-        io = list_items->size() -
+        io = list_items_size -
              displayable_item_size; // if the middle is coming near the bottom, then the selected will change.
     }
     if (io < 0)

@@ -5,7 +5,7 @@
 class Lava_tile : public Tile
 {
   public:
-    Lava_tile(uint8_t _id);
+    Lava_tile(uint8_t id);
     ~Lava_tile();
 };
 

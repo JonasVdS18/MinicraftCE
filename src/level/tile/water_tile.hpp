@@ -5,7 +5,7 @@
 class Water_tile : public Tile
 {
   public:
-    Water_tile(uint8_t _id);
+    Water_tile(uint8_t id);
     ~Water_tile();
 };
 

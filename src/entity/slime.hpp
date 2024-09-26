@@ -6,11 +6,11 @@
 class Slime : public Mob
 {
   public:
-    Slime(int lvl);
+    Slime(const unsigned int lvl);
     ~Slime();
 
   private:
-    int lvl;
+    const unsigned int lvl;
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include "../../gfx/gfx.h"
 #include <graphx.h>
 
-Rock_tile::Rock_tile(uint8_t _id) : Tile(_id)
+Rock_tile::Rock_tile(uint8_t id) : Tile(id)
 {
 }
 

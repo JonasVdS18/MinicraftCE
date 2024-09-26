@@ -1,6 +1,8 @@
 #ifndef LINKED_LIST_HPP
 #define LINKED_LIST_HPP
 
+// #include <debug.h>
+
 template <typename T> class Linked_list
 {
   public:
@@ -14,57 +16,50 @@ template <typename T> class Linked_list
     T* remove(int index);
     T* remove(T* t);
     int size();
+    T** to_array();
 
   private:
     T* item;
     Linked_list* next;
 };
 
-template <typename T> Linked_list<T>::Linked_list(T* item)
+template <typename T> Linked_list<T>::Linked_list(T* item) : item{item}, next{nullptr}
 {
-    this->item = item;
-    this->next = nullptr;
 }
 
-template <typename T> Linked_list<T>::Linked_list()
+template <typename T> Linked_list<T>::Linked_list() : item{nullptr}, next{nullptr}
 {
-    this->item = nullptr;
-    this->next = nullptr;
 }
 
 template <typename T> Linked_list<T>::~Linked_list()
 {
-    /*
-    if (next != nullptr) {
-      delete next;
+    if (next != nullptr)
+    {
+        delete next;
     }
-    if (item != nullptr) {
-      delete item;
-    }
-    */
 }
 
 template <typename T> void Linked_list<T>::add(T* t)
 {
-    if (next == nullptr)
+    // dbg_printf("ADD CALLED\n");
+    Linked_list<T>* list{this};
+    while (list->next != nullptr)
     {
-        if (item == nullptr)
-        {
-            item = t;
-        }
-        else
-        {
-            next = new Linked_list(t);
-        }
+        list = list->next;
+    }
+    if (list->item == nullptr)
+    {
+        list->item = t;
     }
     else
     {
-        next->add(t);
+        list->next = new Linked_list<T>(t);
     }
 }
 
 template <typename T> void Linked_list<T>::add(int index, T* t)
 {
+    // dbg_printf("ADD CALLED\n");
     if (index == 0)
     {
         if (next != nullptr)
@@ -125,21 +120,27 @@ template <typename T> void Linked_list<T>::add_all(Linked_list<T>* list)
 
 template <typename T> T* Linked_list<T>::get(int index)
 {
-    if (index == 0)
+    // dbg_printf("GET CALLED\n");
+    Linked_list<T>* list{this};
+    int i{index};
+    if (i == 0)
     {
         return item;
     }
-    else
+    while (list->next != nullptr)
     {
-        if (next != nullptr)
-        {
-            return next->get(index - 1);
-        }
-        else
+        i--;
+        if (i < 0)
         {
             return nullptr;
         }
+        if (i == 0)
+        {
+            return list->next->item;
+        }
+        list = list->next;
     }
+    return nullptr;
 }
 
 template <typename T> T* Linked_list<T>::remove(int index)
@@ -248,23 +249,42 @@ template <typename T> T* Linked_list<T>::remove(T* t)
     }
 }
 
+/*Always cache the size if used in a loop, because otherwise it will be called over and over each iteration.*/
 template <typename T> int Linked_list<T>::size()
 {
-    if (next != nullptr)
+    // dbg_printf("SIZE CALLED\n");
+    Linked_list<T>* list{this};
+    int size{0};
+    if (item == nullptr)
     {
-        return 1 + next->size();
+        return 0;
     }
-    else
+    size++;
+    while (list->next != nullptr)
     {
-        if (item == nullptr)
-        {
-            return 0;
-        }
-        else
-        {
-            return 1;
-        }
+        size++;
+        list = list->next;
     }
+    return size;
+}
+
+/*returns an array containing all the elents of the list.*/
+template <typename T> T** Linked_list<T>::to_array()
+{
+    // dbg_printf("SIZE IS: %i\n", size());
+    T** array{new T*[size()]};
+    Linked_list<T>* list{this};
+    int index{0};
+    // dbg_printf("INDEX IS: %i\n", index);
+    while (list->next != nullptr)
+    {
+        array[index] = list->item;
+        list = list->next;
+        index++;
+        // dbg_printf("INDEX IS: %i\n", index);
+    }
+    array[index] = list->item;
+    return array;
 }
 
 #endif

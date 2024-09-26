@@ -6,10 +6,10 @@
 class Zombie : public Mob
 {
   public:
-    Zombie(int lvl);
+    Zombie(const unsigned int lvl);
     ~Zombie();
 
   private:
-    int lvl;
+    const unsigned int lvl;
 };
 #endif

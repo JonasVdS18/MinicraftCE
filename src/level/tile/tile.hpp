@@ -27,7 +27,7 @@ class Tile
     bool connects_to_lava;
     bool connects_to_water;
 
-    Tile(uint8_t _id);
+    Tile(uint8_t id);
 
     virtual void render(Level* level, int x, int y);
     virtual bool may_pass(Level* level, int x, int y, Entity* e);

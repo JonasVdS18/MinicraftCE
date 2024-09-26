@@ -21,12 +21,12 @@ class Entity
     Level* level;
     Entity();
     virtual ~Entity();
-    virtual void render();
+    virtual void render(int x_scroll, int y_scroll);
     virtual void tick();
     virtual void remove();
     virtual void init(Level* level) final;
     // Checks if the entity intersects 4 points
-    virtual bool intersects(int x0, int y0, int x1, int y1);
+    inline bool intersects(int x0, int y0, int x1, int y1);
     virtual bool blocks(Entity* entity);
     virtual void hurt(Mob* mob, int damage, int attack_dir);
     virtual void hurt(Tile* tile, int x, int y, int damage);
@@ -40,4 +40,19 @@ class Entity
     virtual uint8_t get_light_radius();
     virtual void touched_by(Entity* entity);
 };
+
+//       ____ x1,y1
+//       |  |
+//       |  |
+// x0,y0 ----
+inline bool Entity::intersects(int x0, int y0, int x1, int y1)
+{
+    // if x + radius_x < x0 is true, then the entity is to the left of the rectangle
+    // if y + radius_y < y0 is true, then the entity is under the rectangle
+    // if x - radius_x > x1 is true, then the entity is to the right of the rectangle
+    // if y - radius_y > y1 is true, then the entity is above the rectangle
+    // if this is all false then the entity must intersect somewhere
+    return !(x + radius_x < x0 || y + radius_y < y0 || x - radius_x > x1 || y - radius_y > y1);
+}
+
 #endif

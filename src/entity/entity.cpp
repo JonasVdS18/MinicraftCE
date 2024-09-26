@@ -14,7 +14,7 @@ Entity::~Entity()
 {
 }
 
-void Entity::render()
+void Entity::render(int x_scroll, int y_scroll)
 {
 }
 
@@ -30,20 +30,6 @@ void Entity::remove()
 void Entity::init(Level* level)
 {
     this->level = level;
-}
-
-//       ____ x1,y1
-//       |  |
-//       |  |
-// x0,y0 ----
-bool Entity::intersects(int x0, int y0, int x1, int y1)
-{
-    // if x + radius_x < x0 is true, then the entity is to the left of the rectangle
-    // if y + radius_y < y0 is true, then the entity is under the rectangle
-    // if x - radius_x > x1 is true, then the entity is to the right of the rectangle
-    // if y - radius_y > y1 is true, then the entity is above the rectangle
-    // if this is all false then the entity must intersect somewhere
-    return !(x + radius_x < x0 || y + radius_y < y0 || x - radius_x > x1 || y - radius_y > y1);
 }
 
 bool Entity::blocks(Entity* entity)
@@ -127,7 +113,8 @@ bool Entity::move2(int xa, int ya)
     Linked_list<Entity>* is_inside =
         level->get_entities(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x,
                             y + ya + radius_y); // gets the entities that this entity will touch.
-    for (int i = 0; i < is_inside->size(); i++)
+    int is_inside_size{is_inside->size()};
+    for (int i = 0; i < is_inside_size; i++)
     {
         Entity* entity = is_inside->get(i);
         if (entity == this)
@@ -138,7 +125,7 @@ bool Entity::move2(int xa, int ya)
         entity->touched_by(this);
     }
     // is_inside->remove_all(was_inside);
-    for (int i = 0; i < is_inside->size(); i++)
+    for (int i = 0; i < is_inside_size; i++)
     {
         Entity* entity = is_inside->get(i);
         if (entity == this)

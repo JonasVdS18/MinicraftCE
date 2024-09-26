@@ -3,14 +3,14 @@
 #include "../gfx/gfx.h"
 #include "../level/tile/tile.hpp"
 #include "../screen/inventory_menu.hpp"
+// #include <debug.h>
 #include <sys/util.h>
 
 Player::Player(Game* game, Input_handler* input)
     : Mob(), max_stamina{10}, stamina{max_stamina}, attack_time{0}, attack_dir{dir}, on_stair_delay{0},
-      active_item{NULL}, attack_item{active_item}, stamina_recharge(0), stamina_recharge_delay{0}, invulnerable_time{0}
+      active_item{NULL}, attack_item{active_item}, stamina_recharge(0), stamina_recharge_delay{0}, invulnerable_time{0},
+      game{game}, input{input}
 {
-    this->game = game;
-    this->input = input;
     x = 24;
     y = 24;
     // inventory->add(new FurnitureItem(new Workbench()));
@@ -179,7 +179,8 @@ bool Player::use()
 bool Player::use(int x0, int y0, int x1, int y1)
 {
     Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
-    for (int i = 0; i < entities->size(); i++)
+    int entities_size{entities->size()};
+    for (int i = 0; i < entities_size; i++)
     {
         Entity* entity = entities->get(i);
         if (entity != this)
@@ -196,7 +197,8 @@ bool Player::use(int x0, int y0, int x1, int y1)
 bool Player::interact(int x0, int y0, int x1, int y1)
 {
     Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
-    for (int i = 0; i < entities->size(); i++)
+    int entities_size{entities->size()};
+    for (int i = 0; i < entities_size; i++)
     {
         Entity* entity = entities->get(i);
         if (entity != this && entity->interact(this, active_item, attack_dir))
@@ -333,7 +335,8 @@ void Player::attack()
 void Player::hurt(int x0, int y0, int x1, int y1)
 {
     Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
-    for (int i = 0; i < entities->size(); i++)
+    int entities_size{entities->size()};
+    for (int i = 0; i < entities_size; i++)
     {
         Entity* entity = entities->get(i);
         if (entity != this)
@@ -353,7 +356,7 @@ uint8_t Player::get_attack_damage(Entity* entity)
     return damage;
 }
 
-void Player::render()
+void Player::render(int x_scroll, int y_scroll)
 {
     bool flip = false;
     if ((walk_dist % 32) < 16)
@@ -411,8 +414,10 @@ void Player::render()
             display_sprite = rlet_player_side_1;
         }
     }
-    gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
-                          (GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
+    // gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
+    //(GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
+    gfx_RLETSprite_NoClip(display_sprite, x - x_scroll - rlet_player_front_width / 2 + GFX_LCD_WIDTH / 2,
+                          y - y_scroll - rlet_player_front_height / 2 + GFX_LCD_HEIGHT / 2);
 }
 
 void Player::touch_item(Item_entity* item_entity)
@@ -428,8 +433,9 @@ bool Player::find_start_pos(Level* level)
 {
     while (true)
     {
-        int x = randInt(0, level->width);
-        int y = randInt(0, level->height);
+        // level->width -1 instead of level-width, because randInt is inclusive
+        int x = randInt(0, level->width - 1);
+        int y = randInt(0, level->height - 1);
         /*
         if (level->get_tile(x, y) == Tile::grass)
         {                        // if the tile at the x & y coordinates is a grass tile then...
@@ -437,8 +443,12 @@ bool Player::find_start_pos(Level* level)
             this.y = y * 16 + 8; // the player's y coordinate will be in the middle of the tile
             return true;         // returns and stop's the loop
         }*/
-        this->x = x * 32 - 16;
-        this->y = y * 32 - 16;
+        // this->x = x * 32 - 16;
+        // this->y = y * 32 - 16;
+
+        // +16 to spawn in the center of the tile
+        this->x = x * 32 + 16;
+        this->y = y * 32 + 16;
         return true;
     }
 }

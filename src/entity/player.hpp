@@ -39,7 +39,7 @@ class Player : public Mob
     Player(Game* game, Input_handler* input);
     ~Player();
     void tick() override;
-    void render() override;
+    void render(int x_scroll, int y_scroll) override;
     void change_level(int8_t dir);
     void touch_item(Item_entity* item_entity) override;
     bool can_swim() override;
