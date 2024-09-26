@@ -109,7 +109,9 @@ outputs:
       - global_palette
     converts:
       - sprites
-#      - sprites_flipped
+      - sprites_flipped_x
+      - sprites_flipped_y
+      - sprites_flipped_xy
       - rlet_sprites
       - rlet_sprites_flipped
     const: true
