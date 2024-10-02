@@ -14,6 +14,7 @@ class Tile
   public:
     static int tick_count;
     static Tile* tiles[256];
+    static Tile* grass;
     static Tile* rock;
     static Tile* water;
     static Tile* lava;

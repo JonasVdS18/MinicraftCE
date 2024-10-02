@@ -3,6 +3,7 @@
 #include "../../entity/mob.hpp"
 #include "../../entity/player.hpp"
 #include "../level.hpp"
+#include "grass_tile.hpp"
 #include "lava_tile.hpp"
 #include "rock_tile.hpp"
 #include "stairs_tile.hpp"
@@ -11,6 +12,7 @@
 
 int Tile::tick_count = 0;
 Tile* Tile::tiles[256];
+Tile* Tile::grass = new Grass_tile(0);
 Tile* Tile::rock = new Rock_tile(1);
 Tile* Tile::water = new Water_tile(2);
 Tile* Tile::lava = new Lava_tile(13);
