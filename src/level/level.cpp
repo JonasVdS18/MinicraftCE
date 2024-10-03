@@ -38,7 +38,7 @@ Level::Level(int width, int height, int level, Level* parent_level)
             for (int x = 0; x < width; x++)
             {
                 int i = x + y * width;
-                tiles[i] = Tile::rock->id;
+                tiles[i] = Tile::grass->id;
                 data[i] = 0;
             }
         }
@@ -77,9 +77,8 @@ void Level::render_background(int x_scroll, int y_scroll)
         for (int x = xo; x <= w + xo; x++)
         {
             // x * 32 - x_scroll is the screen coordinate.
-            get_tile(x, y)->render(
-                this, x * 32 - x_scroll,
-                y * 32 - y_scroll); // renders the tile on the screen using screen cooridinates not tile coordinates.
+            get_tile(x, y)->render(this, x,
+                                   y); // renders the tile on the screen using tile cooridinates not screen coordinates.
         }
     }
 }

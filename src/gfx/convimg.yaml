@@ -37,7 +37,6 @@ converts:
     flip-y: true
     images:
       - grass_tile_endpiece_0.png
-      - grass_tile_endpiece_1.png
 
   - name: sprites_flipped_xy
     suffix: _flipped_xy
@@ -47,6 +46,21 @@ converts:
     flip-x: true
     images:
       - grass_tile_endpiece_0.png
+
+  - name: sprites_rotated_90
+    suffix: _rotated_90
+    palette: global_palette
+    transparent-color-index: 1
+    rotate: 90
+    images:
+      - grass_tile_endpiece_1.png
+
+  - name: sprites_rotated_270
+    suffix: _rotated_270
+    palette: global_palette
+    transparent-color-index: 1
+    rotate: 270
+    images:
       - grass_tile_endpiece_1.png
 
   - name: rlet_sprites
@@ -112,6 +126,8 @@ outputs:
       - sprites_flipped_x
       - sprites_flipped_y
       - sprites_flipped_xy
+      - sprites_rotated_90
+      - sprites_rotated_270
       - rlet_sprites
       - rlet_sprites_flipped
     const: true

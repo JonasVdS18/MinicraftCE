@@ -24,7 +24,7 @@ Tile::Tile(uint8_t id)
 {
     tiles[id] = this;
 }
-
+// x and y in tile coordinates, multiply by 32 to change to screen coordinates and subtract the x and y scroll
 void Tile::render(Level* level, int x, int y)
 {
 }
