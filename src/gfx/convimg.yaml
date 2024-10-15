@@ -6,6 +6,7 @@ palettes:
       - color: {index: 2, r: 240, g: 240, b: 240} # text white color
       - color: {index: 3, r: 102, g: 102, b: 102} # text grey color
       - color: {index: 4, r: 154, g: 154, b: 154} # text grey/white color
+      - color: {index: 5, r: 22, g: 22, b: 137} # inventory blue
     images: automatic
 
 converts:

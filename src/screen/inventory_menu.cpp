@@ -45,11 +45,12 @@ void Inventory_menu::tick()
 
 void Inventory_menu::render()
 {
-    fontlib_ClearWindow();
-    fontlib_SetWindow(32, 32, (rlet_inventory_screen_width - 16), (rlet_inventory_screen_height - 16));
-    fontlib_SetCursorPosition(32, 32);
-    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
-    fontlib_SetColors(2, 0);
     gfx_RLETSprite_NoClip(rlet_inventory_screen, 16, 16);
-    render_item_list(32, 32, (rlet_inventory_screen_height - 16), player->inventory->items, selected);
+    fontlib_SetWindow(24, 24, (rlet_inventory_screen_width - 16), (rlet_inventory_screen_height - 16));
+    fontlib_SetBackgroundColor(5);
+    fontlib_ClearWindow();
+    fontlib_SetCursorPosition(32, 32);
+    fontlib_SetColors(5, 0);
+    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+    // Menu::render_item_list(32, 32, (rlet_inventory_screen_height - 16), player->inventory->items, selected);
 }
