@@ -101,7 +101,7 @@ void Grass_tile::render(Level* level, int x, int y)
     }
 }
 
-void Grass_tile::tick(Level* level, int xt, int yt)
+void Grass_tile::tick(Level* level, int xt, int yt, int modifier)
 {
 }
 

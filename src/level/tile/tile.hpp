@@ -35,7 +35,7 @@ class Tile
     virtual int get_light_radius(Level* level, int x, int y);
     virtual void hurt(Level* level, int x, int y, Mob* source, int damage, int attack_dir);
     virtual void bumped_into(Level* level, int xt, int yt, Entity* entity);
-    virtual void tick(Level* level, int xt, int yt);
+    virtual void tick(Level* level, int xt, int yt, int modifier);
     virtual void stepped_on(Level* level, int xt, int yt, Entity* entity);
     virtual bool interact(Level* level, int xt, int yt, Player* player, Item* item, int attack_dir);
     virtual bool connects_to_liquid();

@@ -27,7 +27,7 @@ class Level
     ~Level();
 
     void render_background(int x_scroll, int y_scroll);
-    Tile* get_tile(int x, int y);
+    inline Tile* get_tile(int x, int y);
     void set_tile(int x, int y, Tile* t, uint8_t dataval);
     uint8_t get_data(int x, int y);
     void set_data(int x, int y, uint8_t val);
@@ -40,5 +40,14 @@ class Level
   private:
     int depth;
 };
+
+inline Tile* Level::get_tile(int x, int y)
+{
+    if (x < 0 || y < 0 || x >= width || y >= height)
+    {
+        return Tile::rock;
+    }
+    return Tile::tiles[tiles[x + y * width]];
+}
 
 #endif

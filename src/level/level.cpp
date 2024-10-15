@@ -10,6 +10,29 @@
 #include <stdint.h>
 #include <sys/util.h>
 
+// amount of tiles in the screen width.
+const int SCREEN_WIDTH_IN_TILES{GFX_LCD_WIDTH >> 5};
+// amount of tiles in the screen height.
+const int SCREEN_HEIGHT_IN_TILES{GFX_LCD_HEIGHT >> 5};
+// amount of tiles to buffer around the screen width, this value is multiplied by 2 because it's a buffer to the left
+// and right f the screen.
+// This is used for the tick to determine which tiles are updated more frequent.
+const int SCREEN_WIDTH_IN_TILES_BUFFER{3};
+// amount of tiles to buffer around the screen height, this value is multiplied by 2 because it's a buffer under
+// and above the screen.
+// This is used for the tick to determine which tiles are updated more frequent.
+const int SCREEN_HEIGHT_IN_TILES_BUFFER{2};
+
+// The amount of tiles to update frequently (every tick)
+// We divide by 50 to have the same update frequency as in teh original game
+const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN_WIDTH_IN_TILES_BUFFER) *
+                                             (SCREEN_HEIGHT_IN_TILES + 2 * SCREEN_HEIGHT_IN_TILES_BUFFER) / 50};
+
+// The amount of tiles that will be ticked infrequently (not in the view of the player), will be divided by this number
+// for performance reasons.
+// This is also the tick modifier when calling tick on the tiles to make up for less tick calls.
+const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
+
 Level::Level(int width, int height, int level, Level* parent_level)
     : depth{level}, width{width}, height{height}, monster_density{8}, entities{new Linked_list<Entity>()}, player{NULL}
 {
@@ -81,15 +104,6 @@ void Level::render_background(int x_scroll, int y_scroll)
                                    y); // renders the tile on the screen using tile cooridinates not screen coordinates.
         }
     }
-}
-
-Tile* Level::get_tile(int x, int y)
-{
-    if (x < 0 || y < 0 || x >= width || y >= height)
-    {
-        return Tile::rock;
-    }
-    return Tile::tiles[tiles[x + y * width]];
 }
 
 void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
@@ -188,13 +202,41 @@ void Level::tick()
     // dbg_printf("LEVEL::TICKED CALLED\n");
     try_spawn(1);
     // dbg_printf("LEVEL::TICKED END\n");
-    for (int i = 0; i < width * height / 50; i++)
+
+    // Update the tiles that are viewed by the player frequently
+    // const int tiles_to_update_per_tick{static_cast<int>(width * height / 50)};
+
+    for (int i = 0; i < AMOUNT_OF_TILES_TO_TICK_FREQUENTLY; i++)
     {
-        int xt = randInt(0, width - 1);
-        int yt = randInt(0, height - 1);
-        get_tile(xt, yt)->tick(this, xt, yt);
+        int xt = randInt(player->x - SCREEN_WIDTH_IN_TILES / 2 - SCREEN_WIDTH_IN_TILES_BUFFER,
+                         player->x + SCREEN_WIDTH_IN_TILES / 2 + SCREEN_WIDTH_IN_TILES_BUFFER);
+        int yt = randInt(player->y - SCREEN_HEIGHT_IN_TILES / 2 - SCREEN_HEIGHT_IN_TILES_BUFFER,
+                         player->y + SCREEN_HEIGHT_IN_TILES / 2 + SCREEN_HEIGHT_IN_TILES_BUFFER);
+        get_tile(xt, yt)->tick(this, xt, yt, 1);
     }
 
+    // Update the tiles that are not visible less frequent but in larger increments.
+    const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY{(width * height - AMOUNT_OF_TILES_TO_TICK_FREQUENTLY) / 50 /
+                                                   AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER};
+
+    if (AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY > 0)
+    {
+        for (int i = 0; i < AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY; i++)
+        {
+            int xt = randInt(0, width - 1 - SCREEN_WIDTH_IN_TILES - SCREEN_WIDTH_IN_TILES_BUFFER * 2);
+            int yt = randInt(0, height - 1 - SCREEN_HEIGHT_IN_TILES - SCREEN_HEIGHT_IN_TILES_BUFFER * 2);
+            if (xt >= player->x - SCREEN_WIDTH_IN_TILES / 2 - SCREEN_WIDTH_IN_TILES_BUFFER)
+            {
+                xt += SCREEN_WIDTH_IN_TILES_BUFFER * 2 + SCREEN_WIDTH_IN_TILES;
+            }
+            if (yt >= player->y - SCREEN_HEIGHT_IN_TILES / 2 - SCREEN_HEIGHT_IN_TILES_BUFFER)
+            {
+                yt += SCREEN_HEIGHT_IN_TILES_BUFFER * 2 + SCREEN_HEIGHT_IN_TILES;
+            }
+            get_tile(xt, yt)->tick(this, xt, yt, AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER);
+        }
+    }
+    /*
     int size{entities->size()};
     Entity** entities_array{entities->to_array()};
 
@@ -211,7 +253,7 @@ void Level::tick()
         }
     }
 
-    delete[] entities_array;
+    delete[] entities_array;*/
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
@@ -220,7 +262,7 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     // dbg_printf("IN GET_ENTITIES\n");
     //  dbg_printf("START OF GET_ENTITIES\n");
     Linked_list<Entity>* result{new Linked_list<Entity>()};
-    int size{entities->size()};
+    const int size{entities->size()};
     Entity** entities_array{entities->to_array()};
     for (int i = 0; i < size; i++)
     {

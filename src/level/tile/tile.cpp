@@ -47,7 +47,7 @@ void Tile::bumped_into(Level* level, int xt, int yt, Entity* entity)
 {
 }
 
-void Tile::tick(Level* level, int xt, int yt)
+void Tile::tick(Level* level, int xt, int yt, int modifier)
 {
 }
 
