@@ -136,6 +136,7 @@ void Game::tick()
         if (level != NULL)
         {
             level->tick();
+            player->tick();
         }
         Tile::tick_count++;
     }
