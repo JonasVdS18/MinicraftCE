@@ -135,12 +135,16 @@ bool Entity::move2(int xa, int ya)
 
         if (entity->blocks(this))
         {
+            delete was_inside;
+            delete is_inside;
             return false;
         }
     }
 
     x += xa;
     y += ya;
+    delete was_inside;
+    delete is_inside;
     return true;
 }
 
