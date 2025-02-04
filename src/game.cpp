@@ -84,6 +84,7 @@ void Game::init()
     fontlib_SetTransparency(true);
     fontlib_SetLineSpacing(1, 1);
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+    gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT - 48);
     srand(rtc_Time());
 
     set_menu(new Title_menu(this, input));
@@ -144,12 +145,15 @@ void Game::tick()
 
 void Game::render()
 {
-    gfx_ZeroScreen();
 
     if (level != NULL)
     {
         level->render_background(level->x_offset, level->y_offset);
         player->render(level->x_offset, level->y_offset);
+    }
+    else
+    {
+        gfx_ZeroScreen();
     }
     render_GUI();
 
@@ -169,8 +173,6 @@ void Game::won()
 
 void Game::render_GUI()
 {
-    gfx_SetColor(0);
-    gfx_FillRectangle_NoClip(0, GFX_LCD_HEIGHT - 48, GFX_LCD_WIDTH, 48);
     if (menu != NULL)
     {
         menu->render();
