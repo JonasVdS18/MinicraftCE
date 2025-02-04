@@ -243,7 +243,6 @@ void Level::tick()
         }
     }
 
-    /*
     int size{entities->size()};
     dbg_printf("ENTITIES: %i\n", size);
     /*
@@ -276,6 +275,7 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     // dbg_printf("START OF GET_ENTITIES\n");
     Linked_list<Entity>* result{new Linked_list<Entity>()};
     const int size{entities->size()};
+    // to array seems to be very expensive especially for large lists
     Entity** entities_array{entities->to_array()};
     for (int i = 0; i < size; i++)
     {

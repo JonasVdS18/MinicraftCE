@@ -143,15 +143,8 @@ bool Entity::move2(int xa, int ya)
 
     x += xa;
     y += ya;
-<<<<<<< HEAD
     delete was_inside;
     delete is_inside;
-=======
-
-    delete was_inside;
-    delete is_inside;
-
->>>>>>> 4400f92 (changed the linkedlist implementation for better performance.)
     return true;
 }
 
