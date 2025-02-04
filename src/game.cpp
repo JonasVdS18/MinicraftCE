@@ -24,8 +24,9 @@ void Game::set_menu(Menu* menu)
 }
 
 Game::Game()
-    : running{true}, tick_count{0}, game_time{0}, player_dead_time{0}, pending_level_change{0}, wontimer{0},
-      has_won{false}, current_level{3}, input{new Input_handler()}, menu{NULL}, level{NULL}, player{NULL}
+    : running{true}, tick_count{0}, prev_health{0}, prev_stamina{0}, game_time{0}, player_dead_time{0},
+      pending_level_change{0}, wontimer{0}, has_won{false}, current_level{3}, input{new Input_handler()}, menu{NULL},
+      level{NULL}, player{NULL}
 {
 }
 
@@ -173,6 +174,52 @@ void Game::won()
 
 void Game::render_GUI()
 {
+    if (player != NULL)
+    {
+        if (player->health > prev_health)
+        {
+            for (uint8_t i = player->health - prev_health; i > 0; i--)
+            {
+                gfx_SetDrawScreen();
+                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_SetDrawBuffer();
+                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+            }
+        }
+        else if (player->health < prev_health)
+        {
+            for (uint8_t i = prev_health - player->health; i > 0; i--)
+            {
+                gfx_SetDrawScreen();
+                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_SetDrawBuffer();
+                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+            }
+        }
+        if (player->stamina > prev_stamina)
+        {
+            for (uint8_t i = player->stamina - prev_stamina; i > 0; i--)
+            {
+                gfx_SetDrawScreen();
+                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_SetDrawBuffer();
+                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+            }
+        }
+        else if (player->stamina < prev_stamina)
+        {
+            for (uint8_t i = prev_stamina - player->stamina; i > 0; i--)
+            {
+                gfx_SetDrawScreen();
+                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_SetDrawBuffer();
+                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+            }
+        }
+        prev_health = player->health;
+        prev_stamina = player->stamina;
+    }
+
     if (menu != NULL)
     {
         menu->render();

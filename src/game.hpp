@@ -35,6 +35,7 @@ class Game
     int pending_level_change;
     int wontimer;
     int current_level;
+    uint8_t prev_health, prev_stamina;
     Input_handler* input;
 
     void init();
