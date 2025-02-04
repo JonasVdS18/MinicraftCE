@@ -34,7 +34,8 @@ const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN
 const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
 
 Level::Level(int width, int height, int level, Level* parent_level)
-    : depth{level}, width{width}, height{height}, monster_density{8}, entities{new Linked_list<Entity>()}, player{NULL}
+    : depth{level}, width{width}, height{height}, x_offset{0}, y_offset{0}, monster_density{8},
+      entities{new Linked_list<Entity>()}, player{NULL}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -93,8 +94,8 @@ void Level::render_background(int x_scroll, int y_scroll)
 {
     int xo = x_scroll >> 5;             // the game's horizontal scroll offset in tile coordinates.
     int yo = y_scroll >> 5;             // the game's vertical scroll offset in tile coordinates.
-    int w = (GFX_LCD_WIDTH + 32) >> 5;  // width of the screen being rendered in tile coordinates
-    int h = (GFX_LCD_HEIGHT + 32) >> 5; // height of the screen being rendered in tile coordinates
+    int w = (GFX_LCD_WIDTH) >> 5;       // width of the screen being rendered in tile coordinates
+    int h = (GFX_LCD_HEIGHT - 32) >> 5; // height of the screen being rendered in tile coordinates
     for (int y = yo; y <= h + yo; y++)
     {
         for (int x = xo; x <= w + xo; x++)
@@ -236,6 +237,7 @@ void Level::tick()
             get_tile(xt, yt)->tick(this, xt, yt, AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER);
         }
     }
+
     /*
     int size{entities->size()};
     Entity** entities_array{entities->to_array()};
@@ -254,6 +256,9 @@ void Level::tick()
     }
 
     delete[] entities_array;*/
+
+    x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
+    y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/

@@ -15,6 +15,8 @@ class Level
   public:
     // Width and Height in tiles not in pixels.
     int width, height;
+    // x_offset and y_offset in world coordinates
+    int x_offset, y_offset;
     // array of tile id's
     uint8_t* tiles;
     uint8_t* data;

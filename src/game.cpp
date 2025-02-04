@@ -101,7 +101,7 @@ void Game::reset()
     current_level = 3;
 
     // placeholder level
-    level = new Level(10, 8, 0, NULL);
+    level = new Level(20, 20, 0, NULL);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);
@@ -148,8 +148,8 @@ void Game::render()
 
     if (level != NULL)
     {
-        level->render_background(player->x, player->y);
-        player->render(player->x, player->y);
+        level->render_background(level->x_offset, level->y_offset);
+        player->render(level->x_offset, level->y_offset);
     }
     render_GUI();
 
@@ -169,6 +169,8 @@ void Game::won()
 
 void Game::render_GUI()
 {
+    gfx_SetColor(0);
+    gfx_FillRectangle_NoClip(0, GFX_LCD_HEIGHT - 48, GFX_LCD_WIDTH, 48);
     if (menu != NULL)
     {
         menu->render();
