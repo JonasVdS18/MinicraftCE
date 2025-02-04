@@ -1,5 +1,6 @@
 #ifndef LINKED_LIST_HPP
 #define LINKED_LIST_HPP
+// #include <debug.h>
 
 template <typename T> class Linked_list_item
 {
@@ -13,6 +14,7 @@ template <typename T> class Linked_list_item
 
 template <typename T> Linked_list_item<T>::Linked_list_item(T* item)
 {
+    // dbg_printf("CREATED A NEW ITEM\n");
     this->item = item;
     this->next = nullptr;
 }
@@ -78,8 +80,10 @@ template <typename T> Linked_list<T>::~Linked_list()
 
 template <typename T> void Linked_list<T>::add(T* t)
 {
+    // dbg_printf("IN LIST ADD\n");
     if (last == nullptr)
     {
+        // dbg_printf("LAST IS NULLPTR\n");
         first = new Linked_list_item<T>(t);
         last = first;
         list_size++;
@@ -87,10 +91,12 @@ template <typename T> void Linked_list<T>::add(T* t)
     }
     if (last->item == nullptr)
     {
+        // dbg_printf("LAST ITEM IS NULLPT\n");
         last->item = t;
     }
     else
     {
+        // dbg_printf("LAST ITEM IS FULL\n");
         last->next = new Linked_list_item<T>(t);
         last = last->next;
     }

@@ -72,6 +72,15 @@ Level::Level(int width, int height, int level, Level* parent_level)
     // create the chunks array
     entities_in_chunks = new Linked_list<Entity>*[width_in_chunks * height_in_chunks];
 
+    // Reset all the memory
+    for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
+    {
+        if (entities_in_chunks[i] != nullptr)
+        {
+            entities_in_chunks[i] = nullptr;
+        }
+    }
+
     // Stair code needs to be implemented.
 
     // Air Wizard code needs to be implemented.
@@ -81,6 +90,7 @@ Level::~Level()
 {
     if (entities_in_chunks != nullptr)
     {
+        /*
         for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
         {
             if (entities_in_chunks[i] != nullptr)
@@ -88,6 +98,8 @@ Level::~Level()
                 delete entities_in_chunks[i];
             }
         }
+        */
+        delete[] entities_in_chunks;
     }
     if (tiles != nullptr)
     {
@@ -102,6 +114,7 @@ Level::~Level()
 /* This method renders all the tiles in the game */
 void Level::render_background(int x_scroll, int y_scroll)
 {
+    // dbg_printf("RENDERBACKGROUND START\n");
     int xo = x_scroll >> 5;             // the game's horizontal scroll offset in tile coordinates.
     int yo = y_scroll >> 5;             // the game's vertical scroll offset in tile coordinates.
     int w = (GFX_LCD_WIDTH) >> 5;       // width of the screen being rendered in tile coordinates
@@ -119,6 +132,7 @@ void Level::render_background(int x_scroll, int y_scroll)
 
 void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
 {
+    // dbg_printf("SETTILE START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return;
@@ -130,6 +144,7 @@ void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
 
 uint8_t Level::get_data(int x, int y)
 {
+    // dbg_printf("GETDATA START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return 0;
@@ -139,6 +154,7 @@ uint8_t Level::get_data(int x, int y)
 
 void Level::set_data(int x, int y, uint8_t val)
 {
+    // dbg_printf("SETDATA START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return;
@@ -148,10 +164,13 @@ void Level::set_data(int x, int y, uint8_t val)
 
 void Level::add(Entity* entity)
 {
-    if (dynamic_cast<Player*>(entity) != NULL)
+    // dbg_printf("ADD START\n");
+    if (dynamic_cast<Player*>(entity) != nullptr)
     {
-        if (player != NULL)
+        // dbg_printf("ADDING PLAYER\n");
+        if (player != nullptr)
         {
+            // dbg_printf("PLAYER ALREADY EXISTED\n");
             delete player;
         }
         player = static_cast<Player*>(entity);
@@ -163,6 +182,7 @@ void Level::add(Entity* entity)
     int chunk_y = entity->y / (32 * chunk_size);
     if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
     {
+        // dbg_printf("OUT OF BOUNDS\n");
         return;
     }
     if (entities_in_chunks[chunk_x + chunk_y * width_in_chunks] == nullptr)
@@ -170,12 +190,16 @@ void Level::add(Entity* entity)
         // dbg_printf("creating new entity list\n");
         entities_in_chunks[chunk_x + chunk_y * width_in_chunks] = new Linked_list<Entity>();
     }
+    // dbg_printf("before list add\n");
     entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->add(entity);
+    // dbg_printf("after list add\n");
     entity->init(this);
+    // dbg_printf("end of add\n");
 }
 
 void Level::remove(Entity* e)
 {
+    // dbg_printf("REMOVE START\n");
     int chunk_x = e->x / (32 * chunk_size);
     int chunk_y = e->y / (32 * chunk_size);
     if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
@@ -187,6 +211,7 @@ void Level::remove(Entity* e)
 
 void Level::try_spawn(int count)
 {
+    // dbg_printf("TRYSPAWN START\n");
     for (int i = 0; i < count; i++)
     {
         Mob* mob{nullptr};
@@ -228,7 +253,7 @@ void Level::try_spawn(int count)
 void Level::tick()
 {
     // dbg_printf("LEVEL::TICKED CALLED\n");
-    //  this is expensive
+    //    this is expensive
     try_spawn(1);
 
     // Update the tiles that are viewed by the player frequently
@@ -339,6 +364,11 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     if (chunk_y1 >= height_in_chunks)
         chunk_y1 = height_in_chunks - 1;
 
+    // dbg_printf("CHUNK_X0: %i\n", chunk_x0);
+    // dbg_printf("CHUNK_Y0: %i\n", chunk_y0);
+    // dbg_printf("CHUNK_X1: %i\n", chunk_x1);
+    // dbg_printf("CHUNK_Y1: %i\n", chunk_y1);
+
     // dbg_printf("NOT OUT OF BOUNDS\n");
 
     for (int i = chunk_x0; i <= chunk_x1; i++)
@@ -357,7 +387,10 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
                 {
                     Entity* e = entities->get(k);
                     if (e->intersects(x0, y0, x1, y1))
+                    {
+                        // dbg_printf("ADDING TO RESULT IN GETENTITIES\n");
                         result->add(e);
+                    }
                 }
             }
         }

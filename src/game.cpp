@@ -77,6 +77,7 @@ void Game::run()
 
 void Game::init()
 {
+    // dbg_printf("INIT START\n");
     gfx_Begin();
     gfx_SetDrawBuffer();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
@@ -92,6 +93,7 @@ void Game::init()
 
 void Game::reset()
 {
+    // dbg_printf("RESET\n");
     running = true;
     tick_count = 0;
     game_time = 0;
@@ -110,17 +112,20 @@ void Game::reset()
 
 void Game::start()
 {
+    // dbg_printf("START\n");
     running = true;
     run();
 }
 
 void Game::stop()
 {
+    // dbg_printf("STOP\n");
     running = false;
 }
 
 void Game::tick()
 {
+    // dbg_printf("TICK START\n");
     tick_count++;
     input->tick();
     if (input->quit->clicked)
@@ -145,7 +150,7 @@ void Game::tick()
 
 void Game::render()
 {
-
+    // dbg_printf("RENDER START\n");
     if (level != NULL)
     {
         level->render_background(level->x_offset, level->y_offset);
@@ -155,24 +160,27 @@ void Game::render()
     {
         gfx_ZeroScreen();
     }
-    render_GUI();
+    // render_GUI();
 
     gfx_SwapDraw();
 }
 
 void Game::schedule_level_change(int dir)
 {
+    // dbg_printf("SCHEDULE_LEVEL_CHANGE START\n");
     pending_level_change = dir;
 }
 
 void Game::won()
 {
+    // dbg_printf("WON\n");
     wontimer = 60 * 3;
     has_won = true;
 }
 
 void Game::render_GUI()
 {
+    // dbg_printf("RENDER_GUI START\n");
     if (player != NULL)
     {
         if (player->health > prev_health)
