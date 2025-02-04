@@ -1,15 +1,11 @@
 #include "inventory_menu.hpp"
 #include "../entity/player.hpp"
 #include "../gfx/gfx.h"
-<<<<<<< HEAD
 #include "font.hpp"
-    =======
 #include <debug.h>
-    >>>>>>> 19fe58b (Fixed issues with non initialized inventory.)
 #include <fontlibc.h>
 
-    Inventory_menu::Inventory_menu(Player* player)
-    : Menu(player->game, player->input)
+Inventory_menu::Inventory_menu(Player* player) : Menu(player->game, player->input)
 {
     // dbg_printf("CREATING NEW INVENTORY MENU\n");
     this->player = player;
