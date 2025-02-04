@@ -21,7 +21,7 @@ void Instructions_menu::tick()
 
 void Instructions_menu::render()
 {
-    fontlib_ClearWindow();
+    // fontlib_ClearWindow();
     fontlib_SetWindowFullScreen();
     fontlib_HomeUp();
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);

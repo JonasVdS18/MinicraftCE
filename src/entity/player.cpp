@@ -383,7 +383,7 @@ void Player::render(int x_scroll, int y_scroll)
         }
         else
         {
-            display_sprite = rlet_player_front_flipped;
+            display_sprite = rlet_player_front_flipped_y;
         }
     }
     if (dir == 1) // if the direction is 1 (Up)...
@@ -394,18 +394,18 @@ void Player::render(int x_scroll, int y_scroll)
         }
         else
         {
-            display_sprite = rlet_player_back_flipped;
+            display_sprite = rlet_player_back_flipped_y;
         }
     }
     if (dir == 2) // if the direction is 2 (Left)...
     {
         if (!flip)
         {
-            display_sprite = rlet_player_side_0_flipped;
+            display_sprite = rlet_player_side_0_flipped_y;
         }
         else
         {
-            display_sprite = rlet_player_side_1_flipped;
+            display_sprite = rlet_player_side_1_flipped_y;
         }
     }
     if (dir == 3) // if the direction is 3 (Right)...

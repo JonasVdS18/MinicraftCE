@@ -1,6 +1,7 @@
 #include "inventory_menu.hpp"
 #include "../entity/player.hpp"
 #include "../gfx/gfx.h"
+#include "font.hpp"
 #include <fontlibc.h>
 
 Inventory_menu::Inventory_menu(Player* player) : Menu(player->game, player->input)
@@ -45,12 +46,6 @@ void Inventory_menu::tick()
 
 void Inventory_menu::render()
 {
-    gfx_RLETSprite_NoClip(rlet_inventory_screen, 16, 16);
-    fontlib_SetWindow(24, 24, (rlet_inventory_screen_width - 16), (rlet_inventory_screen_height - 16));
-    fontlib_SetBackgroundColor(5);
-    fontlib_ClearWindow();
-    fontlib_SetCursorPosition(32, 32);
-    fontlib_SetColors(5, 0);
-    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+    Font::renderFrame("INVENTORY", 9, 16, 16, 11, 10);
     // Menu::render_item_list(32, 32, (rlet_inventory_screen_height - 16), player->inventory->items, selected);
 }

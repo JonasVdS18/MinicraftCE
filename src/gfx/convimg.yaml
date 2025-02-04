@@ -7,6 +7,7 @@ palettes:
       - color: {index: 3, r: 102, g: 102, b: 102} # text grey color
       - color: {index: 4, r: 154, g: 154, b: 154} # text grey/white color
       - color: {index: 5, r: 22, g: 22, b: 137} # inventory blue
+      - color: {index: 6, r: 229,g: 229, b: 137} #text yellow
     images: automatic
 
 converts:
@@ -75,7 +76,8 @@ converts:
     style: rlet
     images:
       - logo.png
-      - inventory_screen.png
+      - frame_corner.png
+      - frame_side.png
       - player_back.png
       - player_back_hold.png
       - player_front.png
@@ -94,9 +96,9 @@ converts:
       - slime_jump.png
 
 
-  - name: rlet_sprites_flipped
+  - name: rlet_sprites_flipped_y
     prefix: rlet_
-    suffix: _flipped
+    suffix: _flipped_y
     palette: global_palette
     transparent-color-index: 1
     flip-y: true
@@ -116,6 +118,49 @@ converts:
       - zombie_front.png
       - zombie_side_0.png
       - zombie_side_1.png
+      - frame_corner.png
+
+  - name: rlet_sprites_flipped_x
+    prefix: rlet_
+    suffix: _flipped_x
+    palette: global_palette
+    transparent-color-index: 1
+    flip-x: true
+    style: rlet
+    images:
+      - frame_corner.png
+      - frame_side.png
+
+  - name: rlet_sprites_flipped_xy
+    prefix: rlet_
+    suffix: _flipped_xy
+    palette: global_palette
+    transparent-color-index: 1
+    flip-x: true
+    flip-y: true
+    style: rlet
+    images:
+      - frame_corner.png
+  
+  - name: rlet_sprites_rotated_90
+    prefix: rlet_
+    suffix: _rotated_90
+    palette: global_palette
+    transparent-color-index: 1
+    rotate: 90
+    style: rlet
+    images:
+      - frame_side.png
+
+  - name: rlet_sprites_rotated_270
+    prefix: rlet_
+    suffix: _rotated_270
+    palette: global_palette
+    transparent-color-index: 1
+    rotate: 270
+    style: rlet
+    images:
+      - frame_side.png
 
 outputs:
   - type: c
@@ -130,5 +175,9 @@ outputs:
       - sprites_rotated_90
       - sprites_rotated_270
       - rlet_sprites
-      - rlet_sprites_flipped
+      - rlet_sprites_flipped_y
+      - rlet_sprites_flipped_x
+      - rlet_sprites_flipped_xy
+      - rlet_sprites_rotated_90
+      - rlet_sprites_rotated_270
     const: true

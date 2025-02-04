@@ -82,7 +82,7 @@ void Game::init()
     gfx_SetDrawBuffer();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
     fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT), static_cast<fontlib_load_options_t>(0));
-    fontlib_SetTransparency(true);
+    fontlib_SetTransparency(false);
     fontlib_SetLineSpacing(1, 1);
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
     gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT - 48);

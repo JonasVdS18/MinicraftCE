@@ -57,7 +57,7 @@ void Title_menu::tick()
 
 void Title_menu::render()
 {
-    fontlib_ClearWindow();
+    // fontlib_ClearWindow();
     fontlib_SetWindow(0, (96 + rlet_logo_height), GFX_LCD_WIDTH, (GFX_LCD_HEIGHT - (96 + rlet_logo_height)));
     fontlib_SetCursorPosition(0, (96 + rlet_logo_height));
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
