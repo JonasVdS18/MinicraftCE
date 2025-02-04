@@ -4,12 +4,13 @@
 #include "../level/tile/tile.hpp"
 #include "../screen/inventory_menu.hpp"
 // #include <debug.h>
+#include <debug.h>
 #include <sys/util.h>
 
 Player::Player(Game* game, Input_handler* input)
     : Mob(), max_stamina{10}, stamina{max_stamina}, attack_time{0}, attack_dir{dir}, on_stair_delay{0},
       active_item{NULL}, attack_item{active_item}, stamina_recharge(0), stamina_recharge_delay{0}, invulnerable_time{0},
-      game{game}, input{input}
+      game{game}, input{input}, inventory(new Inventory())
 {
     x = 24;
     y = 24;
@@ -138,8 +139,10 @@ void Player::tick()
 
     if (input->menu->clicked)
     {
+        // dbg_printf("CLICKED INVENTORY\n");
         if (!use())
         {
+            // dbg_printf("NOT USE\n");
             game->set_menu(new Inventory_menu(this));
         }
     }

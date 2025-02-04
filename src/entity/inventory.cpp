@@ -11,7 +11,7 @@ Inventory::~Inventory()
 
 void Inventory::add(Item* item)
 {
-    add(items->size(), item);
+    items->add(item);
 }
 /*not fully implemented yet*/
 void Inventory::add(int slot, Item* item)

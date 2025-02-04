@@ -16,8 +16,10 @@ const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
 
 void Game::set_menu(Menu* menu)
 {
+    // dbg_printf("IN SETMENU\n");
     if (this->menu != NULL)
     {
+        // dbg_printf("DELETING PREVIOUS MENU\n");
         delete this->menu;
     }
     this->menu = menu;
