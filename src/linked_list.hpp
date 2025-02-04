@@ -1,7 +1,35 @@
 #ifndef LINKED_LIST_HPP
 #define LINKED_LIST_HPP
 
-// #include <debug.h>
+template <typename T> class Linked_list_item
+{
+  public:
+    Linked_list_item(T* item);
+    Linked_list_item();
+    ~Linked_list_item();
+    T* item;
+    Linked_list_item* next;
+};
+
+template <typename T> Linked_list_item<T>::Linked_list_item(T* item)
+{
+    this->item = item;
+    this->next = nullptr;
+}
+
+template <typename T> Linked_list_item<T>::Linked_list_item()
+{
+    this->item = nullptr;
+    this->next = nullptr;
+}
+
+template <typename T> Linked_list_item<T>::~Linked_list_item()
+{
+    if (next != nullptr)
+    {
+        delete next;
+    }
+}
 
 template <typename T> class Linked_list
 {
@@ -19,271 +47,295 @@ template <typename T> class Linked_list
     T** to_array();
 
   private:
-    T* item;
-    Linked_list* next;
+    Linked_list_item<T>* first;
+    Linked_list_item<T>* last;
+    int list_size;
 };
 
-template <typename T> Linked_list<T>::Linked_list(T* item) : item{item}, next{nullptr}
+template <typename T> Linked_list<T>::Linked_list(T* item)
 {
+    this->first = new Linked_list_item<T>(item);
+    this->last = first;
+    this->list_size = 1;
 }
 
-template <typename T> Linked_list<T>::Linked_list() : item{nullptr}, next{nullptr}
+template <typename T> Linked_list<T>::Linked_list()
 {
+    this->first = nullptr;
+    this->last = nullptr;
+    this->list_size = 0;
 }
 
 template <typename T> Linked_list<T>::~Linked_list()
 {
-    if (next != nullptr)
+    if (first != nullptr)
     {
-        delete next;
+        delete first;
     }
+    // last does not have to be deleted, because it will be deleted when first
+    // deletes the next etc.
 }
 
 template <typename T> void Linked_list<T>::add(T* t)
 {
-    // dbg_printf("ADD CALLED\n");
-    Linked_list<T>* list{this};
-    while (list->next != nullptr)
+    if (last == nullptr)
     {
-        list = list->next;
+        first = new Linked_list_item<T>(t);
+        last = first;
+        list_size++;
+        return;
     }
-    if (list->item == nullptr)
+    if (last->item == nullptr)
     {
-        list->item = t;
+        last->item = t;
     }
     else
     {
-        list->next = new Linked_list<T>(t);
+        last->next = new Linked_list_item<T>(t);
+        last = last->next;
     }
+    list_size++;
 }
 
 template <typename T> void Linked_list<T>::add(int index, T* t)
 {
-    // dbg_printf("ADD CALLED\n");
+    if (index < 0)
+    {
+        return;
+    }
+    Linked_list_item<T>* list_item{first};
+
+    // this is only true when we are adding at the beginning of the list
     if (index == 0)
     {
-        if (next != nullptr)
+        first = new Linked_list_item<T>(t);
+        first->next = list_item;
+        list_size++;
+        return;
+    }
+
+    if (first == nullptr)
+    {
+        first = new Linked_list_item<T>();
+        list_item = first;
+        list_size++;
+    }
+
+    while (index != 1)
+    {
+        // this was the last item in the list
+        if (list_item->next == nullptr)
         {
-            T* temp = item;
-            item = t;
-            next->add(0, t);
+            list_item->next = new Linked_list_item<T>();
+            last = list_item->next;
+            list_size++;
         }
-        else // end of the list.
-        {
-            T* temp = item;
-            item = t;
-            if (item != nullptr)
-            {
-                next = new Linked_list(temp);
-            }
-        }
+        list_item = list_item->next;
+        index--;
+    }
+
+    // the index is now 1, so the next item needs to become t
+    if (list_item->next == nullptr)
+    {
+        list_item->next = new Linked_list_item<T>(t);
+        last = list_item->next;
+        list_size++;
     }
     else
     {
-        if (next == nullptr)
-        {
-            next = new Linked_list();
-        }
-        next->add(index - 1, t);
+        Linked_list_item<T>* temp{list_item->next};
+        list_item->next = new Linked_list_item<T>(t);
+        list_item->next->next = temp;
+        list_size++;
     }
 }
 
 template <typename T> void Linked_list<T>::add_all(Linked_list<T>* list)
 {
-    if (list == nullptr)
+    Linked_list_item<T>* list_item{list->first};
+    for (int i = 0; i < list->list_size; i++)
     {
-        return;
-    }
-
-    if (next == nullptr)
-    {
-        if (item == nullptr)
+        if (last == nullptr)
         {
-            item = list->item;
-            if (list->next != nullptr)
-            {
-                next = new Linked_list();
-                next->add_all(list->next);
-            }
+            first = new Linked_list_item<T>(list_item->item);
+            last = first;
         }
         else
         {
-            next = new Linked_list();
-            next->add_all(list);
+            if (last->item == nullptr)
+            {
+                last->item = list_item->item;
+            }
+            else
+            {
+                last->next = new Linked_list_item<T>(list_item->item);
+                last = last->next;
+            }
         }
-    }
-    else
-    {
-        next->add_all(list);
+        list_size++;
+        list_item = list_item->next;
     }
 }
 
 template <typename T> T* Linked_list<T>::get(int index)
 {
-    // dbg_printf("GET CALLED\n");
-    Linked_list<T>* list{this};
-    int i{index};
-    if (i == 0)
+    if (index < 0)
     {
-        return item;
+        return nullptr;
     }
-    while (list->next != nullptr)
+    Linked_list_item<T>* list_item{first};
+    if (list_item == nullptr)
     {
-        i--;
-        if (i < 0)
+        return nullptr;
+    }
+
+    if (index == 0)
+    {
+        return list_item->item;
+    }
+    while (list_item->next != nullptr)
+    {
+        index--;
+        if (index == 0)
         {
-            return nullptr;
+            return list_item->next->item;
         }
-        if (i == 0)
-        {
-            return list->next->item;
-        }
-        list = list->next;
+        list_item = list_item->next;
     }
     return nullptr;
 }
 
 template <typename T> T* Linked_list<T>::remove(int index)
 {
-
     if (index < 0)
     {
         return nullptr;
     }
-
-    if (index == 0) // if this item needs to be removed.
+    Linked_list_item<T>* list_item{first};
+    if (list_item == nullptr)
     {
-        if (next != nullptr) // if there is a next list entry
+        return nullptr;
+    }
+
+    // this is only true when we are deleting the first item of the list
+    if (index == 0)
+    {
+        if (list_item->next != nullptr)
         {
-            // remove the item by overriding it with the next, this shifts the list to
-            // the front
-            T* temp{item};
-            item = next->item;
-            if (next->next != nullptr)
-            {
-                next->remove(0);
-                return temp;
-            }
-            else // if the next item is the last in the list, remove it because we
-                 // dont need it anymore.
-            {
-                delete next;
-                next = nullptr;
-                return temp;
-            }
+            first = list_item->next;
         }
-        else // if this is the only item in the list (we know it is the only item
-             // in the list because it doesnt have a next one but it is also the
-             // last because it would have been deleted).
+        // The first is also the last item
+        else
         {
-            // create an empty list entry.
-            T* temp{item};
-            item = nullptr;
+            first = nullptr;
+            last = nullptr;
+        }
+        T* temp = list_item->item;
+        // set next to nullptr so it wont get deleted
+        list_item->next = nullptr;
+        delete list_item;
+        // update the list size
+        list_size--;
+        return temp;
+    }
+    while (list_item->next != nullptr)
+    {
+        if (index == 1)
+        {
+            Linked_list_item<T>* new_next{list_item->next->next};
+            T* temp = list_item->next->item;
+            // set next next to nullptr so it wont get deleted
+            list_item->next->next = nullptr;
+            delete list_item->next;
+            // update the list size
+            list_size--;
+            list_item->next = new_next;
+            // if there is no new next item we deleted the last item
+            if (new_next == nullptr)
+            {
+                last = list_item;
+            }
             return temp;
         }
+        index--;
+        list_item = list_item->next;
     }
-    else // if this item does not need to be removed.
-    {
-        // if the next item is the item that is going to be removed.
-        if (index - 1 == 0)
-        {
-            // if the next item exists.
-            if (next != nullptr)
-            {
-                // save the item in temp to return later
-                T* temp = next->item;
-
-                // if the next item is the last item in the list but not the first (we
-                // know it is not the first because then index would have been 0).
-                if (next->next == nullptr)
-                {
-                    // delete the next entry to shorten the list.
-                    delete next;
-                    next = nullptr;
-                }
-                else
-                {
-                    // remove the next item.
-                    next->remove(0);
-                }
-                // return the removed item.
-                return temp;
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-        else // if the next item does not need to be removed.
-        {
-            if (next != nullptr) // if the next item exists.
-            {
-                return next->remove(index - 1);
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
-    }
+    return nullptr;
 }
 
 template <typename T> T* Linked_list<T>::remove(T* t)
 {
-    if (item == t) // if we need to remove this item.
+    Linked_list_item<T>* list_item{first};
+    if (list_item == nullptr)
     {
-        // remove the item using the normal remove function.
-        remove(0);
-        return t;
+        return nullptr;
     }
-    else // if this item does not need to be removed.
+
+    // this is only true when we are deleting the first item of the list
+    if (list_item->item == t)
     {
-        if (next != nullptr) // try to remove it from the remaining list.
+        if (list_item->next != nullptr)
         {
-            return next->remove(t);
+            first = list_item->next;
         }
-        else // if the item is not in the list.
+        // The first is also the last item
+        else
         {
-            return nullptr;
+            first = nullptr;
+            last = nullptr;
         }
+        T* temp = list_item->item;
+        // set next to nullptr so it wont get deleted
+        list_item->next = nullptr;
+        delete list_item;
+        // update the list size
+        list_size--;
+        return temp;
     }
+
+    while (list_item->next != nullptr)
+    {
+        if (list_item->next->item == t)
+        {
+            Linked_list_item<T>* new_next{list_item->next->next};
+            T* temp = list_item->next->item;
+            // set next next to nullptr so it wont get deleted
+            list_item->next->next = nullptr;
+            delete list_item->next;
+            // update the list size
+            list_size--;
+            list_item->next = new_next;
+            // if there is no new next item we deleted the last item
+            if (new_next == nullptr)
+            {
+                last = list_item;
+            }
+            return temp;
+        }
+        list_item = list_item->next;
+    }
+
+    return nullptr;
 }
 
-/*Always cache the size if used in a loop, because otherwise it will be called over and over each iteration.*/
 template <typename T> int Linked_list<T>::size()
 {
-    // dbg_printf("SIZE CALLED\n");
-    Linked_list<T>* list{this};
-    int size{0};
-    if (item == nullptr)
-    {
-        return 0;
-    }
-    size++;
-    while (list->next != nullptr)
-    {
-        size++;
-        list = list->next;
-    }
-    return size;
+    return this->list_size;
 }
 
-/*returns an array containing all the elents of the list.*/
+/*returns an array containing all the elements of the list.*/
 template <typename T> T** Linked_list<T>::to_array()
 {
-    // dbg_printf("SIZE IS: %i\n", size());
-    T** array{new T*[size()]};
-    Linked_list<T>* list{this};
+    T** array{new T*[list_size]};
+    Linked_list_item<T>* list_item{first};
     int index{0};
-    // dbg_printf("INDEX IS: %i\n", index);
-    while (list->next != nullptr)
+    while (list_item->next != nullptr)
     {
-        array[index] = list->item;
-        list = list->next;
+        array[index] = list_item->item;
+        list_item = list_item->next;
         index++;
-        // dbg_printf("INDEX IS: %i\n", index);
     }
-    array[index] = list->item;
+    array[index] = list_item->item;
     return array;
 }
 

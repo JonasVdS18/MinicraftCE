@@ -4,7 +4,7 @@
 #include "level/level.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
-// #include <debug.h>
+#include <debug.h>
 #include <fontlibc.h>
 #include <graphx.h>
 #include <sys/rtc.h>
@@ -61,11 +61,10 @@ void Game::run()
             tick();
             clockdiff -= CLOCKS_PER_TICK;
             should_render = true;
-            /*
             if (tick_count % 60 == 0)
             {
                 dbg_printf("SECONDS: %i\n", static_cast<int>(tick_count / 60));
-            }*/
+            }
         }
 
         if (should_render)

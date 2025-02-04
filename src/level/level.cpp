@@ -24,7 +24,7 @@ const int SCREEN_WIDTH_IN_TILES_BUFFER{3};
 const int SCREEN_HEIGHT_IN_TILES_BUFFER{2};
 
 // The amount of tiles to update frequently (every tick)
-// We divide by 50 to have the same update frequency as in teh original game
+// We divide by 50 to have the same update frequency as in the original game
 const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN_WIDTH_IN_TILES_BUFFER) *
                                              (SCREEN_HEIGHT_IN_TILES + 2 * SCREEN_HEIGHT_IN_TILES_BUFFER) / 50};
 
@@ -62,7 +62,7 @@ Level::Level(int width, int height, int level, Level* parent_level)
             for (int x = 0; x < width; x++)
             {
                 int i = x + y * width;
-                tiles[i] = Tile::grass->id;
+                tiles[i] = Tile::rock->id;
                 data[i] = 0;
             }
         }
@@ -201,11 +201,14 @@ void Level::try_spawn(int count)
 void Level::tick()
 {
     // dbg_printf("LEVEL::TICKED CALLED\n");
+    // this is expensive
     try_spawn(1);
     // dbg_printf("LEVEL::TICKED END\n");
 
     // Update the tiles that are viewed by the player frequently
     // const int tiles_to_update_per_tick{static_cast<int>(width * height / 50)};
+
+    int tiles_tick_amount{0};
 
     for (int i = 0; i < AMOUNT_OF_TILES_TO_TICK_FREQUENTLY; i++)
     {
@@ -214,6 +217,7 @@ void Level::tick()
         int yt = randInt(player->y - SCREEN_HEIGHT_IN_TILES / 2 - SCREEN_HEIGHT_IN_TILES_BUFFER,
                          player->y + SCREEN_HEIGHT_IN_TILES / 2 + SCREEN_HEIGHT_IN_TILES_BUFFER);
         get_tile(xt, yt)->tick(this, xt, yt, 1);
+        tiles_tick_amount++;
     }
 
     // Update the tiles that are not visible less frequent but in larger increments.
@@ -235,11 +239,14 @@ void Level::tick()
                 yt += SCREEN_HEIGHT_IN_TILES_BUFFER * 2 + SCREEN_HEIGHT_IN_TILES;
             }
             get_tile(xt, yt)->tick(this, xt, yt, AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER);
+            tiles_tick_amount++;
         }
     }
 
     /*
     int size{entities->size()};
+    dbg_printf("ENTITIES: %i\n", size);
+    /*
     Entity** entities_array{entities->to_array()};
 
     for (int i = 0; i < size; i++)
@@ -262,10 +269,11 @@ void Level::tick()
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
+// This functions is very expensive
 Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
     // dbg_printf("IN GET_ENTITIES\n");
-    //  dbg_printf("START OF GET_ENTITIES\n");
+    // dbg_printf("START OF GET_ENTITIES\n");
     Linked_list<Entity>* result{new Linked_list<Entity>()};
     const int size{entities->size()};
     Entity** entities_array{entities->to_array()};
