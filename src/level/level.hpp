@@ -14,7 +14,11 @@ class Level
 {
   public:
     // Width and Height in tiles not in pixels.
-    int width, height;
+    const int width, height;
+    // size in tiles of a chunk, a chunk is chunksize* chunksize in tiles, its a square with chunksize as length
+    const int chunk_size;
+    // Width and height in chunks not in
+    const int width_in_chunks, height_in_chunks;
     // x_offset and y_offset in world coordinates
     int x_offset, y_offset;
     // array of tile id's
@@ -22,7 +26,9 @@ class Level
     uint8_t* data;
     int monster_density;
     // List containing all the entities in the level
-    Linked_list<Entity>* entities;
+    // Linked_list<Entity>* entities;
+    // Array containing lists of entities per chunks of chunksize * chunksize
+    Linked_list<Entity>** entities_in_chunks;
     Player* player;
 
     Level(int width, int height, int level, Level* parent_level);

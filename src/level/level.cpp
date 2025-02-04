@@ -34,8 +34,9 @@ const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN
 const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
 
 Level::Level(int width, int height, int level, Level* parent_level)
-    : depth{level}, width{width}, height{height}, x_offset{0}, y_offset{0}, monster_density{8},
-      entities{new Linked_list<Entity>()}, player{NULL}
+    : depth{level}, width{width}, height{height}, x_offset{0}, y_offset{0}, monster_density{8}, chunk_size{16},
+      player{NULL}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
+      height_in_chunks{(height + chunk_size - 1) / chunk_size}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -68,6 +69,9 @@ Level::Level(int width, int height, int level, Level* parent_level)
         }
     }
 
+    // create the chunks array
+    entities_in_chunks = new Linked_list<Entity>*[width_in_chunks * height_in_chunks];
+
     // Stair code needs to be implemented.
 
     // Air Wizard code needs to be implemented.
@@ -75,9 +79,15 @@ Level::Level(int width, int height, int level, Level* parent_level)
 
 Level::~Level()
 {
-    if (entities != nullptr)
+    if (entities_in_chunks != nullptr)
     {
-        delete entities;
+        for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
+        {
+            if (entities_in_chunks[i] != nullptr)
+            {
+                delete entities_in_chunks[i];
+            }
+        }
     }
     if (tiles != nullptr)
     {
@@ -148,14 +158,31 @@ void Level::add(Entity* entity)
     }
 
     entity->removed = false;
-    // add to entities
-    entities->add(entity);
+    // add to entities_in_chunks
+    int chunk_x = entity->x / (32 * chunk_size);
+    int chunk_y = entity->y / (32 * chunk_size);
+    if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
+    {
+        return;
+    }
+    if (entities_in_chunks[chunk_x + chunk_y * width_in_chunks] == nullptr)
+    {
+        // dbg_printf("creating new entity list\n");
+        entities_in_chunks[chunk_x + chunk_y * width_in_chunks] = new Linked_list<Entity>();
+    }
+    entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->add(entity);
     entity->init(this);
 }
 
 void Level::remove(Entity* e)
 {
-    entities->remove(e);
+    int chunk_x = e->x / (32 * chunk_size);
+    int chunk_y = e->y / (32 * chunk_size);
+    if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
+    {
+        return;
+    }
+    entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->remove(e);
 }
 
 void Level::try_spawn(int count)
@@ -201,9 +228,8 @@ void Level::try_spawn(int count)
 void Level::tick()
 {
     // dbg_printf("LEVEL::TICKED CALLED\n");
-    // this is expensive
+    //  this is expensive
     try_spawn(1);
-    // dbg_printf("LEVEL::TICKED END\n");
 
     // Update the tiles that are viewed by the player frequently
     // const int tiles_to_update_per_tick{static_cast<int>(width * height / 50)};
@@ -243,8 +269,21 @@ void Level::tick()
         }
     }
 
-    int size{entities->size()};
-    dbg_printf("ENTITIES: %i\n", size);
+    /*
+    for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
+    {
+        dbg_printf("chunk %i: ", i);
+        if (entities_in_chunks[i] != nullptr)
+        {
+            dbg_printf("%i", entities_in_chunks[i]);
+            dbg_printf(" size: %i\n", entities_in_chunks[i]->size());
+        }
+        else
+        {
+            dbg_printf("0 size: 0\n");
+        }
+    }
+    */
     /*
     Entity** entities_array{entities->to_array()};
 
@@ -265,15 +304,65 @@ void Level::tick()
 
     x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
     y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
+
+    // dbg_printf("LEVEL::TICKED END\n");
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
 // This functions is very expensive
 Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
-    // dbg_printf("IN GET_ENTITIES\n");
     // dbg_printf("START OF GET_ENTITIES\n");
     Linked_list<Entity>* result{new Linked_list<Entity>()};
+
+    int chunk_x0 = x0 / (32 * chunk_size);
+    int chunk_y0 = y0 / (32 * chunk_size);
+    int chunk_x1 = x1 / (32 * chunk_size);
+    int chunk_y1 = y1 / (32 * chunk_size);
+
+    // clamp teh bounds
+    if (chunk_x0 < 0)
+        chunk_x0 = 0;
+    if (chunk_x0 >= width_in_chunks)
+        chunk_x0 = width_in_chunks - 1;
+    if (chunk_y0 < 0)
+        chunk_y0 = 0;
+    if (chunk_y0 >= height_in_chunks)
+        chunk_y0 = height_in_chunks - 1;
+
+    if (chunk_x1 < 0)
+        chunk_x1 = 0;
+    if (chunk_x1 >= width_in_chunks)
+        chunk_x1 = width_in_chunks - 1;
+    if (chunk_y1 < 0)
+        chunk_y1 = 0;
+    if (chunk_y1 >= height_in_chunks)
+        chunk_y1 = height_in_chunks - 1;
+
+    // dbg_printf("NOT OUT OF BOUNDS\n");
+
+    for (int i = chunk_x0; i <= chunk_x1; i++)
+    {
+        for (int j = chunk_y0; j <= chunk_y1; j++)
+        {
+            // dbg_printf("i + j * width_in_chunks = %i", i + j * width_in_chunks);
+            // dbg_printf("and max is %i\n", width_in_chunks * height_in_chunks);
+            if (entities_in_chunks[i + j * width_in_chunks] != nullptr)
+            {
+                // dbg_printf("NOT NULLPTR\n");
+                Linked_list<Entity>* entities{entities_in_chunks[i + j * width_in_chunks]};
+                const int size{entities->size()};
+                // dbg_printf("SIZE: %i\n", size);
+                for (int k = 0; k < size; k++)
+                {
+                    Entity* e = entities->get(k);
+                    if (e->intersects(x0, y0, x1, y1))
+                        result->add(e);
+                }
+            }
+        }
+    }
+    /*
     const int size{entities->size()};
     // to array seems to be very expensive especially for large lists
     Entity** entities_array{entities->to_array()};
@@ -285,6 +374,7 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     }
 
     delete[] entities_array;
+    */
     // dbg_printf("AMOUNT OF ENTITIES IN GET_ENTITIES: %i\n", result->size());
     return result; // returns the result list of entities
 }
