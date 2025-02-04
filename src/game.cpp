@@ -160,7 +160,7 @@ void Game::render()
     {
         gfx_ZeroScreen();
     }
-    // render_GUI();
+    render_GUI();
 
     gfx_SwapDraw();
 }
