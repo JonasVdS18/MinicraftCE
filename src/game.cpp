@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include "fonts/fonts.h"
 #include "gfx/gfx.h"
 #include "level/level.hpp"
 #include "screen/menu.hpp"
@@ -46,7 +45,10 @@ void Game::run()
     int frames{0};
     int ticks{0};
 
-    init();
+    if (init())
+    {
+        stop();
+    }
 
     while (running)
     {
@@ -77,20 +79,31 @@ void Game::run()
     }
 }
 
-void Game::init()
+bool Game::init()
 {
     // dbg_printf("INIT START\n");
     gfx_Begin();
     gfx_SetDrawBuffer();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
-    fontlib_SetFont(reinterpret_cast<const fontlib_font_t*>(FONT), static_cast<fontlib_load_options_t>(0));
+
+    fontlib_font_t* mini_font;
+    mini_font = fontlib_GetFontByIndex("MINIFONT", 0);
+    if (mini_font == NULL)
+    {
+        gfx_PrintStringXY("MINIFONT appvar not found or invalid", 0, 0);
+        return 1;
+    }
+
+    fontlib_SetFont(mini_font, static_cast<fontlib_load_options_t>(0));
     fontlib_SetTransparency(false);
     fontlib_SetLineSpacing(1, 1);
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+
     gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT - 48);
     srand(rtc_Time());
 
     set_menu(new Title_menu(this, input));
+    return 0;
 }
 
 void Game::reset()
