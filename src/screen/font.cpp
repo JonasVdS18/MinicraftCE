@@ -1,5 +1,5 @@
 #include "font.hpp"
-#include "../gfx/gfx.h"
+#include "../gfx/minigfx.h"
 #include <fontlibc.h>
 #include <graphx.h>
 

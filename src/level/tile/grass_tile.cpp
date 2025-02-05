@@ -1,6 +1,6 @@
 #include "grass_tile.hpp"
 #include "../../entity/player.hpp"
-#include "../../gfx/gfx.h"
+#include "../../gfx/minigfx.h"
 #include "../level.hpp"
 #include <graphx.h>
 

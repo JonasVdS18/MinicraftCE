@@ -1,5 +1,5 @@
 #include "zombie.hpp"
-#include "../gfx/gfx.h"
+#include "../gfx/minigfx.h"
 #include "player.hpp"
 #include <sys/util.h>
 

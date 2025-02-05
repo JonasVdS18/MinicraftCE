@@ -1,5 +1,5 @@
 #include "game.hpp"
-#include "gfx/gfx.h"
+#include "gfx/minigfx.h"
 #include "level/level.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
@@ -82,6 +82,12 @@ void Game::run()
 bool Game::init()
 {
     // dbg_printf("INIT START\n");
+
+    if (minigfx_init() == 0)
+    {
+        return 1;
+    }
+
     gfx_Begin();
     gfx_SetDrawBuffer();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);

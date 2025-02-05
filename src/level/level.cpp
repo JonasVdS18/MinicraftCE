@@ -3,7 +3,7 @@
 #include "../entity/player.hpp"
 #include "../entity/slime.hpp"
 #include "../entity/zombie.hpp"
-#include "../gfx/gfx.h"
+#include "../gfx/minigfx.h"
 #include "../linked_list.hpp"
 #include "tile/tile.hpp"
 #include <debug.h>

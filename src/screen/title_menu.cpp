@@ -1,6 +1,6 @@
 #include "title_menu.hpp"
 #include "../game.hpp"
-#include "../gfx/gfx.h"
+#include "../gfx/minigfx.h"
 #include "../input_handler.hpp"
 #include "about_menu.hpp"
 #include "instructions_menu.hpp"

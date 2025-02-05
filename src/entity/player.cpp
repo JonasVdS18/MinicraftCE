@@ -1,6 +1,6 @@
 #include "player.hpp"
 // #include "../level/level.hpp"
-#include "../gfx/gfx.h"
+#include "../gfx/minigfx.h"
 #include "../level/tile/tile.hpp"
 #include "../screen/inventory_menu.hpp"
 // #include <debug.h>

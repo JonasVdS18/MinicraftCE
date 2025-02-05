@@ -163,8 +163,10 @@ converts:
       - frame_side.png
 
 outputs:
-  - type: c
-    include-file: gfx.h
+  - type: appvar
+    name: minigfx
+    include-file: minigfx.h
+    source-format: c
     palettes:
       - global_palette
     converts:
@@ -180,4 +182,4 @@ outputs:
       - rlet_sprites_flipped_xy
       - rlet_sprites_rotated_90
       - rlet_sprites_rotated_270
-    const: true
+    # const: true
