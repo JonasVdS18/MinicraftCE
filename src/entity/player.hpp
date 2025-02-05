@@ -29,12 +29,12 @@ class Player : public Mob
     Game* game;
     Input_handler* input;
     Inventory* inventory;
-    Item* attack_item;
     Item* active_item;
+    Item* attack_item;
+    const uint8_t max_stamina;
     uint8_t stamina;
     uint8_t stamina_recharge;
     uint8_t stamina_recharge_delay;
-    const uint8_t max_stamina;
     uint8_t invulnerable_time;
     Player(Game* game, Input_handler* input);
     ~Player();

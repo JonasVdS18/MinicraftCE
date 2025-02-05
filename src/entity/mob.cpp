@@ -7,7 +7,7 @@
 class Level;
 
 Mob::Mob()
-    : Mob::Entity(), walk_dist{0}, dir{0}, hurt_time{0}, x_knockback{0}, y_knockback{0}, maxhealth{10},
+    : Mob::Entity(), walk_dist{0}, dir{0}, x_knockback{0}, y_knockback{0}, hurt_time{0}, maxhealth{10},
       health{maxhealth}, swim_timer{0}, tick_time{0}
 {
     x = 8;

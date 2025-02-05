@@ -8,9 +8,10 @@
 #include <sys/util.h>
 
 Player::Player(Game* game, Input_handler* input)
-    : Mob(), max_stamina{10}, stamina{max_stamina}, attack_time{0}, attack_dir{dir}, on_stair_delay{0},
-      active_item{NULL}, attack_item{active_item}, stamina_recharge(0), stamina_recharge_delay{0}, invulnerable_time{0},
-      game{game}, input{input}, inventory(new Inventory())
+    : Mob(), attack_time{0}, attack_dir{dir}, on_stair_delay{0}, game{game}, input{input}, inventory(new Inventory()),
+      active_item{NULL}, attack_item{active_item}, max_stamina{10}, stamina{max_stamina}, stamina_recharge(0),
+      stamina_recharge_delay{0}, invulnerable_time{0}
+
 {
     x = 24;
     y = 24;

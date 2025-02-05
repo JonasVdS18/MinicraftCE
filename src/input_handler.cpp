@@ -1,7 +1,7 @@
 #include "input_handler.hpp"
 #include <keypadc.h>
 
-Key::Key() : clicked{false}, down{false}, clickable{true}
+Key::Key() : clickable{true}, down{false}, clicked{false}
 {
 }
 

@@ -20,7 +20,7 @@ Tile* Tile::stairs_down = new Stairs_tile(14, false);
 Tile* Tile::stairs_up = new Stairs_tile(15, true);
 
 Tile::Tile(uint8_t id)
-    : id(id), connects_to_grass{false}, connects_to_lava{false}, connects_to_sand{false}, connects_to_water{false}
+    : id(id), connects_to_grass{false}, connects_to_sand{false}, connects_to_lava{false}, connects_to_water{false}
 {
     tiles[id] = this;
 }

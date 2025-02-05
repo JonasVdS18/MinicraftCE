@@ -26,9 +26,9 @@ void Game::set_menu(Menu* menu)
 }
 
 Game::Game()
-    : running{true}, tick_count{0}, prev_health{0}, prev_stamina{0}, game_time{0}, player_dead_time{0},
-      pending_level_change{0}, wontimer{0}, has_won{false}, current_level{3}, input{new Input_handler()}, menu{NULL},
-      level{NULL}, player{NULL}
+    : game_time{0}, has_won{false}, menu{NULL}, player{NULL}, running{true}, level{NULL}, tick_count{0},
+      player_dead_time{0}, pending_level_change{0}, wontimer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
+      input{new Input_handler()}
 {
 }
 

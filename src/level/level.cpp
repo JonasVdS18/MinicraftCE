@@ -34,9 +34,9 @@ const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN
 const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
 
 Level::Level(int width, int height, int level, Level* parent_level)
-    : depth{level}, width{width}, height{height}, x_offset{0}, y_offset{0}, monster_density{8}, chunk_size{16},
-      player{NULL}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
-      height_in_chunks{(height + chunk_size - 1) / chunk_size}
+    : width{width}, height{height}, chunk_size{16}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
+      height_in_chunks{(height + chunk_size - 1) / chunk_size}, x_offset{0}, y_offset{0}, monster_density{8},
+      player{NULL}, depth{level}
 {
     // 2D array
     uint8_t** maps = NULL;
