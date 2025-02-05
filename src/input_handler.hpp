@@ -13,6 +13,7 @@ class Key
 
     void toggle(bool pressed);
     void tick();
+    void reset();
 };
 
 class Input_handler
@@ -29,6 +30,7 @@ class Input_handler
     Input_handler();
     ~Input_handler();
     void tick();
+    void reset();
 };
 
 #endif

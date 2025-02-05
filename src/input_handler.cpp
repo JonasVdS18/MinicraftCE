@@ -27,6 +27,13 @@ void Key::tick()
     }
 }
 
+void Key::reset()
+{
+    clicked = false;
+    down = false;
+    clickable = false;
+}
+
 Input_handler::Input_handler()
     : up{new Key()}, down{new Key()}, left{new Key()}, right{new Key()}, attack{new Key()}, menu{new Key()},
       quit{new Key()}
@@ -63,4 +70,14 @@ void Input_handler::tick()
     attack->tick();
     menu->tick();
     quit->tick();
+}
+
+void Input_handler::reset()
+{
+    up->reset();
+    down->reset();
+    left->reset();
+    right->reset();
+    attack->reset();
+    menu->reset();
 }
