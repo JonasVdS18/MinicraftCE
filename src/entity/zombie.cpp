@@ -132,7 +132,7 @@ void Zombie::render(int x_scroll, int y_scroll)
 
 void Zombie::touched_by(Entity* entity)
 {
-    if (dynamic_cast<Player*>(entity) != NULL)
+    if (entity = level->player)
     {
         entity->hurt(this, lvl + 1, dir);
     }

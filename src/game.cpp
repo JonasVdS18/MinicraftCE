@@ -249,28 +249,54 @@ void Game::render_GUI()
                 gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 32);
             }
         }
-        if (player->stamina > prev_stamina)
+        if (player->stamina_recharge_delay > 0)
         {
-            for (uint8_t i = player->stamina - prev_stamina; i > 0; i--)
+            if (player->stamina_recharge_delay / 4 % 2 == 0)
             {
-                gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
-                gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                for (uint8_t i = 0; i < 10; i++)
+                {
+                    gfx_SetDrawScreen();
+                    gfx_Sprite_NoClip(stamina_blink, i * 16, GFX_LCD_HEIGHT - 16);
+                    gfx_SetDrawBuffer();
+                    gfx_Sprite_NoClip(stamina_blink, i * 16, GFX_LCD_HEIGHT - 16);
+                }
+            }
+            else
+            {
+                for (uint8_t i = 0; i < 10; i++)
+                {
+                    gfx_SetDrawScreen();
+                    gfx_Sprite_NoClip(stamina_empty, i * 16, GFX_LCD_HEIGHT - 16);
+                    gfx_SetDrawBuffer();
+                    gfx_Sprite_NoClip(stamina_empty, i * 16, GFX_LCD_HEIGHT - 16);
+                }
             }
         }
-        else if (player->stamina < prev_stamina)
+        else
         {
-            for (uint8_t i = prev_stamina - player->stamina; i > 0; i--)
+            if (player->stamina > prev_stamina)
             {
-                gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
-                gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                for (uint8_t i = player->stamina - prev_stamina; i > 0; i--)
+                {
+                    gfx_SetDrawScreen();
+                    gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                    gfx_SetDrawBuffer();
+                    gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                }
             }
+            else if (player->stamina < prev_stamina)
+            {
+                for (uint8_t i = prev_stamina - player->stamina; i > 0; i--)
+                {
+                    gfx_SetDrawScreen();
+                    gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                    gfx_SetDrawBuffer();
+                    gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
+                }
+            }
+            prev_health = player->health;
+            prev_stamina = player->stamina;
         }
-        prev_health = player->health;
-        prev_stamina = player->stamina;
     }
 
     if (menu != NULL)

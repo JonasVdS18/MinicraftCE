@@ -20,6 +20,7 @@ converts:
       - heart_empty.png
       - stamina_full.png
       - stamina_empty.png
+      - stamina_blink.png
 
   - name: rlet_sprites
     palette: global_palette
