@@ -4,6 +4,7 @@
 #include "entity/player.hpp"
 #include "input_handler.hpp"
 #include "screen/menu.hpp"
+#include <time.h>
 
 class Menu;
 class Level;
@@ -37,6 +38,8 @@ class Game
     int current_level;
     uint8_t prev_health, prev_stamina;
     Input_handler* input;
+    clock_t last_clock;
+    clock_t clockdiff;
 
     bool init();
     void render_GUI();

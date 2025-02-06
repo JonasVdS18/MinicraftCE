@@ -29,7 +29,7 @@ void Game::set_menu(Menu* menu)
 Game::Game()
     : game_time{0}, has_won{false}, menu{NULL}, player{NULL}, running{true}, level{NULL}, tick_count{0},
       player_dead_time{0}, pending_level_change{0}, wontimer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
-      input{new Input_handler()}
+      input{new Input_handler()}, last_clock{clock()}, clockdiff{0}
 {
 }
 
@@ -42,8 +42,8 @@ Game::~Game()
 
 void Game::run()
 {
-    clock_t last_clock{clock()};
-    clock_t clockdiff{0};
+    last_clock = clock();
+    clockdiff = 0;
     int frames{0};
     int ticks{0};
 
@@ -149,6 +149,10 @@ void Game::reset()
     gfx_SetDrawBuffer();
     gfx_ZeroScreen();
     input->reset();
+
+    // reset time so we wont lag
+    clock_t now_clock{clock()};
+    last_clock = now_clock;
 }
 
 void Game::start()
