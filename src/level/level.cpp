@@ -1,4 +1,5 @@
 #include "level.hpp"
+#include "../arraylist.hpp"
 #include "../entity/entity.hpp"
 #include "../entity/player.hpp"
 #include "../entity/slime.hpp"
@@ -10,15 +11,6 @@
 #include <debug.h>
 #include <stdint.h>
 #include <sys/util.h>
-
-Entity_queue_item::Entity_queue_item(Entity* e, int old_chunk, int new_chunk)
-    : e{e}, old_chunk{old_chunk}, new_chunk{new_chunk}
-{
-}
-
-Entity_queue_item::~Entity_queue_item()
-{
-}
 
 // amount of tiles in the screen width.
 const int SCREEN_WIDTH_IN_TILES{GFX_LCD_WIDTH >> 5};
@@ -43,10 +35,15 @@ const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN
 // This is also the tick modifier when calling tick on the tiles to make up for less tick calls.
 const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
 
+// Only entities within a square of 2*ENTITY_TICK_RADIUS by 2*ENTITY_TICK_RADIUS will be ticked, this is in pixel
+// coordinates
+// const int ENTITY_TICK_RADIUS{32 * 8};
+
 Level::Level(int width, int height, int level, Level* parent_level)
     : width{width}, height{height}, chunk_size{16}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
       height_in_chunks{(height + chunk_size - 1) / chunk_size}, x_offset{0}, y_offset{0}, monster_density{8},
-      changed_chunk_queue{new Linked_list<Entity_queue_item>()}, player{NULL}, depth{level}
+      entities{new Arraylist<Entity>(64)},
+      entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]}, player{NULL}, depth{level}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -102,15 +99,10 @@ Level::Level(int width, int height, int level, Level* parent_level)
     screen_tiles.y_loc = 0;
     screen_tiles.x_loc = 0;
     // create the chunks array
-    entities_in_chunks = new Linked_list<Entity>*[width_in_chunks * height_in_chunks];
 
-    // Reset all the memory
-    for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
+    for (uint8_t i = 0; i < width_in_chunks * height_in_chunks; i++)
     {
-        if (entities_in_chunks[i] != nullptr)
-        {
-            entities_in_chunks[i] = nullptr;
-        }
+        entities_in_chunks[i] = nullptr;
     }
 
     // Stair code needs to be implemented.
@@ -122,15 +114,6 @@ Level::~Level()
 {
     if (entities_in_chunks != nullptr)
     {
-        /*
-        for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
-        {
-            if (entities_in_chunks[i] != nullptr)
-            {
-                delete entities_in_chunks[i];
-            }
-        }
-        */
         delete[] entities_in_chunks;
     }
     if (tiles != nullptr)
@@ -155,7 +138,6 @@ void Level::render_background(int x_scroll, int y_scroll)
 
 void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
 {
-    // dbg_printf("SETTILE START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return;
@@ -168,7 +150,6 @@ void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
 
 uint8_t Level::get_data(int x, int y)
 {
-    // dbg_printf("GETDATA START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return 0;
@@ -178,7 +159,6 @@ uint8_t Level::get_data(int x, int y)
 
 void Level::set_data(int x, int y, uint8_t val)
 {
-    // dbg_printf("SETDATA START\n");
     if (x < 0 || y < 0 || x >= width || y >= height)
     {
         return;
@@ -188,13 +168,10 @@ void Level::set_data(int x, int y, uint8_t val)
 
 void Level::add(Entity* entity)
 {
-    // dbg_printf("ADD START\n");
     if (dynamic_cast<Player*>(entity) != nullptr)
     {
-        // dbg_printf("ADDING PLAYER\n");
         if (player != nullptr)
         {
-            // dbg_printf("PLAYER ALREADY EXISTED\n");
             delete player;
         }
         player = static_cast<Player*>(entity);
@@ -206,54 +183,58 @@ void Level::add(Entity* entity)
     int chunk_y = entity->y / (32 * chunk_size);
     if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
     {
-        // dbg_printf("OUT OF BOUNDS\n");
         return;
     }
     if (entities_in_chunks[chunk_x + chunk_y * width_in_chunks] == nullptr)
     {
-        // dbg_printf("creating new entity list\n");
-        entities_in_chunks[chunk_x + chunk_y * width_in_chunks] = new Linked_list<Entity>();
+        entities_in_chunks[chunk_x + chunk_y * width_in_chunks] = new Arraylist<Entity>();
     }
-    // dbg_printf("before list add\n");
+
+    entities->add(entity);
     entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->add(entity);
-    // dbg_printf("after list add\n");
+
     entity->init(this);
-    // dbg_printf("end of add\n");
 }
 
 // We have to pass the original x and y pixel-coordinates of the entity because it may have changed chunk after tick and
 // then we wont find it This does not delete the Entity
-void Level::remove(int chunk, Entity* e)
+void Level::remove(Entity* e)
 {
-    // dbg_printf("REMOVE START\n");
-    /*
-    int chunk_x = x / (32 * chunk_size);
-    int chunk_y = y / (32 * chunk_size);
+    entities->remove_element(e);
+    int chunk_x = e->x / (32 * chunk_size);
+    int chunk_y = e->y / (32 * chunk_size);
     if (chunk_x < 0 || chunk_y < 0 || chunk_x >= width_in_chunks || chunk_y >= height_in_chunks)
     {
         return;
     }
-    entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->remove(e);
-    */
-    if (chunk < 0 || chunk >= width_in_chunks * height_in_chunks)
-    {
-        return;
-    }
-    entities_in_chunks[chunk]->remove(e);
+    remove_entity(chunk_x + chunk_y * width_in_chunks, e);
 }
 
-void Level::insert(int chunk, Entity* e)
+void Level::remove_entity(int chunk, Entity* e)
 {
     if (chunk < 0 || chunk >= width_in_chunks * height_in_chunks)
     {
         return;
+    }
+    entities_in_chunks[chunk]->remove_element(e);
+}
+
+void Level::insert_entity(int chunk, Entity* e)
+{
+    if (chunk < 0 || chunk >= width_in_chunks * height_in_chunks)
+    {
+        return;
+    }
+    if (entities_in_chunks[chunk] == nullptr)
+    {
+        entities_in_chunks[chunk] = new Arraylist<Entity>();
     }
     entities_in_chunks[chunk]->add(e);
 }
 
 void Level::try_spawn(int count)
 {
-    // dbg_printf("TRYSPAWN START\n");
+    dbg_printf("TRYSPAWN START\n");
     for (int i = 0; i < count; i++)
     {
         Mob* mob{nullptr};
@@ -272,10 +253,12 @@ void Level::try_spawn(int count)
         // dbg_printf("LVL: %i\n", lvl);
         if (randInt(0, 1) == 0)
         {
+            // dbg_printf("SLIME\n");
             mob = new Slime(lvl);
         }
         else
         {
+            // dbg_printf("ZOMBIE\n");
             mob = new Zombie(lvl);
         }
 
@@ -294,12 +277,8 @@ void Level::try_spawn(int count)
 
 void Level::tick()
 {
-    // dbg_printf("LEVEL::TICKED CALLED\n");
-    //    this is expensive
+    dbg_printf("Tick Started\n");
     try_spawn(1);
-
-    // Update the tiles that are viewed by the player frequently
-    // const int tiles_to_update_per_tick{static_cast<int>(width * height / 50)};
 
     // Ticking the tiles
     int tiles_tick_amount{0};
@@ -337,110 +316,55 @@ void Level::tick()
         }
     }
 
-    // Ticking the Entities
-    for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
+    dbg_printf("ticking entities\n");
+    dbg_printf("entities size: %i\n", entities->size());
+    // int amount = entities->size() > 10 ? 10 : entities->size();
+    for (int i = 0; i < entities->size(); i++)
     {
-        if (entities_in_chunks[i] != nullptr)
+        Entity* e = entities->get(i);
+        uint8_t chunk_x_old = e->x / (32 * chunk_size);
+        uint8_t chunk_y_old = e->y / (32 * chunk_size);
+        int old_chunk = chunk_x_old + chunk_y_old * width_in_chunks;
+
+        e->tick();
+
+        if (e->removed)
         {
-            dbg_printf("NOT NULLPTR\n");
-            Linked_list<Entity>* entities{entities_in_chunks[i]};
-            dbg_printf("SIZE: %i\n", entities->size());
-            for (int j = 0; j < entities->size(); j++)
+            remove(e);
+        }
+        else
+        {
+            uint8_t chunk_x_new = e->x / (32 * chunk_size);
+            uint8_t chunk_y_new = e->y / (32 * chunk_size);
+            int new_chunk = chunk_x_new + chunk_y_new * width_in_chunks;
+
+            if (old_chunk != new_chunk)
             {
-                Entity* e = entities->get(j);
-                int chunk_x_old = e->x / (32 * chunk_size);
-                int chunk_y_old = e->y / (32 * chunk_size);
-
-                e->tick();
-                if (e->removed)
-                {
-                    remove(chunk_x_old + chunk_y_old * width_in_chunks, e);
-                    j--;
-                }
-                else
-                {
-
-                    int chunk_x_new = e->x / (32 * chunk_size);
-                    int chunk_y_new = e->y / (32 * chunk_size);
-                    // If the Entity changed chunk
-                    if (chunk_x_old != chunk_x_new || chunk_y_old != chunk_y_new)
-                    {
-                        // We create a queue because otherwise we might move the entity to a chunk that we havent ticked
-                        // yet and then tick it twice
-                        /*
-                        changed_chunk_queue->add(new Entity_queue_item(e, chunk_x_old + chunk_y_old * width_in_chunks,
-                                                                       chunk_x_new + chunk_y_new * width_in_chunks));
-                                                                       */
-                    }
-                }
+                remove_entity(old_chunk, e);
+                insert_entity(new_chunk, e);
             }
         }
     }
 
-    /*
-    // Switch the entities to the new chunks
-    while (changed_chunk_queue->size() != 0)
-    {
-        Entity_queue_item* queue_item = changed_chunk_queue->get(0);
-        remove(queue_item->old_chunk, queue_item->e);
-        insert(queue_item->old_chunk, queue_item->e);
-        changed_chunk_queue->remove(0);
-        delete queue_item;
-    }
-    */
-
-    /*
-    for (int i = 0; i < width_in_chunks * height_in_chunks; i++)
-    {
-        dbg_printf("chunk %i: ", i);
-        if (entities_in_chunks[i] != nullptr)
-        {
-            dbg_printf("%i", entities_in_chunks[i]);
-            dbg_printf(" size: %i\n", entities_in_chunks[i]->size());
-        }
-        else
-        {
-            dbg_printf("0 size: 0\n");
-        }
-    }
-    */
-    /*
-    Entity** entities_array{entities->to_array()};
-
-    for (int i = 0; i < size; i++)
-    {
-        Entity* e = entities_array[i];
-
-        e->tick(); // calls the entity's tick() method.
-
-        if (e->removed)
-        {
-            entities->remove(e);
-            delete e;
-        }
-    }
-
-    delete[] entities_array;*/
-
     x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
     y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
-
-    // dbg_printf("LEVEL::TICKED END\n");
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
 // This functions is very expensive
-Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
+Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
-    // dbg_printf("START OF GET_ENTITIES\n");
-    Linked_list<Entity>* result{new Linked_list<Entity>()};
+    static Arraylist<Entity>* result{new Arraylist<Entity>()};
+    result->clear();
+    dbg_printf("in getentities\n");
+    // make this static
 
     int chunk_x0 = x0 / (32 * chunk_size);
     int chunk_y0 = y0 / (32 * chunk_size);
     int chunk_x1 = x1 / (32 * chunk_size);
     int chunk_y1 = y1 / (32 * chunk_size);
 
-    // clamp teh bounds
+    // clamp the bounds
     if (chunk_x0 < 0)
         chunk_x0 = 0;
     if (chunk_x0 >= width_in_chunks)
@@ -459,38 +383,28 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     if (chunk_y1 >= height_in_chunks)
         chunk_y1 = height_in_chunks - 1;
 
-    // dbg_printf("CHUNK_X0: %i\n", chunk_x0);
-    // dbg_printf("CHUNK_Y0: %i\n", chunk_y0);
-    // dbg_printf("CHUNK_X1: %i\n", chunk_x1);
-    // dbg_printf("CHUNK_Y1: %i\n", chunk_y1);
-
-    // dbg_printf("NOT OUT OF BOUNDS\n");
+    dbg_printf("after clamp\n");
 
     for (int i = chunk_x0; i <= chunk_x1; i++)
     {
         for (int j = chunk_y0; j <= chunk_y1; j++)
         {
-            // dbg_printf("i + j * width_in_chunks = %i", i + j * width_in_chunks);
-            // dbg_printf("and max is %i\n", width_in_chunks * height_in_chunks);
             if (entities_in_chunks[i + j * width_in_chunks] != nullptr)
             {
-                // dbg_printf("NOT NULLPTR\n");
-                Linked_list<Entity>* entities{entities_in_chunks[i + j * width_in_chunks]};
+                Arraylist<Entity>* entities{entities_in_chunks[i + j * width_in_chunks]};
                 const int size{entities->size()};
-                // dbg_printf("SIZE: %i\n", size);
                 for (int k = 0; k < size; k++)
                 {
                     Entity* e = entities->get(k);
                     if (e->intersects(x0, y0, x1, y1))
                     {
-                        // dbg_printf("ADDING TO RESULT IN GETENTITIES\n");
                         result->add(e);
                     }
                 }
             }
         }
     }
-    // dbg_printf("AMOUNT OF ENTITIES IN GET_ENTITIES: %i\n", result->size());
+
     return result; // returns the result list of entities
 }
 

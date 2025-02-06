@@ -5,6 +5,7 @@
 #include "level/tile/tile.hpp"
 #include "mob.hpp"
 #include "player.hpp"
+#include <debug.h>
 
 Entity::Entity() : x{0}, y{0}, radius_x{6}, radius_y{6}, removed{false}, level{NULL}
 {
@@ -20,6 +21,7 @@ void Entity::render(int x_scroll, int y_scroll)
 
 void Entity::tick()
 {
+    // dbg_printf("ENTITY TICK\n");
 }
 
 void Entity::remove()
@@ -107,12 +109,16 @@ bool Entity::move2(int xa, int ya)
         return false;
     }
 
-    Linked_list<Entity>* was_inside =
+    /*
+    Arraylist<Entity>* was_inside =
         level->get_entities(x - radius_x, y - radius_y, x + radius_x,
                             y + radius_y); // gets all of the entities that are inside this entity (aka: colliding)
-    Linked_list<Entity>* is_inside =
+    */
+    Arraylist<Entity>* is_inside =
         level->get_entities(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x,
                             y + ya + radius_y); // gets the entities that this entity will touch.
+
+    /*
     int is_inside_size{is_inside->size()};
     for (int i = 0; i < is_inside_size; i++)
     {
@@ -140,11 +146,33 @@ bool Entity::move2(int xa, int ya)
             return false;
         }
     }
+    */
+
+    int is_inside_size{is_inside->size()};
+    for (int i = 0; i < is_inside_size; i++)
+    {
+        Entity* entity = is_inside->get(i);
+        if (entity == this)
+        {
+            continue;
+        }
+
+        entity->touched_by(this);
+
+        if (entity->blocks(this))
+        {
+            // delete was_inside;
+            // delete is_inside;
+            return false;
+        }
+    }
 
     x += xa;
     y += ya;
-    delete was_inside;
-    delete is_inside;
+
+    // delete was_inside;
+    // delete is_inside;
+
     return true;
 }
 

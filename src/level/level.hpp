@@ -1,7 +1,7 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include "../linked_list.hpp"
+#include "../arraylist.hpp"
 #include "tile/tile.hpp"
 #include <graphx.h>
 #include <stdint.h>
@@ -15,17 +15,6 @@
 class Entity;
 class Tile;
 class Player;
-
-class Entity_queue_item
-{
-  public:
-    Entity* e;
-    int old_chunk;
-    int new_chunk;
-
-    Entity_queue_item(Entity* e, int old_chunk, int new_chunk);
-    ~Entity_queue_item();
-};
 
 class Level
 {
@@ -44,10 +33,10 @@ class Level
     gfx_tilemap_t screen_tiles; // tilemap object of the actual tiles that will be drawn to the screen
     uint8_t* screen_tiles_map;  // map of the tilemap that belongs to the tilemap object
     int monster_density;
-    // Array containing lists of entities per chunks of chunksize * chunksize
-    Linked_list<Entity>** entities_in_chunks;
-    // Queue of Entities that changed queue
-    Linked_list<Entity_queue_item>* changed_chunk_queue;
+    // Array containing all entities
+    Arraylist<Entity>* entities;
+    //  Array containing lists of entities per chunks of chunksize * chunksize
+    Arraylist<Entity>** entities_in_chunks;
     Player* player;
 
     Level(int width, int height, int level, Level* parent_level);
@@ -61,12 +50,13 @@ class Level
     // Only used for adding new entities not for swapping chunks
     void add(Entity* entity);
     // Removes the entity form a chunk
-    void remove(int chunk, Entity* e);
+    void remove(Entity* e);
     // Inserts the Entity in a chunk
-    void insert(int chunk, Entity* e);
+    void insert_entity(int chunk, Entity* e);
+    void remove_entity(int chunk, Entity* e);
     void try_spawn(int count);
     void tick();
-    Linked_list<Entity>* get_entities(int x0, int y0, int x1, int y1);
+    Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1);
 
   private:
     int depth;

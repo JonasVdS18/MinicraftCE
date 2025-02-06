@@ -1,6 +1,7 @@
 #include "zombie.hpp"
 #include "../gfx/minigfx1.h"
 #include "player.hpp"
+#include <debug.h>
 #include <sys/util.h>
 
 Zombie::Zombie(uint8_t lvl) : Mob(), xa{0}, ya{0}, lvl{lvl}, random_walk_time{0}
@@ -17,6 +18,7 @@ Zombie::~Zombie()
 
 void Zombie::tick()
 {
+    // dbg_printf("ZOMBIE TICK\n");
     Mob::tick();
     if (level->player != NULL && random_walk_time == 0)
     {
@@ -51,6 +53,7 @@ void Zombie::tick()
             }
         }
         uint8_t speed = tick_time & 1;
+
         if (!move(xa * speed, ya * speed) || randInt(0, 200) == 0)
         { // moves the zombie, doubles as a check to see if it's still moving -OR- random chance out of 200
             random_walk_time = 60;                    // sets the not-so-random walk time to 60

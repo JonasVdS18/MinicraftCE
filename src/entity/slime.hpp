@@ -11,6 +11,7 @@ class Slime : public Mob
 
   private:
     const unsigned int lvl;
+    void tick() override;
 };
 
 #endif

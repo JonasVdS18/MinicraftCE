@@ -38,6 +38,7 @@ Player::~Player()
 
 void Player::tick()
 {
+    // dbg_printf("PLAYER TICK\n");
     Mob::tick();
 
     if (invulnerable_time > 0)
@@ -182,7 +183,7 @@ bool Player::use()
 
 bool Player::use(int x0, int y0, int x1, int y1)
 {
-    Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
+    Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
     {
@@ -191,29 +192,29 @@ bool Player::use(int x0, int y0, int x1, int y1)
         {
             if (entity->use(this, attack_dir))
             {
-                delete entities;
+                // delete entities;
                 return true;
             }
         }
     }
-    delete entities;
+    // delete entities;
     return false;
 }
 
 bool Player::interact(int x0, int y0, int x1, int y1)
 {
-    Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
+    Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
     {
         Entity* entity = entities->get(i);
         if (entity != this && entity->interact(this, active_item, attack_dir))
         {
-            delete entities;
+            // delete entities;
             return true;
         }
     }
-    delete entities;
+    // delete entities;
     return false;
 }
 
@@ -342,7 +343,7 @@ void Player::attack()
 
 void Player::hurt(int x0, int y0, int x1, int y1)
 {
-    Linked_list<Entity>* entities = level->get_entities(x0, y0, x1, y1);
+    Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
     {
@@ -352,7 +353,7 @@ void Player::hurt(int x0, int y0, int x1, int y1)
             entity->hurt(this, get_attack_damage(entity), attack_dir);
         }
     }
-    delete entities;
+    // delete entities;
 }
 
 uint8_t Player::get_attack_damage(Entity* entity)

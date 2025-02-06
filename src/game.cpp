@@ -138,6 +138,7 @@ void Game::reset()
     current_level = 3;
 
     // placeholder level
+    input->reset();
     level = new Level(80, 80, 0, NULL);
     player = new Player(this, input);
     player->find_start_pos(level);
