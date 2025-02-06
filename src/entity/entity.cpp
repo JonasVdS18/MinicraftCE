@@ -74,6 +74,11 @@ bool Entity::move(int xa, int ya)
 
 bool Entity::move2(int xa, int ya)
 {
+    if (x + xa < 0 || x + xa > level->width * 32 || y + ya < 0 || y + ya > level->height * 32)
+    {
+        return false;
+    }
+
     int xto0 = ((x)-radius_x) >> 5;   // gets the tile coordinate of the position to the left of the sprite
     int yto0 = ((y)-radius_y) >> 5;   // gets the tile coordinate of the position to the top of the sprite
     int xto1 = ((x) + radius_x) >> 5; // gets the tile coordinate of the position to the right of the sprite

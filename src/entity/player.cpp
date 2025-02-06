@@ -488,7 +488,7 @@ void Player::die()
 
 void Player::touched_by(Entity* entity)
 {
-    if (!(dynamic_cast<Player*>(entity) == NULL))
+    if (entity != this)
     {
         entity->touched_by(this);
     }

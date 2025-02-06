@@ -52,19 +52,18 @@ void Zombie::tick()
                 ya = 0;
             }
         }
-        uint8_t speed = tick_time & 1;
 
-        if (!move(xa * speed, ya * speed) || randInt(0, 200) == 0)
+        int8_t speed = tick_time & 1;
+        if (!Mob::move(xa * speed, ya * speed) || randInt(0, 200) == 0)
         { // moves the zombie, doubles as a check to see if it's still moving -OR- random chance out of 200
             random_walk_time = 60;                    // sets the not-so-random walk time to 60
             xa = (randInt(0, 3) - 1) * randInt(0, 2); // sets the acceleration to random i.e. idling code
             ya = (randInt(0, 3) - 1) * randInt(0, 2); // sets the acceleration to random i.e. idling code
         }
-
-        if (random_walk_time > 0)
-        {
-            random_walk_time--;
-        }
+    }
+    if (random_walk_time > 0)
+    {
+        random_walk_time--;
     }
 }
 
@@ -128,13 +127,12 @@ void Zombie::render(int x_scroll, int y_scroll)
     }
     // gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
     //(GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
-    gfx_RLETSprite_NoClip(display_sprite, x - x_scroll - rlet_zombie_front_width / 2 + GFX_LCD_WIDTH / 2,
-                          y - y_scroll - rlet_zombie_front_height / 2 + GFX_LCD_HEIGHT / 2);
+    gfx_RLETSprite(display_sprite, x - x_scroll, y - y_scroll);
 }
 
 void Zombie::touched_by(Entity* entity)
 {
-    if ((dynamic_cast<Player*>(entity) == NULL))
+    if (dynamic_cast<Player*>(entity) != NULL)
     {
         entity->hurt(this, lvl + 1, dir);
     }

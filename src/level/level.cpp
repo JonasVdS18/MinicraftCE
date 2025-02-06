@@ -330,15 +330,15 @@ void Level::tick()
         }
     }
 
-    dbg_printf("ticking entities\n");
-    dbg_printf("entities size: %i\n", entities->size());
+    // dbg_printf("ticking entities\n");
+    // dbg_printf("entities size: %i\n", entities->size());
     Arraylist<Entity>* tick_entities{get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
                                                   player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
     screen_entities->clear();
     screen_entities->add_all(tick_entities);
     delete tick_entities;
     // int amount = entities->size() > 10 ? 10 : entities->size();
-    dbg_printf("screen_entities size: %i\n", screen_entities->size());
+    // dbg_printf("screen_entities size: %i\n", screen_entities->size());
     for (int i = 0; i < screen_entities->size(); i++)
     {
         Entity* e = screen_entities->get(i);

@@ -70,7 +70,7 @@ bool Mob::move(int xa, int ya)
         move2(0, -1);
         y_knockback++;
     }
-    if (x_knockback > 0)
+    if (y_knockback > 0)
     {
         move2(0, 1);
         y_knockback--;
