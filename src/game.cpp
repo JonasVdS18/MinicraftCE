@@ -182,7 +182,7 @@ void Game::tick()
     {
         if (level != NULL)
         {
-            player->tick(); // player has to be ticked first
+            // player->tick(); // player has to be ticked first
             level->tick();
         }
         Tile::tick_count++;

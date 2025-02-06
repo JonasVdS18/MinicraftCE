@@ -37,6 +37,8 @@ class Level
     Arraylist<Entity>* entities;
     //  Array containing lists of entities per chunks of chunksize * chunksize
     Arraylist<Entity>** entities_in_chunks;
+    // Array of entities on screen, these will be ticked and drawn
+    Arraylist<Entity>* screen_entities;
     Player* player;
 
     Level(int width, int height, int level, Level* parent_level);

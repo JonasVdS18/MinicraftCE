@@ -24,6 +24,7 @@ template <typename T> class Arraylist
     bool remove_element(T* t);
     // Clears the arraylist/makes it empty
     void clear();
+    bool add_all(Arraylist* arraylist);
 
   private:
     T** head;
@@ -169,6 +170,27 @@ template <typename T> void Arraylist<T>::clear()
         head[i] = nullptr;
     }
     array_size = 0;
+}
+
+template <typename T> bool Arraylist<T>::add_all(Arraylist* arraylist)
+{
+    // If the array will overflow we will not add it
+    if (array_size + arraylist->size() > MAX_CAPACITY)
+    {
+        return false;
+    }
+    // Create extra capacity until we can store the new array
+    while (array_size + arraylist->size() > capacity)
+    {
+        reallocate();
+    }
+
+    for (uint8_t i = array_size; i < array_size + arraylist->size(); i++)
+    {
+        head[i] = arraylist->get(i - array_size);
+    }
+    array_size += arraylist->size();
+    return true;
 }
 
 #endif

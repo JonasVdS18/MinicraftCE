@@ -181,12 +181,12 @@ bool Mob::find_start_pos(Level* level)
     Arraylist<Entity>* entities_around_player{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
     if (entities_around_player->size() > 0)
     {
-        // delete entities_around_player;
+        delete entities_around_player;
         return false; // Get a list of mobs in the level, within a box centered on our attempted coordinates, with
                       // dimensions of r times 2, and if there are any close to us, return false;
     }
 
-    // delete entities_around_player;
+    delete entities_around_player;
 
     if (level->get_tile(x, y)->may_pass(level, x, y, this))
     { // Check if the tile we're trying to spawn on is not solid to us

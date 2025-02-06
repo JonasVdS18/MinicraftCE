@@ -35,15 +35,18 @@ const int AMOUNT_OF_TILES_TO_TICK_FREQUENTLY{(SCREEN_WIDTH_IN_TILES + 2 * SCREEN
 // This is also the tick modifier when calling tick on the tiles to make up for less tick calls.
 const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY_MODIFIER{20};
 
-// Only entities within a square of 2*ENTITY_TICK_RADIUS by 2*ENTITY_TICK_RADIUS will be ticked, this is in pixel
+// Only entities within a rectangle of 2*ENTITY_TICK_RADIUS_X by 2*ENTITY_TICK_RADIUS_Y will be ticked, this is in pixel
 // coordinates
-// const int ENTITY_TICK_RADIUS{32 * 8};
+const int ENTITY_TICK_RADIUS_X{32 * 6};
+
+const int ENTITY_TICK_RADIUS_Y{32 * 4};
 
 Level::Level(int width, int height, int level, Level* parent_level)
     : width{width}, height{height}, chunk_size{16}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
       height_in_chunks{(height + chunk_size - 1) / chunk_size}, x_offset{0}, y_offset{0}, monster_density{8},
       entities{new Arraylist<Entity>(64)},
-      entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]}, player{NULL}, depth{level}
+      entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
+      screen_entities{new Arraylist<Entity>(12)}, player{NULL}, depth{level}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -234,7 +237,7 @@ void Level::insert_entity(int chunk, Entity* e)
 
 void Level::try_spawn(int count)
 {
-    dbg_printf("TRYSPAWN START\n");
+    // dbg_printf("TRYSPAWN START\n");
     for (int i = 0; i < count; i++)
     {
         Mob* mob{nullptr};
@@ -277,7 +280,7 @@ void Level::try_spawn(int count)
 
 void Level::tick()
 {
-    dbg_printf("Tick Started\n");
+    // dbg_printf("Tick Started\n");
     try_spawn(1);
 
     // Ticking the tiles
@@ -318,10 +321,16 @@ void Level::tick()
 
     dbg_printf("ticking entities\n");
     dbg_printf("entities size: %i\n", entities->size());
+    Arraylist<Entity>* tick_entities{get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
+                                                  player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
+    screen_entities->clear();
+    screen_entities->add_all(tick_entities);
+    delete tick_entities;
     // int amount = entities->size() > 10 ? 10 : entities->size();
-    for (int i = 0; i < entities->size(); i++)
+    dbg_printf("screen_entities size: %i\n", screen_entities->size());
+    for (int i = 0; i < screen_entities->size(); i++)
     {
-        Entity* e = entities->get(i);
+        Entity* e = screen_entities->get(i);
         uint8_t chunk_x_old = e->x / (32 * chunk_size);
         uint8_t chunk_y_old = e->y / (32 * chunk_size);
         int old_chunk = chunk_x_old + chunk_y_old * width_in_chunks;
@@ -346,6 +355,8 @@ void Level::tick()
         }
     }
 
+    // delete tick_entities;
+
     x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
     y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
 }
@@ -354,10 +365,9 @@ void Level::tick()
 // This functions is very expensive
 Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
-    static Arraylist<Entity>* result{new Arraylist<Entity>()};
-    result->clear();
-    dbg_printf("in getentities\n");
-    // make this static
+    Arraylist<Entity>* result{new Arraylist<Entity>()};
+    // dbg_printf("in getentities\n");
+    //  make this static
 
     int chunk_x0 = x0 / (32 * chunk_size);
     int chunk_y0 = y0 / (32 * chunk_size);
@@ -383,7 +393,7 @@ Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     if (chunk_y1 >= height_in_chunks)
         chunk_y1 = height_in_chunks - 1;
 
-    dbg_printf("after clamp\n");
+    // dbg_printf("after clamp\n");
 
     for (int i = chunk_x0; i <= chunk_x1; i++)
     {

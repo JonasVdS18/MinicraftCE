@@ -192,12 +192,12 @@ bool Player::use(int x0, int y0, int x1, int y1)
         {
             if (entity->use(this, attack_dir))
             {
-                // delete entities;
+                delete entities;
                 return true;
             }
         }
     }
-    // delete entities;
+    delete entities;
     return false;
 }
 
@@ -210,11 +210,11 @@ bool Player::interact(int x0, int y0, int x1, int y1)
         Entity* entity = entities->get(i);
         if (entity != this && entity->interact(this, active_item, attack_dir))
         {
-            // delete entities;
+            delete entities;
             return true;
         }
     }
-    // delete entities;
+    delete entities;
     return false;
 }
 
@@ -353,7 +353,7 @@ void Player::hurt(int x0, int y0, int x1, int y1)
             entity->hurt(this, get_attack_damage(entity), attack_dir);
         }
     }
-    // delete entities;
+    delete entities;
 }
 
 uint8_t Player::get_attack_damage(Entity* entity)
