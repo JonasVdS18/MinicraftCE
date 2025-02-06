@@ -1,6 +1,6 @@
 #include "inventory_menu.hpp"
 #include "../entity/player.hpp"
-#include "../gfx/minigfx.h"
+#include "../gfx/minigfx1.h"
 #include "font.hpp"
 #include <debug.h>
 #include <fontlibc.h>

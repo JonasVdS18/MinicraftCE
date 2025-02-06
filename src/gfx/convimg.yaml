@@ -162,10 +162,18 @@ converts:
     images:
       - frame_side.png
 
+  - name: mini_tiles
+    palette: global_palette
+    tilesets:
+      tile-width: 16
+      tile-height: 16
+      images:
+        - mini_tiles.png
+
 outputs:
   - type: appvar
-    name: minigfx
-    include-file: minigfx.h
+    name: minigfx1
+    include-file: minigfx1.h
     source-format: c
     palettes:
       - global_palette
@@ -182,4 +190,12 @@ outputs:
       - rlet_sprites_flipped_xy
       - rlet_sprites_rotated_90
       - rlet_sprites_rotated_270
-    # const: true
+
+  - type: appvar
+    name: minigfx2
+    include-file: minigfx2.h
+    source-format: c
+    palettes:
+      - global_palette
+    converts:
+      - mini_tiles

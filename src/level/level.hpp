@@ -3,7 +3,13 @@
 
 #include "../linked_list.hpp"
 #include "tile/tile.hpp"
+#include <graphx.h>
 #include <stdint.h>
+
+#define TILE_HEIGHT 16
+#define TILE_WIDTH 16
+#define TILE_DRAW_WIDTH 21
+#define TILE_DRAW_HEIGHT 14
 
 // const int MAX_ENTITIES{100};
 class Entity;
@@ -24,6 +30,8 @@ class Level
     // array of tile id's
     uint8_t* tiles;
     uint8_t* data;
+    gfx_tilemap_t screen_tiles; // tilemap object of the actual tiles that will be drawn to the screen
+    uint8_t* screen_tiles_map;  // map of the tilemap that belongs to the tilemap object
     int monster_density;
     // List containing all the entities in the level
     // Linked_list<Entity>* entities;
@@ -35,6 +43,8 @@ class Level
     ~Level();
 
     void render_background(int x_scroll, int y_scroll);
+    void update_screen_tiles(int x,
+                             int y); // needs to be called if a tile is changed, x and y in tile coordinates
     inline Tile* get_tile(int x, int y);
     void set_tile(int x, int y, Tile* t, uint8_t dataval);
     uint8_t get_data(int x, int y);
@@ -47,6 +57,7 @@ class Level
 
   private:
     int depth;
+    void generate_screen_tiles();
 };
 
 inline Tile* Level::get_tile(int x, int y)

@@ -30,7 +30,6 @@ class Tile
 
     Tile(uint8_t id);
 
-    virtual void render(Level* level, int x, int y);
     virtual bool may_pass(Level* level, int x, int y, Entity* e);
     virtual int get_light_radius(Level* level, int x, int y);
     virtual void hurt(Level* level, int x, int y, Mob* source, int damage, int attack_dir);

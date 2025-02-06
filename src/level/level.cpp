@@ -3,7 +3,8 @@
 #include "../entity/player.hpp"
 #include "../entity/slime.hpp"
 #include "../entity/zombie.hpp"
-#include "../gfx/minigfx.h"
+#include "../gfx/minigfx1.h"
+#include "../gfx/minigfx2.h"
 #include "../linked_list.hpp"
 #include "tile/tile.hpp"
 #include <debug.h>
@@ -63,12 +64,34 @@ Level::Level(int width, int height, int level, Level* parent_level)
             for (int x = 0; x < width; x++)
             {
                 int i = x + y * width;
-                tiles[i] = Tile::rock->id;
+                int r = randInt(0, 1);
+                if (r == 0)
+                {
+                    tiles[i] = Tile::rock->id;
+                }
+                else
+                {
+                    tiles[i] = Tile::grass->id;
+                }
                 data[i] = 0;
             }
         }
     }
 
+    // create the screen tiles that will be rendered
+    generate_screen_tiles();
+    screen_tiles.map = screen_tiles_map;
+    screen_tiles.tiles = mini_tiles_tiles;
+    screen_tiles.type_width = gfx_tile_16_pixel;
+    screen_tiles.type_height = gfx_tile_16_pixel;
+    screen_tiles.tile_height = TILE_HEIGHT;
+    screen_tiles.tile_width = TILE_WIDTH;
+    screen_tiles.draw_height = TILE_DRAW_HEIGHT;
+    screen_tiles.draw_width = TILE_DRAW_WIDTH;
+    screen_tiles.height = height * 2;
+    screen_tiles.width = width * 2;
+    screen_tiles.y_loc = 0;
+    screen_tiles.x_loc = 0;
     // create the chunks array
     entities_in_chunks = new Linked_list<Entity>*[width_in_chunks * height_in_chunks];
 
@@ -109,25 +132,16 @@ Level::~Level()
     {
         delete[] data;
     }
+    if (screen_tiles_map != nullptr)
+    {
+        delete[] screen_tiles_map;
+    }
 }
 
 /* This method renders all the tiles in the game */
 void Level::render_background(int x_scroll, int y_scroll)
 {
-    // dbg_printf("RENDERBACKGROUND START\n");
-    int xo = x_scroll >> 5;             // the game's horizontal scroll offset in tile coordinates.
-    int yo = y_scroll >> 5;             // the game's vertical scroll offset in tile coordinates.
-    int w = (GFX_LCD_WIDTH) >> 5;       // width of the screen being rendered in tile coordinates
-    int h = (GFX_LCD_HEIGHT - 32) >> 5; // height of the screen being rendered in tile coordinates
-    for (int y = yo; y <= h + yo; y++)
-    {
-        for (int x = xo; x <= w + xo; x++)
-        {
-            // x * 32 - x_scroll is the screen coordinate.
-            get_tile(x, y)->render(this, x,
-                                   y); // renders the tile on the screen using tile cooridinates not screen coordinates.
-        }
-    }
+    gfx_Tilemap(&screen_tiles, x_scroll, y_scroll);
 }
 
 void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
@@ -410,4 +424,113 @@ Linked_list<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
     */
     // dbg_printf("AMOUNT OF ENTITIES IN GET_ENTITIES: %i\n", result->size());
     return result; // returns the result list of entities
+}
+
+void Level::generate_screen_tiles()
+{
+    screen_tiles_map = new uint8_t[width * height * 4];
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            update_screen_tiles(x, y);
+        }
+    }
+}
+
+void Level::update_screen_tiles(int x, int y) // needs to be called if a tile is changed, x and y in tile coordinates
+{
+    if (tiles[x + width * y] == Tile::rock->id)
+    {
+        screen_tiles_map[(x + width * 2 * y) * 2] = 5;
+        screen_tiles_map[(x + width * 2 * y) * 2 + 1] = 6;
+        screen_tiles_map[(x + width * 2 * y) * 2 + width * 2] = 5 + 16;
+        screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 6 + 16;
+    }
+    if (tiles[x + width * y] == Tile::grass->id)
+    {
+        bool connected_up = get_tile(x, y - 1)->connects_to_grass;
+        bool connected_down = get_tile(x, y + 1)->connects_to_grass;
+        bool connected_left = get_tile(x - 1, y)->connects_to_grass;
+        bool connected_right = get_tile(x + 1, y)->connects_to_grass;
+
+        if (connected_up)
+        {
+            if (connected_left)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2] = 3;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2] = 16;
+            }
+
+            if (connected_right)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1] = 4;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1] = 2 + 16;
+            }
+        }
+        else
+        {
+            if (connected_left)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2] = 1;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2] = 0;
+            }
+            if (connected_right)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1] = 1;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1] = 2;
+            }
+        }
+
+        if (connected_down)
+        {
+            if (connected_left)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + width * 2] = 3 + 16;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + width * 2] = 16;
+            }
+            if (connected_right)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 4 + 16;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 2 + 16;
+            }
+        }
+        else
+        {
+            if (connected_left)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + width * 2] = 1 + 2 * 16;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + width * 2] = 2 * 16;
+            }
+            if (connected_right)
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 1 + 2 * 16;
+            }
+            else
+            {
+                screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 2 + 2 * 16;
+            }
+        }
+    }
 }

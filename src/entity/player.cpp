@@ -1,6 +1,6 @@
 #include "player.hpp"
 // #include "../level/level.hpp"
-#include "../gfx/minigfx.h"
+#include "../gfx/minigfx1.h"
 #include "../level/tile/tile.hpp"
 #include "../screen/inventory_menu.hpp"
 // #include <debug.h>
@@ -13,8 +13,8 @@ Player::Player(Game* game, Input_handler* input)
       stamina_recharge_delay{0}, invulnerable_time{0}
 
 {
-    x = 24;
-    y = 24;
+    x = 10 * 32;
+    y = 10 * 32;
     // inventory->add(new FurnitureItem(new Workbench()));
     // inventory->add(new PowerGloveItem());
 }
@@ -94,19 +94,19 @@ void Player::tick()
 
     int8_t xa = 0; // x acceleration
     int8_t ya = 0; // y acceleration
-    if (input->up->down)
+    if (input->up->down && level->y_offset > 0)
     {
         ya--;
     }
-    if (input->down->down)
+    if (input->down->down && level->y_offset + TILE_DRAW_HEIGHT * TILE_HEIGHT < level->height * 32)
     {
         ya++;
     }
-    if (input->left->down)
+    if (input->left->down && level->x_offset > 0)
     {
         xa--;
     }
-    if (input->right->down)
+    if (input->right->down && level->x_offset + TILE_DRAW_WIDTH * TILE_WIDTH < level->width * 32)
     {
         xa++;
     }
@@ -442,8 +442,8 @@ bool Player::find_start_pos(Level* level)
     while (true)
     {
         // level->width -1 instead of level-width, because randInt is inclusive
-        int x = randInt(0, level->width - 1);
-        int y = randInt(0, level->height - 1);
+        int x = randInt(5, level->width - 5);
+        int y = randInt(4, level->height - 4);
         /*
         if (level->get_tile(x, y) == Tile::grass)
         {                        // if the tile at the x & y coordinates is a grass tile then...

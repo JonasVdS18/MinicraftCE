@@ -1,20 +1,13 @@
 #include "title_menu.hpp"
 #include "../game.hpp"
-#include "../gfx/minigfx.h"
+#include "../gfx/minigfx1.h"
 #include "../input_handler.hpp"
 #include "about_menu.hpp"
+#include "font.hpp"
 #include "instructions_menu.hpp"
 #include "menu.hpp"
 #include <fontlibc.h>
 #include <graphx.h>
-
-void print_centered(const char* string)
-{
-    fontlib_SetCursorPosition(fontlib_GetWindowWidth() / 2 + fontlib_GetWindowXMin() -
-                                  (fontlib_GetStringWidth(string) / 2),
-                              fontlib_GetCursorY());
-    fontlib_DrawString(string);
-}
 
 // Call the Menu constructor in the initializer list
 Title_menu::Title_menu(Game* game, Input_handler* input) : Menu(game, input), selected{0}
@@ -65,33 +58,33 @@ void Title_menu::render()
     {
     case 0:
         fontlib_SetColors(2, 0);
-        print_centered("> START GAME <");
+        Font::print_centered("> START GAME <");
         fontlib_SetColors(3, 0);
         fontlib_Newline();
-        print_centered("HOW TO PLAY");
+        Font::print_centered("HOW TO PLAY");
         fontlib_Newline();
-        print_centered("ABOUT");
+        Font::print_centered("ABOUT");
         break;
 
     case 1:
         fontlib_SetColors(3, 0);
-        print_centered("START GAME");
+        Font::print_centered("START GAME");
         fontlib_SetColors(2, 0);
         fontlib_Newline();
-        print_centered("> HOW TO PLAY <");
+        Font::print_centered("> HOW TO PLAY <");
         fontlib_SetColors(3, 0);
         fontlib_Newline();
-        print_centered("ABOUT");
+        Font::print_centered("ABOUT");
         break;
 
     case 2:
         fontlib_SetColors(3, 0);
-        print_centered("START GAME");
+        Font::print_centered("START GAME");
         fontlib_Newline();
-        print_centered("HOW TO PLAY");
+        Font::print_centered("HOW TO PLAY");
         fontlib_Newline();
         fontlib_SetColors(2, 0);
-        print_centered("> ABOUT <");
+        Font::print_centered("> ABOUT <");
         break;
 
     default:

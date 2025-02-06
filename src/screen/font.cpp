@@ -1,5 +1,5 @@
 #include "font.hpp"
-#include "../gfx/minigfx.h"
+#include "../gfx/minigfx1.h"
 #include <fontlibc.h>
 #include <graphx.h>
 
@@ -9,6 +9,14 @@ Font::Font()
 
 Font::~Font()
 {
+}
+
+void Font::print_centered(const char* msg)
+{
+    fontlib_SetCursorPosition(fontlib_GetWindowWidth() / 2 + fontlib_GetWindowXMin() -
+                                  (fontlib_GetStringWidth(msg) / 2),
+                              fontlib_GetCursorY());
+    fontlib_DrawString(msg);
 }
 
 void Font::draw(const char* msg, uint8_t msg_length, int x, int y) // x and y in screen pixel coordinates

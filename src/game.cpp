@@ -1,6 +1,8 @@
 #include "game.hpp"
-#include "gfx/minigfx.h"
+#include "gfx/minigfx1.h"
+#include "gfx/minigfx2.h"
 #include "level/level.hpp"
+#include "screen/font.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
 #include <debug.h>
@@ -83,7 +85,12 @@ bool Game::init()
 {
     // dbg_printf("INIT START\n");
 
-    if (minigfx_init() == 0)
+    if (minigfx1_init() == 0)
+    {
+        return 1;
+    }
+
+    if (minigfx2_init() == 0)
     {
         return 1;
     }
@@ -105,7 +112,7 @@ bool Game::init()
     fontlib_SetLineSpacing(1, 1);
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
 
-    gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT - 48);
+    gfx_SetClipRegion(0, 0, GFX_LCD_WIDTH, GFX_LCD_HEIGHT - 32);
     srand(rtc_Time());
 
     set_menu(new Title_menu(this, input));
@@ -114,6 +121,12 @@ bool Game::init()
 
 void Game::reset()
 {
+    gfx_SetDrawScreen();
+    gfx_ZeroScreen();
+    fontlib_SetColors(2, 0);
+    fontlib_SetWindowFullScreen();
+    fontlib_SetCursorPosition(0, 120);
+    Font::print_centered("LOADING WORLD...");
     // dbg_printf("RESET\n");
     running = true;
     tick_count = 0;
@@ -125,11 +138,16 @@ void Game::reset()
     current_level = 3;
 
     // placeholder level
-    input->reset();
-    level = new Level(128, 128, 0, NULL);
+    level = new Level(80, 80, 0, NULL);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);
+
+    // clear everything
+    gfx_ZeroScreen();
+    gfx_SetDrawBuffer();
+    gfx_ZeroScreen();
+    input->reset();
 }
 
 void Game::start()
@@ -163,8 +181,8 @@ void Game::tick()
     {
         if (level != NULL)
         {
+            player->tick(); // player has to be ticked first
             level->tick();
-            player->tick();
         }
         Tile::tick_count++;
     }
@@ -210,9 +228,9 @@ void Game::render_GUI()
             for (uint8_t i = player->health - prev_health; i > 0; i--)
             {
                 gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 32);
                 gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_Sprite_NoClip(heart_full, (prev_health + i - 1) * 16, GFX_LCD_HEIGHT - 32);
             }
         }
         else if (player->health < prev_health)
@@ -220,9 +238,9 @@ void Game::render_GUI()
             for (uint8_t i = prev_health - player->health; i > 0; i--)
             {
                 gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 32);
                 gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 48);
+                gfx_Sprite_NoClip(heart_empty, (player->health + i - 1) * 16, GFX_LCD_HEIGHT - 32);
             }
         }
         if (player->stamina > prev_stamina)
@@ -230,9 +248,9 @@ void Game::render_GUI()
             for (uint8_t i = player->stamina - prev_stamina; i > 0; i--)
             {
                 gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
                 gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_Sprite_NoClip(stamina_full, (prev_stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
             }
         }
         else if (player->stamina < prev_stamina)
@@ -240,9 +258,9 @@ void Game::render_GUI()
             for (uint8_t i = prev_stamina - player->stamina; i > 0; i--)
             {
                 gfx_SetDrawScreen();
-                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
                 gfx_SetDrawBuffer();
-                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 32);
+                gfx_Sprite_NoClip(stamina_empty, (player->stamina + i - 1) * 16, GFX_LCD_HEIGHT - 16);
             }
         }
         prev_health = player->health;
