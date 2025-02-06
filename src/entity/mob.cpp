@@ -13,8 +13,8 @@ Mob::Mob()
 {
     x = 8;
     y = 8;
-    radius_x = 4;
-    radius_y = 3;
+    radius_x = 8;
+    radius_y = 6;
 }
 
 Mob::~Mob()
@@ -57,22 +57,22 @@ bool Mob::move(int xa, int ya)
     }
     if (x_knockback < 0)
     {
-        move2(-1, 0);
+        move2(-2, 0);
         x_knockback++; // increases so it reaches 0 and the mob will not be knocked back any further;
     }
     if (x_knockback > 0)
     {
-        move2(1, 0);
+        move2(2, 0);
         x_knockback--;
     }
     if (y_knockback < 0)
     {
-        move2(0, -1);
+        move2(0, -2);
         y_knockback++;
     }
     if (y_knockback > 0)
     {
-        move2(0, 1);
+        move2(0, 2);
         y_knockback--;
     }
 
@@ -170,7 +170,7 @@ bool Mob::find_start_pos(Level* level)
     {
         int xd = level->player->x - xx; // Get the difference between our attempted spawn x, and the player's x
         int yd = level->player->y - yy; // Get the difference between our attempted spawn y, and the player's y
-        if (xd * xd + yd * yd < 80 * 80)
+        if (xd * xd + yd * yd < 160 * 160)
             return false; // Use pythagoras' theorem to determine the distance between us and the player, and if it is
                           // less than 80 (too close) then return false
     }

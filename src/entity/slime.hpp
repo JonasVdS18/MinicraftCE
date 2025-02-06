@@ -12,8 +12,13 @@ class Slime : public Mob
   private:
     const unsigned int lvl;
     int jump_time;
+    int xa, ya;
     void tick() override;
     void render(int x_scroll, int y_scroll) override;
+
+  protected:
+    void die();
+    void touched_by(Entity* entity) override;
 };
 
 #endif

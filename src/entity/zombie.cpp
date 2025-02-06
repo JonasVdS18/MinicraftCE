@@ -24,15 +24,15 @@ void Zombie::tick()
     {
         int xd = level->player->x - x;
         int yd = level->player->y - y;
-        if (xd * xd + yd * yd < 50 * 50)
+        if (xd * xd + yd * yd < 100 * 100)
         {
             if (xd < 0)
             {
-                xa = -1;
+                xa = -2;
             }
             else if (xd > 0)
             {
-                xa = +1;
+                xa = +2;
             }
             else
             {
@@ -41,11 +41,11 @@ void Zombie::tick()
 
             if (yd < 0)
             {
-                ya = -1;
+                ya = -2;
             }
             else if (yd > 0)
             {
-                ya = +1;
+                ya = +2;
             }
             else
             {
@@ -57,8 +57,8 @@ void Zombie::tick()
         if (!Mob::move(xa * speed, ya * speed) || randInt(0, 200) == 0)
         { // moves the zombie, doubles as a check to see if it's still moving -OR- random chance out of 200
             random_walk_time = 60;                    // sets the not-so-random walk time to 60
-            xa = (randInt(0, 3) - 1) * randInt(0, 2); // sets the acceleration to random i.e. idling code
-            ya = (randInt(0, 3) - 1) * randInt(0, 2); // sets the acceleration to random i.e. idling code
+            xa = (randInt(0, 4) - 1) * randInt(0, 1); // sets the acceleration to random i.e. idling code
+            ya = (randInt(0, 4) - 1) * randInt(0, 1); // sets the acceleration to random i.e. idling code
         }
     }
     if (random_walk_time > 0)

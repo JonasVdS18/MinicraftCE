@@ -36,6 +36,7 @@ class Player : public Mob
     uint8_t stamina_recharge;
     uint8_t stamina_recharge_delay;
     uint8_t invulnerable_time;
+    int score;
     Player(Game* game, Input_handler* input);
     ~Player();
     void tick() override;

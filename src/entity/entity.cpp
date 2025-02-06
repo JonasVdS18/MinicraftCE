@@ -7,7 +7,7 @@
 #include "player.hpp"
 #include <debug.h>
 
-Entity::Entity() : x{0}, y{0}, radius_x{6}, radius_y{6}, removed{false}, level{NULL}
+Entity::Entity() : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}
 {
 }
 

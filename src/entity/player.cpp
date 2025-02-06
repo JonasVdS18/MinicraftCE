@@ -10,7 +10,7 @@
 Player::Player(Game* game, Input_handler* input)
     : Mob(), attack_time{0}, attack_dir{dir}, on_stair_delay{0}, game{game}, input{input}, inventory(new Inventory()),
       active_item{NULL}, attack_item{active_item}, max_stamina{10}, stamina{max_stamina}, stamina_recharge(0),
-      stamina_recharge_delay{0}, invulnerable_time{0}
+      stamina_recharge_delay{0}, invulnerable_time{0}, score{0}
 
 {
     x = 10 * 32;
@@ -97,19 +97,19 @@ void Player::tick()
     int8_t ya = 0; // y acceleration
     if (input->up->down && level->y_offset > 0)
     {
-        ya--;
+        ya -= 2;
     }
     if (input->down->down && level->y_offset + TILE_DRAW_HEIGHT * TILE_HEIGHT < level->height * 32)
     {
-        ya++;
+        ya += 2;
     }
     if (input->left->down && level->x_offset > 0)
     {
-        xa--;
+        xa -= 2;
     }
     if (input->right->down && level->x_offset + TILE_DRAW_WIDTH * TILE_WIDTH < level->width * 32)
     {
-        xa++;
+        xa += 2;
     }
 
     if (is_swimming() && (tick_time % 60) == 0)
@@ -224,28 +224,28 @@ void Player::attack()
     attack_dir = dir;
     attack_item = active_item;
     bool done = false;
-    int8_t y_offset = -2;
-    uint8_t range = 12;
+    int8_t y_offset = -4;
+    uint8_t range = 24;
     int x_tile = x >> 5;
     int y_tile = (y + y_offset) >> 5;
-    uint8_t r = 12;
+    uint8_t r = 24;
 
     if (active_item != NULL)
     {
         attack_time = 10;
-        if (dir == 0 && interact(x - 8, y + 4 + y_offset, x + 8, y + range + y_offset))
+        if (dir == 0 && interact(x - 16, y + 8 + y_offset, x + 16, y + range + y_offset))
         {
             done = true;
         }
-        if (dir == 1 && interact(x - 8, y - range + y_offset, x + 8, y - 4 + y_offset))
+        if (dir == 1 && interact(x - 16, y - range + y_offset, x + 16, y - 8 + y_offset))
         {
             done = true;
         }
-        if (dir == 3 && interact(x + 4, y - 8 + y_offset, x + range, y + 8 + y_offset))
+        if (dir == 3 && interact(x + 8, y - 16 + y_offset, x + range, y + 16 + y_offset))
         {
             done = true;
         }
-        if (dir == 2 && interact(x - range, y - 8 + y_offset, x - 4, y + 8 + y_offset))
+        if (dir == 2 && interact(x - range, y - 16 + y_offset, x - 8, y + 16 + y_offset))
         {
             done = true;
         }
@@ -256,19 +256,19 @@ void Player::attack()
 
         if (attack_dir == 0)
         {
-            y_tile = (y + r + y_offset) >> 4; // gets the tile below that you are attacking.
+            y_tile = (y + r + y_offset) >> 5; // gets the tile below that you are attacking.
         }
         if (attack_dir == 1)
         {
-            y_tile = (y - r + y_offset) >> 4; // gets the tile above that you are attacking.
+            y_tile = (y - r + y_offset) >> 5; // gets the tile above that you are attacking.
         }
         if (attack_dir == 2)
         {
-            x_tile = (x - r) >> 4; // gets the tile to the left that you are attacking.
+            x_tile = (x - r) >> 5; // gets the tile to the left that you are attacking.
         }
         if (attack_dir == 3)
         {
-            x_tile = (x + r) >> 4; // gets the tile to the right that you are attacking.
+            x_tile = (x + r) >> 5; // gets the tile to the right that you are attacking.
         }
 
         if ((x_tile >= 0) && (y_tile >= 0) && (x_tile < level->width) && (y_tile < level->height))
@@ -300,38 +300,38 @@ void Player::attack()
     if (active_item == NULL || active_item->can_attack())
     {
         attack_time = 5;
-        range = 20;
+        range = 40;
         if (dir == 0)
         {
-            hurt(x - 8, y + 4 + y_offset, x + 8, y + range + y_offset); // attacks the entity below you.
+            hurt(x - 16, y + 8 + y_offset, x + 16, y + range + y_offset); // attacks the entity below you.
         }
         if (dir == 1)
         {
-            hurt(x - 8, y - range + y_offset, x + 8, y - 4 + y_offset); // attacks the entity above you.
+            hurt(x - 16, y - range + y_offset, x + 16, y - 8 + y_offset); // attacks the entity above you.
         }
         if (dir == 3)
         {
-            hurt(x + 4, y - 8 + y_offset, x + range, y + 8 + y_offset); // attacks the entity to the right of you.
+            hurt(x + 8, y - 16 + y_offset, x + range, y + 16 + y_offset); // attacks the entity to the right of you.
         }
         if (dir == 2)
         {
-            hurt(x - range, y - 8 + y_offset, x - 4, y + 8 + y_offset); // attacks the entity to the left of you.
+            hurt(x - range, y - 16 + y_offset, x - 8, y + 16 + y_offset); // attacks the entity to the left of you.
         }
         if (attack_dir == 0)
         {
-            y_tile = (y + r + y_offset) >> 4; // gets the tile below that you are attacking.
+            y_tile = (y + r + y_offset) >> 5; // gets the tile below that you are attacking.
         }
         if (attack_dir == 1)
         {
-            y_tile = (y - r + y_offset) >> 4; // gets the tile above that you are attacking.
+            y_tile = (y - r + y_offset) >> 5; // gets the tile above that you are attacking.
         }
         if (attack_dir == 2)
         {
-            x_tile = (x - r) >> 4; // gets the tile to the left that you are attacking.
+            x_tile = (x - r) >> 5; // gets the tile to the left that you are attacking.
         }
         if (attack_dir == 3)
         {
-            x_tile = (x + r) >> 4; // gets the tile to the right that you are attacking.
+            x_tile = (x + r) >> 5; // gets the tile to the right that you are attacking.
         }
 
         if (x_tile >= 0 && y_tile >= 0 && x_tile < level->width && y_tile < level->height)
@@ -477,7 +477,7 @@ bool Player::pay_stamina(uint8_t cost)
 
 uint8_t Player::get_light_radius()
 {
-    uint8_t r = 2;
+    uint8_t r = 4;
     return r;
 }
 
