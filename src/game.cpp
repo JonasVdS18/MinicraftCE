@@ -195,7 +195,8 @@ void Game::render()
     if (level != NULL)
     {
         level->render_background(level->x_offset, level->y_offset);
-        player->render(level->x_offset, level->y_offset);
+        // player->render(level->x_offset, level->y_offset);
+        level->render_sprites(level->x_offset, level->y_offset);
     }
     else
     {

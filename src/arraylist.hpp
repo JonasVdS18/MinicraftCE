@@ -15,6 +15,7 @@ template <typename T> class Arraylist
     Arraylist(uint8_t initial_capacity);
     ~Arraylist();
     bool add(T* t);
+    void add(uint8_t index, T* t);
     // Returns the element at the index if 0 <= index < size
     T* get(uint8_t index);
     uint8_t size();
@@ -71,6 +72,32 @@ template <typename T> bool Arraylist<T>::add(T* t)
     {
         return false;
     }
+}
+
+template <typename T> void Arraylist<T>::add(uint8_t index, T* t)
+{
+    // index > size and not >= size see java specifications of the arraylist
+    if (index < 0 || index > array_size)
+    {
+        return;
+    }
+    // if the array is full we cant add more
+    if (array_size + 1 > MAX_CAPACITY)
+    {
+        return;
+    }
+    // increase the array size if needed
+    else if (array_size + 1 > capacity)
+    {
+        reallocate();
+    }
+
+    for (uint8_t i = array_size; i > index; i--)
+    {
+        head[i] = head[i - 1];
+    }
+    head[index] = t;
+    array_size++;
 }
 
 template <typename T> void Arraylist<T>::reallocate()

@@ -108,6 +108,8 @@ Level::Level(int width, int height, int level, Level* parent_level)
         entities_in_chunks[i] = nullptr;
     }
 
+    // try to spawn a lot of mobs so it wont need to spawn a lot when the game has started
+
     // Stair code needs to be implemented.
 
     // Air Wizard code needs to be implemented.
@@ -137,6 +139,15 @@ Level::~Level()
 void Level::render_background(int x_scroll, int y_scroll)
 {
     gfx_Tilemap(&screen_tiles, x_scroll, y_scroll);
+}
+
+void Level::render_sprites(int x_scroll, int y_scroll)
+{
+    insertion_sort(screen_entities);
+    for (uint8_t i = 0; i < screen_entities->size(); i++)
+    {
+        screen_entities->get(i)->render(x_scroll, y_scroll);
+    }
 }
 
 void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
@@ -523,6 +534,54 @@ void Level::update_screen_tiles(int x, int y) // needs to be called if a tile is
             {
                 screen_tiles_map[(x + width * 2 * y) * 2 + 1 + width * 2] = 2 + 2 * 16;
             }
+        }
+    }
+}
+
+void Level::insertion_sort(Arraylist<Entity>* arraylist)
+{
+    if (arraylist->size() == 0)
+    {
+        return;
+    }
+
+    const uint8_t size{arraylist->size()};
+
+    // current is the element we are going to sort, all the elements before
+    // current are already sorted
+    for (uint8_t current = 1; current < size; current++)
+    {
+        // index is the index we are going to compare against
+
+        int current_y = arraylist->get(current)->y;
+
+        uint8_t index = current;
+
+        bool found_index = false;
+
+        while (index > 0 && !found_index)
+        {
+            index--;
+            if (arraylist->get(index)->y < current_y)
+            {
+                found_index = true;
+            }
+        }
+        // no elemnt is smaller then this one
+        if (!found_index)
+        {
+            arraylist->add(0, arraylist->remove_index(current));
+            continue;
+        }
+        // if this is the largest element we wont insert it
+        if (index + 1 == current)
+        {
+            continue;
+        }
+        // we insert the elements
+        else
+        {
+            arraylist->add(index + 1, arraylist->remove_index(current));
         }
     }
 }
