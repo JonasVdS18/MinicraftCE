@@ -16,6 +16,17 @@ class Entity;
 class Tile;
 class Player;
 
+class Entity_queue_item
+{
+  public:
+    Entity* e;
+    int old_chunk;
+    int new_chunk;
+
+    Entity_queue_item(Entity* e, int old_chunk, int new_chunk);
+    ~Entity_queue_item();
+};
+
 class Level
 {
   public:
@@ -33,10 +44,10 @@ class Level
     gfx_tilemap_t screen_tiles; // tilemap object of the actual tiles that will be drawn to the screen
     uint8_t* screen_tiles_map;  // map of the tilemap that belongs to the tilemap object
     int monster_density;
-    // List containing all the entities in the level
-    // Linked_list<Entity>* entities;
     // Array containing lists of entities per chunks of chunksize * chunksize
     Linked_list<Entity>** entities_in_chunks;
+    // Queue of Entities that changed queue
+    Linked_list<Entity_queue_item>* changed_chunk_queue;
     Player* player;
 
     Level(int width, int height, int level, Level* parent_level);
@@ -47,8 +58,12 @@ class Level
     void set_tile(int x, int y, Tile* t, uint8_t dataval);
     uint8_t get_data(int x, int y);
     void set_data(int x, int y, uint8_t val);
+    // Only used for adding new entities not for swapping chunks
     void add(Entity* entity);
-    void remove(Entity* e);
+    // Removes the entity form a chunk
+    void remove(int chunk, Entity* e);
+    // Inserts the Entity in a chunk
+    void insert(int chunk, Entity* e);
     void try_spawn(int count);
     void tick();
     Linked_list<Entity>* get_entities(int x0, int y0, int x1, int y1);
