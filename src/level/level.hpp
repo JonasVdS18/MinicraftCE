@@ -43,8 +43,6 @@ class Level
     ~Level();
 
     void render_background(int x_scroll, int y_scroll);
-    void update_screen_tiles(int x,
-                             int y); // needs to be called if a tile is changed, x and y in tile coordinates
     inline Tile* get_tile(int x, int y);
     void set_tile(int x, int y, Tile* t, uint8_t dataval);
     uint8_t get_data(int x, int y);
@@ -58,6 +56,8 @@ class Level
   private:
     int depth;
     void generate_screen_tiles();
+    void update_screen_tiles(int x,
+                             int y); // needs to be called if a tile is changed, x and y in tile coordinates
 };
 
 inline Tile* Level::get_tile(int x, int y)

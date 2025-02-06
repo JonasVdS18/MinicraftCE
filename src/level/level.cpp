@@ -154,6 +154,7 @@ void Level::set_tile(int x, int y, Tile* t, uint8_t dataval)
 
     tiles[x + y * width] = t->id;
     data[x + y * width] = dataval;
+    update_screen_tiles(x, y);
 }
 
 uint8_t Level::get_data(int x, int y)
