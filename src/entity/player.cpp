@@ -3,6 +3,7 @@
 #include "../gfx/minigfx1.h"
 #include "../level/tile/tile.hpp"
 #include "../screen/inventory_menu.hpp"
+#include "particle/text_particle.hpp"
 // #include <debug.h>
 #include <debug.h>
 #include <sys/util.h>
@@ -427,6 +428,28 @@ void Player::render(int x_scroll, int y_scroll)
     // gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
     //(GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
     gfx_RLETSprite_NoClip(display_sprite, x - x_scroll, y - y_scroll);
+
+    if (attack_time > 0)
+    {
+        switch (attack_dir)
+        {
+        case 0: // slash down
+            gfx_RLETSprite(rlet_slash_flipped_x, x - x_scroll, y - y_scroll + 24);
+            break;
+        case 1: // slash up
+            gfx_RLETSprite(rlet_slash, x - x_scroll, y - y_scroll - 8);
+            break;
+        case 2: // slash left
+            gfx_RLETSprite(rlet_slash_rotated_270, x - x_scroll - 8, y - y_scroll);
+            break;
+        case 3: // slash right
+            gfx_RLETSprite(rlet_slash_rotated_90, x - x_scroll + 24, y - y_scroll);
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 void Player::touch_item(Item_entity* item_entity)
@@ -503,7 +526,14 @@ void Player::do_hurt(uint8_t damage, uint8_t attack_dir)
 
     // level->add(new TextParticle("" + damage, x, y, Color.get(-1, 504, 504, 504))); // adds a text particle telling
     // how much damage was done.
-
+    if (damage < 10)
+    {
+        level->add(new Text_particle(damage, 1, x, y, 7));
+    }
+    else
+    {
+        level->add(new Text_particle(damage, 2, x, y, 7));
+    }
     health -= damage;
     if (attack_dir == 0)
     {

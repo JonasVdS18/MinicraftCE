@@ -2,6 +2,7 @@
 #include "../entity/player.hpp"
 #include "../level/level.hpp"
 #include "../level/tile/tile.hpp"
+#include "particle/text_particle.hpp"
 #include <debug.h>
 #include <sys/util.h>
 
@@ -117,7 +118,7 @@ void Mob::hurt(Mob* mob, int damage, int attack_dir)
 void Mob::hurt(Tile* tile, int x, int y, int damage)
 {
     uint8_t attack_dir =
-        dir ^ 1; // Set attackDir to our own direction, inverted. XORing it with 1 flips the rightmost bit in the
+        dir ^ 1; // Set attack_dir to our own direction, inverted. XORing it with 1 flips the rightmost bit in the
                  // variable, this effectively adds one when even, and subtracts one when odd
     do_hurt(damage, attack_dir);
 }
@@ -145,7 +146,14 @@ void Mob::do_hurt(uint8_t damage, uint8_t attack_dir)
         return;
     }
 
-    //!!!!!!!!!! level->add(new TextParticle("" + damage, x, y, red));
+    if (damage < 10)
+    {
+        level->add(new Text_particle(damage, 1, x, y, 8));
+    }
+    else
+    {
+        level->add(new Text_particle(damage, 2, x, y, 8));
+    }
 
     health -= damage;
     if (attack_dir == 0)

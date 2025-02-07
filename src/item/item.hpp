@@ -18,12 +18,12 @@ class Item : public List_item
     virtual gfx_sprite_t* get_sprite();
     // void onTake(ItemEntity itemEntity)
     virtual void render_icon(int x, int y);
-    // boolean interactOn(Tile tile, Level level, int xt, int yt, Player player, int attackDir)
+    // boolean interactOn(Tile tile, Level level, int xt, int yt, Player player, int attack_dir)
     virtual bool is_depleted();
     virtual bool can_attack();
     virtual int get_attack_damage_bonus(Entity* entity);
     virtual const char* get_name();
     virtual bool matches(Item* item);
-    virtual bool interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attackDir);
+    virtual bool interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attack_dir);
 };
 #endif

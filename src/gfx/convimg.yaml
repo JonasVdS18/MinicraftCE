@@ -7,7 +7,9 @@ palettes:
       - color: {index: 3, r: 102, g: 102, b: 102} # text grey color
       - color: {index: 4, r: 154, g: 154, b: 154} # text grey/white color
       - color: {index: 5, r: 22, g: 22, b: 137} # inventory blue
-      - color: {index: 6, r: 229,g: 229, b: 137} #text yellow
+      - color: {index: 6, r: 229,g: 229, b: 137} # text yellow
+      - color: {index: 7, r: 158, g: 44, b: 44} # text red
+      - color: {index: 8, r: 232, g: 54, b: 146} # text purple
     images: automatic
 
 converts:
@@ -47,6 +49,8 @@ converts:
       - zombie_side_1.png
       - slime.png
       - slime_jump.png
+      - smash_particle.png
+      - slash.png
 
   - name: rlet_sprites_flipped_y
     prefix: rlet_
@@ -82,6 +86,7 @@ converts:
     images:
       - frame_corner.png
       - frame_side.png
+      - slash.png
 
   - name: rlet_sprites_flipped_xy
     prefix: rlet_
@@ -103,6 +108,7 @@ converts:
     style: rlet
     images:
       - frame_side.png
+      - slash.png
 
   - name: rlet_sprites_rotated_270
     prefix: rlet_
@@ -113,6 +119,7 @@ converts:
     style: rlet
     images:
       - frame_side.png
+      - slash.png
 
   - name: mini_tiles
     palette: global_palette

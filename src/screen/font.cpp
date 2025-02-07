@@ -18,14 +18,23 @@ void Font::print_centered(const char* msg)
                               fontlib_GetCursorY());
     fontlib_DrawString(msg);
 }
-
-void Font::draw(const char* msg, uint8_t msg_length, int x, int y) // x and y in screen pixel coordinates
+// x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
+void Font::draw(const char* msg, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color)
 {
     fontlib_SetWindow(x, y, msg_length * 16, 16);
     fontlib_HomeUp();
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
-    fontlib_SetColors(6, 5);
+    fontlib_SetColors(fore_color, back_color);
     fontlib_DrawString(msg);
+}
+// x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
+void Font::draw(uint8_t number, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color)
+{
+    fontlib_SetWindow(x, y, msg_length * 16, 16);
+    fontlib_HomeUp();
+    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+    fontlib_SetColors(fore_color, back_color);
+    fontlib_DrawUInt(number, msg_length);
 }
 
 void Font::renderFrame(const char* title, uint8_t title_length, int x, int y, uint8_t width,
@@ -52,5 +61,5 @@ void Font::renderFrame(const char* title, uint8_t title_length, int x, int y, ui
     gfx_FillRectangle_NoClip(x + rlet_frame_corner_width, y + rlet_frame_corner_height,
                              (width - 2) * rlet_frame_corner_width, (height - 2) * rlet_frame_corner_height);
 
-    draw(title, title_length, x + 16, y);
+    draw(title, title_length, x + 16, y, 6, 5);
 }
