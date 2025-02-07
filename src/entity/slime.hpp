@@ -6,18 +6,18 @@
 class Slime : public Mob
 {
   public:
-    Slime(const unsigned int lvl);
+    Slime(const uint8_t lvl);
     ~Slime();
 
   private:
-    const unsigned int lvl;
-    int jump_time;
-    int xa, ya;
+    const uint8_t lvl;
+    int8_t jump_time;
+    int8_t xa, ya;
     void tick() override;
     void render(int x_scroll, int y_scroll) override;
 
   protected:
-    void die();
+    void die() override;
     void touched_by(Entity* entity) override;
 };
 

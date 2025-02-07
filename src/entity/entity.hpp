@@ -16,7 +16,7 @@ class Entity
 {
   public:
     int x, y;
-    int radius_x, radius_y;
+    int8_t radius_x, radius_y;
     bool removed;
     Level* level;
     Entity();
@@ -28,15 +28,15 @@ class Entity
     // Checks if the entity intersects 4 points
     inline bool intersects(int x0, int y0, int x1, int y1);
     virtual bool blocks(Entity* entity);
-    virtual void hurt(Mob* mob, int damage, int attack_dir);
-    virtual void hurt(Tile* tile, int x, int y, int damage);
+    virtual void hurt(Mob* mob, uint8_t damage, uint8_t attack_dir);
+    virtual void hurt(Tile* tile, int x, int y, uint8_t damage);
     virtual bool move(int xa, int ya);
     virtual bool move2(int xa, int ya);
     virtual bool is_blockable_by(Mob* mob);
     virtual void touch_item(Item_entity* item_entity);
     virtual bool can_swim();
-    virtual bool interact(Player* player, Item* item, int attack_dir);
-    virtual bool use(Player* player, int attack_dir);
+    virtual bool interact(Player* player, Item* item, uint8_t attack_dir);
+    virtual bool use(Player* player, uint8_t attack_dir);
     virtual uint8_t get_light_radius();
     virtual void touched_by(Entity* entity);
 };

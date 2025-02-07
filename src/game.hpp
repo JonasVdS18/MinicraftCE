@@ -35,7 +35,7 @@ class Game
     int player_dead_time;
     int pending_level_change;
     int wontimer;
-    int current_level;
+    int8_t current_level;
     uint8_t prev_health, prev_stamina;
     Input_handler* input;
     clock_t last_clock;

@@ -4,7 +4,7 @@
 #include <debug.h>
 #include <sys/util.h>
 
-Slime::Slime(const unsigned int lvl) : Mob(), lvl{lvl}, jump_time{0}
+Slime::Slime(const uint8_t lvl) : Mob(), lvl{lvl}, jump_time{0}
 {
     x = 0;
     y = 0;
@@ -21,7 +21,7 @@ void Slime::tick()
     // dbg_printf("SLIME TICK\n");
     Mob::tick();
 
-    int speed = 1;
+    uint8_t speed = 1;
     if (!move(xa * speed, ya * speed) || randInt(0, 39) == 0)
     {
         if (jump_time <= -10)
@@ -55,7 +55,8 @@ void Slime::tick()
     jump_time--;
     if (jump_time == 0)
     {
-        xa = ya = 0;
+        xa = 0;
+        ya = 0;
     }
 }
 
@@ -84,10 +85,10 @@ void Slime::die()
 {
     Mob::die();
 
-    int count = 2 * (randInt(0, 1) + 1);
+    uint8_t count = 2 * (randInt(0, 1) + 1);
     //!!!!!!!!!!
     /*
-    for (int i = 0; i < count; i++)
+    for (uint8_t i = 0; i < count; i++)
     {
         level.add(new ItemEntity(new ResourceItem(Resource.slime), x + random.nextInt(11) - 5,
                                  y + random.nextInt(11) - 5));

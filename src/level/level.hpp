@@ -22,9 +22,9 @@ class Level
     // Width and Height in tiles not in pixels.
     const int width, height;
     // size in tiles of a chunk, a chunk is chunksize* chunksize in tiles, its a square with chunksize as length
-    const int chunk_size;
+    const uint8_t chunk_size;
     // Width and height in chunks not in
-    const int width_in_chunks, height_in_chunks;
+    const uint8_t width_in_chunks, height_in_chunks;
     // x_offset and y_offset in world coordinates
     int x_offset, y_offset;
     // array of tile id's
@@ -41,7 +41,7 @@ class Level
     Arraylist<Entity>* screen_entities;
     Player* player;
 
-    Level(int width, int height, int level, Level* parent_level);
+    Level(int width, int height, int8_t level, Level* parent_level);
     ~Level();
 
     void render_background(int x_scroll, int y_scroll);
@@ -55,14 +55,14 @@ class Level
     // Removes the entity form a chunk
     void remove(Entity* e);
     // Inserts the Entity in a chunk
-    void insert_entity(int chunk, Entity* e);
-    void remove_entity(int chunk, Entity* e);
+    void insert_entity(uint8_t chunk, Entity* e);
+    void remove_entity(uint8_t chunk, Entity* e);
     void try_spawn(int count);
     void tick();
     Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1);
 
   private:
-    int depth;
+    int8_t depth;
     void generate_screen_tiles();
     void update_screen_tiles(int x,
                              int y); // needs to be called if a tile is changed, x and y in tile coordinates

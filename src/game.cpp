@@ -108,7 +108,7 @@ bool Game::init()
     }
 
     fontlib_SetFont(mini_font, static_cast<fontlib_load_options_t>(0));
-    fontlib_SetTransparency(true);
+    fontlib_SetTransparency(false);
     fontlib_SetLineSpacing(1, 1);
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
 

@@ -35,7 +35,7 @@ int Tile::get_light_radius(Level* level, int x, int y)
     return 0;
 }
 
-void Tile::hurt(Level* level, int x, int y, Mob* source, int damage, int attack_dir)
+void Tile::hurt(Level* level, int x, int y, Mob* source, uint8_t damage, uint8_t attack_dir)
 {
 }
 
@@ -43,7 +43,7 @@ void Tile::bumped_into(Level* level, int xt, int yt, Entity* entity)
 {
 }
 
-void Tile::tick(Level* level, int xt, int yt, int modifier)
+void Tile::tick(Level* level, int xt, int yt, uint8_t modifier)
 {
 }
 
@@ -51,7 +51,7 @@ void Tile::stepped_on(Level* level, int xt, int yt, Entity* entity)
 {
 }
 
-bool Tile::interact(Level* level, int xt, int yt, Player* player, Item* item, int attack_dir)
+bool Tile::interact(Level* level, int xt, int yt, Player* player, Item* item, uint8_t attack_dir)
 {
     return false;
 }

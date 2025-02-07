@@ -110,12 +110,12 @@ bool Mob::blocks(Entity* entity)
     return entity->is_blockable_by(this);
 }
 
-void Mob::hurt(Mob* mob, int damage, int attack_dir)
+void Mob::hurt(Mob* mob, uint8_t damage, uint8_t attack_dir)
 {
     do_hurt(damage, attack_dir);
 }
 
-void Mob::hurt(Tile* tile, int x, int y, int damage)
+void Mob::hurt(Tile* tile, int x, int y, uint8_t damage)
 {
     uint8_t attack_dir =
         dir ^ 1; // Set attack_dir to our own direction, inverted. XORing it with 1 flips the rightmost bit in the

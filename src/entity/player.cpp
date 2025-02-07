@@ -428,7 +428,6 @@ void Player::render(int x_scroll, int y_scroll)
     // gfx_RLETSprite_NoClip(display_sprite, (GFX_LCD_WIDTH - rlet_player_front_width) / 2,
     //(GFX_LCD_HEIGHT - rlet_player_front_height) / 2);
     gfx_RLETSprite_NoClip(display_sprite, x - x_scroll, y - y_scroll);
-
     if (attack_time > 0)
     {
         switch (attack_dir)

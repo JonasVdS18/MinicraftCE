@@ -39,11 +39,11 @@ bool Entity::blocks(Entity* entity)
     return false;
 }
 
-void Entity::hurt(Mob* mob, int damage, int attack_dir)
+void Entity::hurt(Mob* mob, uint8_t damage, uint8_t attack_dir)
 {
 }
 
-void Entity::hurt(Tile* tile, int x, int y, int damage)
+void Entity::hurt(Tile* tile, int x, int y, uint8_t damage)
 {
 }
 
@@ -199,12 +199,12 @@ bool Entity::can_swim()
     return false;
 }
 
-bool Entity::interact(Player* player, Item* item, int attack_dir)
+bool Entity::interact(Player* player, Item* item, uint8_t attack_dir)
 {
     return item->interact(player, this, attack_dir);
 }
 
-bool Entity::use(Player* Player, int attack_dir)
+bool Entity::use(Player* Player, uint8_t attack_dir)
 {
     return false;
 }

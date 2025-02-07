@@ -10,9 +10,9 @@ Text_particle::Text_particle(char* msg, uint8_t msg_length, int x, int y, uint8_
     xx = x;
     yy = y;
     zz = 2;
-    xa = (float)randInt(0, 4) * 0.3;
-    ya = (float)randInt(0, 4) * 0.3;
-    za = (float)(randInt(0, 20)) / 10.0 * 0.7 + 2;
+    xa = (float)randInt(0, 2) * 0.3;
+    ya = (float)randInt(0, 2) * 0.3;
+    za = (float)(randInt(0, 10)) / 10.0 * 0.7 + 2;
 }
 Text_particle::Text_particle(uint8_t number, uint8_t msg_length, int x, int y, uint8_t col)
     : Entity(), msg{NULL}, number{number}, msg_length{msg_length}, col{col}, time{0}
@@ -22,9 +22,9 @@ Text_particle::Text_particle(uint8_t number, uint8_t msg_length, int x, int y, u
     xx = x;
     yy = y;
     zz = 2;
-    xa = (float)randInt(0, 4) * 0.3;
-    ya = (float)randInt(0, 4) * 0.3;
-    za = (float)(randInt(0, 20)) / 10.0 * 0.7 + 2;
+    xa = (float)randInt(0, 2) * 0.3;
+    ya = (float)randInt(0, 2) * 0.3;
+    za = (float)(randInt(0, 10)) / 10.0 * 0.7 + 2;
 }
 Text_particle::~Text_particle()
 {

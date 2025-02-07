@@ -14,7 +14,7 @@ void Item::render_inventory(int x, int y)
 {
 }
 
-bool Item::interact(Player* player, Entity* entity, int attack_dir)
+bool Item::interact(Player* player, Entity* entity, uint8_t attack_dir)
 {
     return false;
 }
@@ -37,7 +37,7 @@ bool Item::can_attack()
     return false;
 }
 
-int get_attack_damage_bonus(Entity* entity)
+uint8_t get_attack_damage_bonus(Entity* entity)
 {
     return 0;
 }
@@ -67,7 +67,7 @@ bool Item::is_depleted()
     return false;
 }
 
-int Item::get_attack_damage_bonus(Entity* entity)
+uint8_t Item::get_attack_damage_bonus(Entity* entity)
 {
     return 0;
 }

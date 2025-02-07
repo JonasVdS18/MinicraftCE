@@ -21,6 +21,6 @@ class Menu
     virtual void tick();
     virtual void render();
     void render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Linked_list<Item>* list_items,
-                                  int selected);
+                          int selected);
 };
 #endif

@@ -41,10 +41,11 @@ const int ENTITY_TICK_RADIUS_X{32 * 6};
 
 const int ENTITY_TICK_RADIUS_Y{32 * 4};
 
-Level::Level(int width, int height, int level, Level* parent_level)
-    : width{width}, height{height}, chunk_size{16}, width_in_chunks{(width + chunk_size - 1) / chunk_size},
-      height_in_chunks{(height + chunk_size - 1) / chunk_size}, x_offset{0}, y_offset{0}, monster_density{8},
-      entities{new Arraylist<Entity>(64)},
+Level::Level(int width, int height, int8_t level, Level* parent_level)
+    : width{width}, height{height}, chunk_size{16},
+      width_in_chunks{(uint8_t)((width + (int)chunk_size - 1) / (int)chunk_size)},
+      height_in_chunks{(uint8_t)((height + (int)chunk_size - 1) / (int)chunk_size)}, x_offset{0}, y_offset{0},
+      monster_density{8}, entities{new Arraylist<Entity>(64)},
       entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
       screen_entities{new Arraylist<Entity>(12)}, player{NULL}, depth{level}
 {
@@ -224,7 +225,7 @@ void Level::remove(Entity* e)
     remove_entity(chunk_x + chunk_y * width_in_chunks, e);
 }
 
-void Level::remove_entity(int chunk, Entity* e)
+void Level::remove_entity(uint8_t chunk, Entity* e)
 {
     if (chunk < 0 || chunk >= width_in_chunks * height_in_chunks)
     {
@@ -233,7 +234,7 @@ void Level::remove_entity(int chunk, Entity* e)
     entities_in_chunks[chunk]->remove_element(e);
 }
 
-void Level::insert_entity(int chunk, Entity* e)
+void Level::insert_entity(uint8_t chunk, Entity* e)
 {
     if (chunk < 0 || chunk >= width_in_chunks * height_in_chunks)
     {

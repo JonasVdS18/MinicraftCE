@@ -29,8 +29,8 @@ class Mob : public Entity
     virtual void tick() override;
     virtual bool move(int xa, int ya) override;
     virtual bool blocks(Entity* entity) override;
-    virtual void hurt(Mob* mob, int damage, int attack_dir) override;
-    virtual void hurt(Tile* tile, int x, int y, int damage) override;
+    virtual void hurt(Mob* mob, uint8_t damage, uint8_t attack_dir) override;
+    virtual void hurt(Tile* tile, int x, int y, uint8_t damage) override;
     virtual void heal(uint8_t heal);
     virtual bool find_start_pos(Level* level);
 };

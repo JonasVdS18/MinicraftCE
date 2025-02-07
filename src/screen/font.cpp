@@ -21,20 +21,37 @@ void Font::print_centered(const char* msg)
 // x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
 void Font::draw(const char* msg, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color)
 {
+    if (back_color == 1) // if the background is transparent
+    {
+        fontlib_SetTransparency(true);
+    }
     fontlib_SetWindow(x, y, msg_length * 16, 16);
     fontlib_HomeUp();
     fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
     fontlib_SetColors(fore_color, back_color);
     fontlib_DrawString(msg);
+    fontlib_SetTransparency(false);
 }
 // x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
 void Font::draw(uint8_t number, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color)
 {
-    fontlib_SetWindow(x, y, msg_length * 16, 16);
-    fontlib_HomeUp();
-    fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
-    fontlib_SetColors(fore_color, back_color);
-    fontlib_DrawUInt(number, msg_length);
+    if (y < GFX_LCD_HEIGHT - 64)
+    {
+        if (back_color == 1) // if the background is transparent
+        {
+            fontlib_SetTransparency(true);
+        }
+        fontlib_SetWindow(x, y, msg_length * 16, 16);
+        fontlib_HomeUp();
+        fontlib_SetNewlineOptions(FONTLIB_ENABLE_AUTO_WRAP);
+        fontlib_SetColors(fore_color, back_color);
+        fontlib_DrawUInt(number, msg_length);
+        fontlib_SetTransparency(false);
+    }
+    else
+    {
+        return;
+    }
 }
 
 void Font::renderFrame(const char* title, uint8_t title_length, int x, int y, uint8_t width,

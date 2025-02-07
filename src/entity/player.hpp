@@ -11,9 +11,9 @@ class Game;
 class Player : public Mob
 {
   private:
-    int attack_time;
+    int8_t attack_time;
     uint8_t attack_dir;
-    int on_stair_delay;
+    int8_t on_stair_delay;
     bool use();
     bool use(int x0, int y0, int x1, int y1);
     void attack();
@@ -31,10 +31,10 @@ class Player : public Mob
     Inventory* inventory;
     Item* active_item;
     Item* attack_item;
-    const uint8_t max_stamina;
-    uint8_t stamina;
-    uint8_t stamina_recharge;
-    uint8_t stamina_recharge_delay;
+    const int8_t max_stamina;
+    int8_t stamina;
+    int8_t stamina_recharge;
+    int8_t stamina_recharge_delay;
     uint8_t invulnerable_time;
     int score;
     Player(Game* game, Input_handler* input);
