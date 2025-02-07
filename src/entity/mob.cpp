@@ -25,8 +25,16 @@ Mob::~Mob()
 void Mob::tick()
 {
     // dbg_printf("MOB TICK\n");
-
     tick_time++;
+    // update the nearby entities every 16 ticks
+    if (tick_time % 16 == 0)
+    {
+        Arraylist<Entity>* tick_entities{level->get_entities(x - 1, y - 1, x + 1, y + 1)};
+        nearby_entities->clear();
+        nearby_entities->add_all(tick_entities);
+        delete tick_entities;
+    }
+
     if (level->get_tile(x >> 5, y >> 5) == Tile::lava) // >> 5 = divides by 32
     {
         hurt(this, 4, dir ^ 1);
@@ -169,11 +177,13 @@ void Mob::do_hurt(uint8_t damage, uint8_t attack_dir)
 
 bool Mob::find_start_pos(Level* level)
 {
+    // dbg_printf("find_start_pos START\n");
     int x = randInt(0, level->width - 1);
     int y = randInt(0, level->height - 1);
     int xx = x * 32 + 16; // Get actual pixel coordinates from this tile coord
     int yy = y * 32 + 16;
 
+    // dbg_printf("checking if player is not nullptr\n");
     if (level->player != NULL)
     {
         int xd = level->player->x - xx; // Get the difference between our attempted spawn x, and the player's x
@@ -186,15 +196,19 @@ bool Mob::find_start_pos(Level* level)
     int r = level->monster_density *
             32; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
 
-    Arraylist<Entity>* entities_around_player{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
-    if (entities_around_player->size() > 0)
+    Arraylist<Entity>* tick_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
+    nearby_entities->clear();
+    nearby_entities->add_all(tick_entities);
+    delete tick_entities;
+
+    if (nearby_entities->size() > 0)
     {
-        delete entities_around_player;
+        // delete entities_around_player;
         return false; // Get a list of mobs in the level, within a box centered on our attempted coordinates, with
                       // dimensions of r times 2, and if there are any close to us, return false;
     }
 
-    delete entities_around_player;
+    // delete entities_around_player;
 
     if (level->get_tile(x, y)->may_pass(level, x, y, this))
     { // Check if the tile we're trying to spawn on is not solid to us

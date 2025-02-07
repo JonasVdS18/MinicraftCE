@@ -19,6 +19,7 @@ class Entity
     int8_t radius_x, radius_y;
     bool removed;
     Level* level;
+    Arraylist<Entity>* nearby_entities;
     Entity();
     virtual ~Entity();
     virtual void render(int x_scroll, int y_scroll);

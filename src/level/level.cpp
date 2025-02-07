@@ -19,11 +19,11 @@ const int SCREEN_HEIGHT_IN_TILES{GFX_LCD_HEIGHT >> 5};
 // amount of tiles to buffer around the screen width, this value is multiplied by 2 because it's a buffer to the left
 // and right f the screen.
 // This is used for the tick to determine which tiles are updated more frequent.
-const int SCREEN_WIDTH_IN_TILES_BUFFER{3};
+const int SCREEN_WIDTH_IN_TILES_BUFFER{1};
 // amount of tiles to buffer around the screen height, this value is multiplied by 2 because it's a buffer under
 // and above the screen.
 // This is used for the tick to determine which tiles are updated more frequent.
-const int SCREEN_HEIGHT_IN_TILES_BUFFER{2};
+const int SCREEN_HEIGHT_IN_TILES_BUFFER{1};
 
 // The amount of tiles to update frequently (every tick)
 // We divide by 50 to have the same update frequency as in the original game
@@ -47,7 +47,7 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
       height_in_chunks{(uint8_t)((height + (int)chunk_size - 1) / (int)chunk_size)}, x_offset{0}, y_offset{0},
       monster_density{8}, entities{new Arraylist<Entity>(64)},
       entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
-      screen_entities{new Arraylist<Entity>(12)}, player{NULL}, depth{level}
+      screen_entities{new Arraylist<Entity>(12)}, player{NULL}, depth{level}, tick_timer{0}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -110,6 +110,7 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
     }
 
     // try to spawn a lot of mobs so it wont need to spawn a lot when the game has started
+    try_spawn(500);
 
     // Stair code needs to be implemented.
 
@@ -133,6 +134,20 @@ Level::~Level()
     if (screen_tiles_map != nullptr)
     {
         delete[] screen_tiles_map;
+    }
+    if (screen_entities != nullptr)
+    {
+        delete screen_entities;
+    }
+    if (entities != nullptr)
+    {
+        // delete all the entities
+        for (int i = 0; i < entities->size(); i++)
+        {
+            Entity* e = entities->remove_index(0);
+            delete e;
+        }
+        delete entities;
     }
 }
 
@@ -207,6 +222,10 @@ void Level::add(Entity* entity)
 
     entities->add(entity);
     entities_in_chunks[chunk_x + chunk_y * width_in_chunks]->add(entity);
+    // if the entity is on screen we add it to the screenentities list
+    if (entity->intersects(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
+                           player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y))
+        screen_entities->add(entity);
 
     entity->init(this);
 }
@@ -223,6 +242,9 @@ void Level::remove(Entity* e)
         return;
     }
     remove_entity(chunk_x + chunk_y * width_in_chunks, e);
+    screen_entities->remove_element(e);
+    // delete the entity
+    delete e;
 }
 
 void Level::remove_entity(uint8_t chunk, Entity* e)
@@ -288,12 +310,16 @@ void Level::try_spawn(int count)
             delete mob;
         }
     }
+    // dbg_printf("TRYSPAWN END\n");
 }
 
 void Level::tick()
 {
     // dbg_printf("Tick Started\n");
-    try_spawn(1);
+    tick_timer++;
+    // only spwan every 16 ticks
+    if (tick_timer % 16 == 0)
+        try_spawn(1);
 
     // Ticking the tiles
     int tiles_tick_amount{0};
@@ -333,11 +359,18 @@ void Level::tick()
 
     // dbg_printf("ticking entities\n");
     // dbg_printf("entities size: %i\n", entities->size());
-    Arraylist<Entity>* tick_entities{get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
-                                                  player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
-    screen_entities->clear();
-    screen_entities->add_all(tick_entities);
-    delete tick_entities;
+
+    // Only update the screenarray every 8 ticks
+    if (tick_timer % 16)
+    {
+        Arraylist<Entity>* tick_entities{
+            get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
+                         player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
+        screen_entities->clear();
+        screen_entities->add_all(tick_entities);
+        delete tick_entities;
+    }
+
     // int amount = entities->size() > 10 ? 10 : entities->size();
     // dbg_printf("screen_entities size: %i\n", screen_entities->size());
     for (int i = 0; i < screen_entities->size(); i++)
@@ -377,7 +410,7 @@ void Level::tick()
 // This functions is very expensive
 Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
-    Arraylist<Entity>* result{new Arraylist<Entity>()};
+    Arraylist<Entity>* result{new Arraylist<Entity>(4)};
     // dbg_printf("in getentities\n");
     //  make this static
 

@@ -63,6 +63,7 @@ class Level
 
   private:
     int8_t depth;
+    unsigned int tick_timer;
     void generate_screen_tiles();
     void update_screen_tiles(int x,
                              int y); // needs to be called if a tile is changed, x and y in tile coordinates

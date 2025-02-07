@@ -132,9 +132,12 @@ void Zombie::render(int x_scroll, int y_scroll)
 
 void Zombie::touched_by(Entity* entity)
 {
-    if (entity = level->player)
+    if (level->player != nullptr)
     {
-        entity->hurt(this, lvl + 1, dir);
+        if (entity == level->player)
+        {
+            entity->hurt(this, lvl + 1, dir);
+        }
     }
 }
 

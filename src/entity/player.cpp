@@ -184,6 +184,7 @@ bool Player::use()
 
 bool Player::use(int x0, int y0, int x1, int y1)
 {
+    /*
     Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
@@ -200,10 +201,28 @@ bool Player::use(int x0, int y0, int x1, int y1)
     }
     delete entities;
     return false;
+    */
+
+    int size{nearby_entities->size()};
+    for (int i = 0; i < size; i++)
+    {
+        Entity* entity = nearby_entities->get(i);
+        if (entity != this && entity->intersects(x0, y0, x1, y1))
+        {
+            if (entity->use(this, attack_dir))
+            {
+                // delete entities;
+                return true;
+            }
+        }
+    }
+    // delete entities;
+    return false;
 }
 
 bool Player::interact(int x0, int y0, int x1, int y1)
 {
+    /*
     Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
@@ -216,6 +235,22 @@ bool Player::interact(int x0, int y0, int x1, int y1)
         }
     }
     delete entities;
+    return false;
+    */
+
+    int size{nearby_entities->size()};
+    for (int i = 0; i < size; i++)
+    {
+        Entity* entity = nearby_entities->get(i);
+        if (!entity->intersects(x0, y0, x1, y1))
+            continue;
+        if (entity != this && entity->interact(this, active_item, attack_dir))
+        {
+            // delete entities;
+            return true;
+        }
+    }
+    // delete entities;
     return false;
 }
 
@@ -344,6 +379,7 @@ void Player::attack()
 
 void Player::hurt(int x0, int y0, int x1, int y1)
 {
+    /*
     Arraylist<Entity>* entities = level->get_entities(x0, y0, x1, y1);
     int entities_size{entities->size()};
     for (int i = 0; i < entities_size; i++)
@@ -355,6 +391,18 @@ void Player::hurt(int x0, int y0, int x1, int y1)
         }
     }
     delete entities;
+    */
+
+    int size{nearby_entities->size()};
+    for (int i = 0; i < size; i++)
+    {
+        Entity* entity = nearby_entities->get(i);
+        if (entity != this && entity->intersects(x0, y0, x1, y1))
+        {
+            entity->hurt(this, get_attack_damage(entity), attack_dir);
+        }
+    }
+    // delete entities;
 }
 
 uint8_t Player::get_attack_damage(Entity* entity)

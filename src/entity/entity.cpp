@@ -7,12 +7,14 @@
 #include "player.hpp"
 #include <debug.h>
 
-Entity::Entity() : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}
+Entity::Entity()
+    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(4)}
 {
 }
 
 Entity::~Entity()
 {
+    delete nearby_entities;
 }
 
 void Entity::render(int x_scroll, int y_scroll)
@@ -119,9 +121,12 @@ bool Entity::move2(int xa, int ya)
         level->get_entities(x - radius_x, y - radius_y, x + radius_x,
                             y + radius_y); // gets all of the entities that are inside this entity (aka: colliding)
     */
+
+    /*
     Arraylist<Entity>* is_inside =
         level->get_entities(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x,
                             y + ya + radius_y); // gets the entities that this entity will touch.
+    */
 
     /*
     int is_inside_size{is_inside->size()};
@@ -153,6 +158,7 @@ bool Entity::move2(int xa, int ya)
     }
     */
 
+    /*
     int is_inside_size{is_inside->size()};
     for (int i = 0; i < is_inside_size; i++)
     {
@@ -171,12 +177,33 @@ bool Entity::move2(int xa, int ya)
             return false;
         }
     }
+    */
+
+    int size{nearby_entities->size()};
+    for (int i = 0; i < size; i++)
+    {
+        Entity* entity = nearby_entities->get(i);
+        if (entity == this ||
+            !entity->intersects(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x, y + ya + radius_y))
+        {
+            continue;
+        }
+
+        entity->touched_by(this);
+
+        if (entity->blocks(this))
+        {
+            // delete was_inside;
+            // delete is_inside;
+            return false;
+        }
+    }
 
     x += xa;
     y += ya;
 
     // delete was_inside;
-    delete is_inside;
+    // delete is_inside;
 
     return true;
 }

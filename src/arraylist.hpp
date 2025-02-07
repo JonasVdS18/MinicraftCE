@@ -201,6 +201,10 @@ template <typename T> void Arraylist<T>::clear()
 
 template <typename T> bool Arraylist<T>::add_all(Arraylist* arraylist)
 {
+    // if the arraylist is empty we stop
+    if (arraylist == nullptr)
+        return false;
+
     // If the array will overflow we will not add it
     if (array_size + arraylist->size() > MAX_CAPACITY)
     {

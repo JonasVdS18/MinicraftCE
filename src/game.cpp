@@ -191,6 +191,10 @@ void Game::tick()
         }
         Tile::tick_count++;
     }
+    if (player->removed)
+    {
+        player == nullptr;
+    }
 }
 
 void Game::render()
