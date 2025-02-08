@@ -45,7 +45,7 @@ void Inventory_menu::tick()
 
     if (input->attack->clicked && len > 0)
     {
-        Item* item = player->inventory->items->remove(selected);
+        Item* item = player->inventory->items->remove_index(selected);
         player->active_item = item;
         game->set_menu(nullptr);
     }
