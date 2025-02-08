@@ -47,15 +47,14 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
       height_in_chunks{(uint8_t)((height + (int)chunk_size - 1) / (int)chunk_size)}, x_offset{0}, y_offset{0},
       monster_density{8}, entities{new Arraylist<Entity>(64)},
       entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
-      screen_entities{new Arraylist<Entity>(12)}, deleted_entities{new Arraylist<Entity>(4)}, player{NULL},
-      depth{level}, tick_timer{0}
+      screen_entities{new Arraylist<Entity>(12)}, depth{level}, tick_timer{0}
 {
     // 2D array
-    uint8_t** maps = NULL;
+    uint8_t** maps = nullptr;
 
     // Level gen needs to be imlemented here.
 
-    if (maps != NULL)
+    if (maps != nullptr)
     {
         tiles = maps[0];
         data = maps[1];
@@ -63,8 +62,8 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
     else
     {
         /*
-        tiles = NULL;
-        data = NULL;*/
+        tiles = nullptr;
+        data = nullptr;*/
 
         // placeholder level
         tiles = new uint8_t[width * height];
@@ -149,16 +148,6 @@ Level::~Level()
             delete e;
         }
         delete entities;
-    }
-    if (deleted_entities != nullptr)
-    {
-        // delete all the entities
-        for (int i = 0; i < deleted_entities->size(); i++)
-        {
-            Entity* e = deleted_entities->remove_index(0);
-            delete e;
-        }
-        delete deleted_entities;
     }
 }
 
@@ -391,15 +380,6 @@ void Level::tick()
         screen_entities->clear();
         screen_entities->add_all(tick_entities);
         delete tick_entities;
-
-        // delete all the entities that need to be deleted.
-        // dbg_printf("DELETING the entities\n");
-        if (deleted_entities->size() > 0)
-        {
-            // dbg_printf("deleting 1 entity\n");
-            Entity* e = deleted_entities->remove_index(0);
-            delete e;
-        }
     }
 
     // int amount = entities->size() > 10 ? 10 : entities->size();

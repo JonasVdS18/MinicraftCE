@@ -10,7 +10,7 @@
 
 Player::Player(Game* game, Input_handler* input)
     : Mob(), attack_time{0}, attack_dir{dir}, on_stair_delay{0}, game{game}, input{input}, inventory(new Inventory()),
-      active_item{NULL}, attack_item{active_item}, max_stamina{10}, stamina{max_stamina}, stamina_recharge(0),
+      active_item{nullptr}, attack_item{active_item}, max_stamina{10}, stamina{max_stamina}, stamina_recharge(0),
       stamina_recharge_delay{0}, invulnerable_time{0}, score{0}
 
 {
@@ -26,11 +26,11 @@ Player::~Player()
     {
         delete active_item;
     }
-    if (active_item != NULL)
+    if (active_item != nullptr)
     {
         delete active_item;
     }
-    if (attack_item != NULL)
+    if (attack_item != nullptr)
     {
         delete attack_item;
     }
@@ -266,7 +266,7 @@ void Player::attack()
     int y_tile = (y + y_offset) >> 5;
     uint8_t r = 24;
 
-    if (active_item != NULL)
+    if (active_item != nullptr)
     {
         attack_time = 10;
         if (dir == 0 && interact(x - 16, y + 8 + y_offset, x + 16, y + range + y_offset))
@@ -323,7 +323,7 @@ void Player::attack()
             if (active_item->is_depleted())
             {
                 delete active_item;
-                active_item = NULL;
+                active_item = nullptr;
             }
         }
     }
@@ -333,7 +333,7 @@ void Player::attack()
         return;
     }
 
-    if (active_item == NULL || active_item->can_attack())
+    if (active_item == nullptr || active_item->can_attack())
     {
         attack_time = 5;
         range = 40;
@@ -408,7 +408,7 @@ void Player::hurt(int x0, int y0, int x1, int y1)
 uint8_t Player::get_attack_damage(Entity* entity)
 {
     uint8_t damage = randInt(0, 3) + 1;
-    if (attack_item != NULL)
+    if (attack_item != nullptr)
     {
         damage += attack_item->get_attack_damage_bonus(entity);
     }

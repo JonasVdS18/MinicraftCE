@@ -20,7 +20,7 @@ void Zombie::tick()
 {
     // dbg_printf("ZOMBIE TICK\n");
     Mob::tick();
-    if (level->player != NULL && random_walk_time == 0)
+    if (level->player != nullptr && random_walk_time == 0)
     {
         int xd = level->player->x - x;
         int yd = level->player->y - y;

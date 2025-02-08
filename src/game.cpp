@@ -18,7 +18,7 @@ const clock_t CLOCKS_PER_TICK{CLOCKS_PER_SEC / TICK_RATE};
 void Game::set_menu(Menu* menu)
 {
     // dbg_printf("IN SETMENU\n");
-    if (this->menu != NULL)
+    if (this->menu != nullptr)
     {
         // dbg_printf("DELETING PREVIOUS MENU\n");
         delete this->menu;
@@ -27,7 +27,7 @@ void Game::set_menu(Menu* menu)
 }
 
 Game::Game()
-    : game_time{0}, has_won{false}, menu{NULL}, player{NULL}, running{true}, level{NULL}, tick_count{0},
+    : game_time{0}, has_won{false}, menu{nullptr}, player{nullptr}, running{true}, level{nullptr}, tick_count{0},
       player_dead_time{0}, pending_level_change{0}, wontimer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
       input{new Input_handler()}, last_clock{clock()}, clockdiff{0}
 {
@@ -101,7 +101,7 @@ bool Game::init()
 
     fontlib_font_t* mini_font;
     mini_font = fontlib_GetFontByIndex("MINIFONT", 0);
-    if (mini_font == NULL)
+    if (mini_font == nullptr)
     {
         gfx_PrintStringXY("MINIFONT appvar not found or invalid", 0, 0);
         return 1;
@@ -139,7 +139,7 @@ void Game::reset()
 
     // placeholder level
     input->reset();
-    level = new Level(80, 80, 0, NULL);
+    level = new Level(80, 80, 0, nullptr);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);
@@ -178,13 +178,13 @@ void Game::tick()
         stop();
     }
 
-    if (menu != NULL)
+    if (menu != nullptr)
     {
         menu->tick();
     }
     else
     {
-        if (level != NULL)
+        if (level != nullptr)
         {
             // player->tick(); // player has to be ticked first
             level->tick();
@@ -200,7 +200,7 @@ void Game::tick()
 void Game::render()
 {
     // dbg_printf("RENDER START\n");
-    if (level != NULL)
+    if (level != nullptr)
     {
         level->render_background(level->x_offset, level->y_offset);
         // player->render(level->x_offset, level->y_offset);
@@ -231,7 +231,7 @@ void Game::won()
 void Game::render_GUI()
 {
     // dbg_printf("RENDER_GUI START\n");
-    if (player != NULL)
+    if (player != nullptr)
     {
         if (player->health > prev_health)
         {
@@ -303,7 +303,7 @@ void Game::render_GUI()
         }
     }
 
-    if (menu != NULL)
+    if (menu != nullptr)
     {
         menu->render();
     }

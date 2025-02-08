@@ -178,7 +178,7 @@ bool Mob::find_start_pos(Level* level)
     int yy = y * 32 + 16;
 
     // dbg_printf("checking if player is not nullptr\n");
-    if (level->player != NULL)
+    if (level->player != nullptr)
     {
         int xd = level->player->x - xx; // Get the difference between our attempted spawn x, and the player's x
         int yd = level->player->y - yy; // Get the difference between our attempted spawn y, and the player's y

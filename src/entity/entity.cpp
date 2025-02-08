@@ -8,7 +8,7 @@
 #include <debug.h>
 
 Entity::Entity()
-    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(2)},
+    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{nullptr}, nearby_entities{new Arraylist<Entity>(2)},
       detectable{false}
 {
 }

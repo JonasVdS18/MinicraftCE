@@ -59,7 +59,7 @@ bool Item::interact_on(Tile* tile, Level* level, int xt, int yt, Player* player,
 
 gfx_sprite_t* Item::get_sprite()
 {
-    return NULL;
+    return nullptr;
 }
 
 bool Item::is_depleted()

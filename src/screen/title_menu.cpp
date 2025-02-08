@@ -34,7 +34,7 @@ void Title_menu::tick()
         if (selected == 0)
         {
             game->reset();
-            game->set_menu(NULL);
+            game->set_menu(nullptr);
         }
 
         if (selected == 1)

@@ -9,12 +9,12 @@ Inventory_menu::Inventory_menu(Player* player) : Menu(player->game, player->inpu
 {
     // dbg_printf("CREATING NEW INVENTORY MENU\n");
     this->player = player;
-    if (player->active_item != NULL)
+    if (player->active_item != nullptr)
     {
         // dbg_printf("before add\n");
         player->inventory->items->add(0, player->active_item);
         // dbg_printf("before after\n");
-        player->active_item = NULL;
+        player->active_item = nullptr;
     }
 }
 
@@ -31,7 +31,7 @@ void Inventory_menu::tick()
     if (input->menu->clicked)
     {
         // dbg_printf("LEAVING INVENTORY\n");
-        game->set_menu(NULL);
+        game->set_menu(nullptr);
     }
 
     if (input->up->clicked && selected > 0)
@@ -47,7 +47,7 @@ void Inventory_menu::tick()
     {
         Item* item = player->inventory->items->remove(selected);
         player->active_item = item;
-        game->set_menu(NULL);
+        game->set_menu(nullptr);
     }
 }
 

@@ -39,7 +39,6 @@ class Level
     Arraylist<Entity>** entities_in_chunks;
     // Array of entities on screen, these will be ticked and drawn
     Arraylist<Entity>* screen_entities;
-    Arraylist<Entity>* deleted_entities;
     Player* player;
 
     // amount of ticks that have passed

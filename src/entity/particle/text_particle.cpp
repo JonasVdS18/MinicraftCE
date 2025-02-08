@@ -15,7 +15,7 @@ Text_particle::Text_particle(char* msg, uint8_t msg_length, int x, int y, uint8_
     za = (float)(randInt(0, 10)) / 10.0 * 0.7 + 2;
 }
 Text_particle::Text_particle(uint8_t number, uint8_t msg_length, int x, int y, uint8_t col)
-    : Entity(), msg{NULL}, number{number}, msg_length{msg_length}, col{col}, time{0}
+    : Entity(), msg{nullptr}, number{number}, msg_length{msg_length}, col{col}, time{0}
 {
     this->x = x;
     this->y = y;
@@ -55,7 +55,7 @@ void Text_particle::tick()
 
 void Text_particle::render(int x_scroll, int y_scroll)
 {
-    if (msg != NULL)
+    if (msg != nullptr)
     {
         Font::draw(msg, msg_length, x - x_scroll + 2, y - y_scroll - (int)zz + 2, 0, 1);
         Font::draw(msg, msg_length, x - x_scroll, y - y_scroll - (int)zz, col, 1);
