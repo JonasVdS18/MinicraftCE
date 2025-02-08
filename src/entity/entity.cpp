@@ -8,7 +8,7 @@
 #include <debug.h>
 
 Entity::Entity()
-    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(4)}
+    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(2)}
 {
 }
 
@@ -184,7 +184,8 @@ bool Entity::move2(int xa, int ya)
     {
         Entity* entity = nearby_entities->get(i);
         if (entity == this ||
-            !entity->intersects(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x, y + ya + radius_y))
+            !entity->intersects(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x, y + ya + radius_y) ||
+            entity->removed)
         {
             continue;
         }

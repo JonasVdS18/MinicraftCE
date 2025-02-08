@@ -29,7 +29,7 @@ void Mob::tick()
     // update the nearby entities every 16 ticks
     if (tick_time % 16 == 0)
     {
-        Arraylist<Entity>* tick_entities{level->get_entities(x - 1, y - 1, x + 1, y + 1)};
+        Arraylist<Entity>* tick_entities{level->get_entities(x - 50, y - 50, x + 50, y + 50)};
         nearby_entities->clear();
         nearby_entities->add_all(tick_entities);
         delete tick_entities;
@@ -196,17 +196,17 @@ bool Mob::find_start_pos(Level* level)
     int r = level->monster_density *
             32; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
 
-    Arraylist<Entity>* tick_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
-    nearby_entities->clear();
-    nearby_entities->add_all(tick_entities);
-    delete tick_entities;
+    Arraylist<Entity>* surrounding_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
+    // delete surrounding_entities;
 
-    if (nearby_entities->size() > 0)
+    if (surrounding_entities->size() > 0)
     {
         // delete entities_around_player;
+        delete surrounding_entities;
         return false; // Get a list of mobs in the level, within a box centered on our attempted coordinates, with
                       // dimensions of r times 2, and if there are any close to us, return false;
     }
+    delete surrounding_entities;
 
     // delete entities_around_player;
 

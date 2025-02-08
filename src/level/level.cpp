@@ -47,7 +47,8 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
       height_in_chunks{(uint8_t)((height + (int)chunk_size - 1) / (int)chunk_size)}, x_offset{0}, y_offset{0},
       monster_density{8}, entities{new Arraylist<Entity>(64)},
       entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
-      screen_entities{new Arraylist<Entity>(12)}, player{NULL}, depth{level}, tick_timer{0}
+      screen_entities{new Arraylist<Entity>(12)}, deleted_entities{new Arraylist<Entity>(4)}, player{NULL},
+      depth{level}, tick_timer{0}
 {
     // 2D array
     uint8_t** maps = NULL;
@@ -149,6 +150,16 @@ Level::~Level()
         }
         delete entities;
     }
+    if (deleted_entities != nullptr)
+    {
+        // delete all the entities
+        for (int i = 0; i < deleted_entities->size(); i++)
+        {
+            Entity* e = deleted_entities->remove_index(0);
+            delete e;
+        }
+        delete deleted_entities;
+    }
 }
 
 /* This method renders all the tiles in the game */
@@ -243,8 +254,10 @@ void Level::remove(Entity* e)
     }
     remove_entity(chunk_x + chunk_y * width_in_chunks, e);
     screen_entities->remove_element(e);
+
     // delete the entity
-    delete e;
+    deleted_entities->add(e);
+    // delete e;
 }
 
 void Level::remove_entity(uint8_t chunk, Entity* e)
@@ -369,6 +382,15 @@ void Level::tick()
         screen_entities->clear();
         screen_entities->add_all(tick_entities);
         delete tick_entities;
+
+        // delete all the entities that need to be deleted.
+        // dbg_printf("DELETING the entities\n");
+        if (deleted_entities->size() > 0)
+        {
+            // dbg_printf("deleting 1 entity\n");
+            Entity* e = deleted_entities->remove_index(0);
+            delete e;
+        }
     }
 
     // int amount = entities->size() > 10 ? 10 : entities->size();
