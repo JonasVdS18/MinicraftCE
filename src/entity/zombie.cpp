@@ -53,7 +53,7 @@ void Zombie::tick()
             }
         }
 
-        int8_t speed = tick_time & 1;
+        int8_t speed = level->tick_timer & 1;
         if (!Mob::move(xa * speed, ya * speed) || randInt(0, 200) == 0)
         { // moves the zombie, doubles as a check to see if it's still moving -OR- random chance out of 200
             random_walk_time = 60;                    // sets the not-so-random walk time to 60

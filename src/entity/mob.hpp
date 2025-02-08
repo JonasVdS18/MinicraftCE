@@ -23,7 +23,6 @@ class Mob : public Entity
     int8_t maxhealth;
     int8_t health;
     uint8_t swim_timer;
-    int tick_time;
     Mob();
     ~Mob();
     virtual void tick() override;

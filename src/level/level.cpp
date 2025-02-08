@@ -255,9 +255,18 @@ void Level::remove(Entity* e)
     remove_entity(chunk_x + chunk_y * width_in_chunks, e);
     screen_entities->remove_element(e);
 
+    // remove the entity from all the entities that might have it in their nearby list
+    // all the entities that are in their nearbylist should also have this entity in their nearby list
+    if (e->detectable)
+    {
+        for (int i = 0; i < e->nearby_entities->size(); i++)
+        {
+            e->nearby_entities->get(i)->nearby_entities->remove_element(e);
+        }
+    }
+
     // delete the entity
-    deleted_entities->add(e);
-    // delete e;
+    delete e;
 }
 
 void Level::remove_entity(uint8_t chunk, Entity* e)
@@ -378,7 +387,7 @@ void Level::tick()
     {
         Arraylist<Entity>* tick_entities{
             get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
-                         player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
+                         player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y, false)};
         screen_entities->clear();
         screen_entities->add_all(tick_entities);
         delete tick_entities;
@@ -430,7 +439,8 @@ void Level::tick()
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
 // This functions is very expensive
-Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
+// also detects entities that are not detectable when only_detectables is true
+Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1, bool only_detectables)
 {
     Arraylist<Entity>* result{new Arraylist<Entity>(4)};
     // dbg_printf("in getentities\n");
@@ -473,6 +483,11 @@ Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
                 for (int k = 0; k < size; k++)
                 {
                     Entity* e = entities->get(k);
+                    // if we only want detectables and the entity is not detecatble we skip it
+                    if (only_detectables && !e->detectable)
+                    {
+                        continue;
+                    }
                     if (e->intersects(x0, y0, x1, y1))
                     {
                         result->add(e);

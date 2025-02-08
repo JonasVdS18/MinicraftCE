@@ -8,7 +8,8 @@
 #include <debug.h>
 
 Entity::Entity()
-    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(2)}
+    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{NULL}, nearby_entities{new Arraylist<Entity>(2)},
+      detectable{false}
 {
 }
 
@@ -24,6 +25,16 @@ void Entity::render(int x_scroll, int y_scroll)
 void Entity::tick()
 {
     // dbg_printf("ENTITY TICK\n");
+    // update the nearby entities every 16 ticks
+    if (level->tick_timer % 16 == 0 && detectable)
+    {
+        Arraylist<Entity>* tick_entities{level->get_entities(x - 50, y - 50, x + 50, y + 50, true)};
+        nearby_entities->clear();
+        nearby_entities->add_all(tick_entities);
+
+        // nearby_entities->add_all(tick_entities);
+        delete tick_entities;
+    }
 }
 
 void Entity::remove()
@@ -183,20 +194,22 @@ bool Entity::move2(int xa, int ya)
     for (int i = 0; i < size; i++)
     {
         Entity* entity = nearby_entities->get(i);
-        if (entity == this ||
-            !entity->intersects(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x, y + ya + radius_y) ||
-            entity->removed)
+        if (entity == this || entity->removed)
         {
             continue;
         }
 
-        entity->touched_by(this);
-
-        if (entity->blocks(this))
+        // this means it is in the is_inside array in the java version
+        if (entity->intersects(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x, y + ya + radius_y))
         {
-            // delete was_inside;
-            // delete is_inside;
-            return false;
+            entity->touched_by(this);
+            // if it is not a part of the was_inside list in the java edition
+            if (entity->blocks(this) && !entity->intersects(x - radius_x, y - radius_y, x + radius_x, y + radius_y))
+            {
+                // delete was_inside;
+                // delete is_inside;
+                return false;
+            }
         }
     }
 

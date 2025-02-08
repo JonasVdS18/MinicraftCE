@@ -8,4 +8,5 @@ Particle::~Particle()
 }
 void Particle::tick()
 {
+    Entity::tick();
 }

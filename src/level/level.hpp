@@ -42,6 +42,9 @@ class Level
     Arraylist<Entity>* deleted_entities;
     Player* player;
 
+    // amount of ticks that have passed
+    unsigned int tick_timer;
+
     Level(int width, int height, int8_t level, Level* parent_level);
     ~Level();
 
@@ -60,11 +63,10 @@ class Level
     void remove_entity(uint8_t chunk, Entity* e);
     void try_spawn(int count);
     void tick();
-    Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1);
+    Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1, bool only_detectables);
 
   private:
     int8_t depth;
-    unsigned int tick_timer;
     void generate_screen_tiles();
     void update_screen_tiles(int x,
                              int y); // needs to be called if a tile is changed, x and y in tile coordinates

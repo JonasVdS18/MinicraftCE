@@ -113,7 +113,7 @@ void Player::tick()
         xa += 2;
     }
 
-    if (is_swimming() && (tick_time % 60) == 0)
+    if (is_swimming() && (level->tick_timer % 60) == 0)
     {
         if (stamina > 0)
         {

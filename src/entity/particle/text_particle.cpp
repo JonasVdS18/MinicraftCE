@@ -32,6 +32,7 @@ Text_particle::~Text_particle()
 
 void Text_particle::tick()
 {
+    Entity::tick();
     time++;
     if (time > 60)
     {

@@ -20,6 +20,8 @@ class Entity
     bool removed;
     Level* level;
     Arraylist<Entity>* nearby_entities;
+    // if true, this entity will be detected by nearby entitities and get_entities
+    bool detectable;
     Entity();
     virtual ~Entity();
     virtual void render(int x_scroll, int y_scroll);

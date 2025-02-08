@@ -10,12 +10,14 @@ class Level;
 
 Mob::Mob()
     : Mob::Entity(), walk_dist{0}, dir{0}, x_knockback{0}, y_knockback{0}, hurt_time{0}, maxhealth{10},
-      health{maxhealth}, swim_timer{0}, tick_time{0}
+      health{maxhealth}, swim_timer{0}
 {
     x = 8;
     y = 8;
     radius_x = 8;
     radius_y = 6;
+    // mobs should be detected by nearby_entities because other mobs need to know about this mob
+    detectable = true;
 }
 
 Mob::~Mob()
@@ -25,15 +27,7 @@ Mob::~Mob()
 void Mob::tick()
 {
     // dbg_printf("MOB TICK\n");
-    tick_time++;
-    // update the nearby entities every 16 ticks
-    if (tick_time % 16 == 0)
-    {
-        Arraylist<Entity>* tick_entities{level->get_entities(x - 50, y - 50, x + 50, y + 50)};
-        nearby_entities->clear();
-        nearby_entities->add_all(tick_entities);
-        delete tick_entities;
-    }
+    Entity::tick();
 
     if (level->get_tile(x >> 5, y >> 5) == Tile::lava) // >> 5 = divides by 32
     {
@@ -196,7 +190,7 @@ bool Mob::find_start_pos(Level* level)
     int r = level->monster_density *
             32; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
 
-    Arraylist<Entity>* surrounding_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
+    Arraylist<Entity>* surrounding_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r, true)};
     // delete surrounding_entities;
 
     if (surrounding_entities->size() > 0)
