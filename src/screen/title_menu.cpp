@@ -50,6 +50,7 @@ void Title_menu::tick()
 
 void Title_menu::render()
 {
+    gfx_ZeroScreen();
     // fontlib_ClearWindow();
     fontlib_SetWindow(0, (96 + rlet_logo_height), GFX_LCD_WIDTH, (GFX_LCD_HEIGHT - (96 + rlet_logo_height)));
     fontlib_SetCursorPosition(0, (96 + rlet_logo_height));

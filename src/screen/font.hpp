@@ -10,8 +10,8 @@ class Font
     static void draw(const char* msg, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color);
     // x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
     static void draw(uint8_t number, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color);
-    static void renderFrame(const char* title, uint8_t title_length, int x, int y, uint8_t width,
-                            uint8_t height); // x and y in screen pixels, width and height in 16x16 menu tiles
+    static void render_frame(const char* title, uint8_t title_length, int x, int y, uint8_t width,
+                             uint8_t height); // x and y in screen pixels, width and height in 16x16 menu tiles
     static void print_centered(const char* string);
 };
 

@@ -54,8 +54,8 @@ void Font::draw(uint8_t number, uint8_t msg_length, int x, int y, uint8_t fore_c
     }
 }
 
-void Font::renderFrame(const char* title, uint8_t title_length, int x, int y, uint8_t width,
-                       uint8_t height) // x and y in screen pixels, width and height in 16x16 menu tiles
+void Font::render_frame(const char* title, uint8_t title_length, int x, int y, uint8_t width,
+                        uint8_t height) // x and y in screen pixels, width and height in 16x16 menu tiles
 {
     gfx_RLETSprite_NoClip(rlet_frame_corner, x, y);
     gfx_RLETSprite_NoClip(rlet_frame_corner_flipped_y, x + (width - 1) * rlet_frame_corner_flipped_y_width, y);

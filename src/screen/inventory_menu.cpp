@@ -53,5 +53,5 @@ void Inventory_menu::tick()
 
 void Inventory_menu::render()
 {
-    Font::renderFrame("INVENTORY", 9, 16, 16, 11, 10);
+    Font::render_frame("INVENTORY", 9, 16, 16, 11, 10);
 }

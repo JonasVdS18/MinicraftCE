@@ -2,6 +2,7 @@
 #include "gfx/minigfx1.h"
 #include "gfx/minigfx2.h"
 #include "level/level.hpp"
+#include "screen/dead_menu.hpp"
 #include "screen/font.hpp"
 #include "screen/menu.hpp"
 #include "screen/title_menu.hpp"
@@ -28,7 +29,7 @@ void Game::set_menu(Menu* menu)
 
 Game::Game()
     : game_time{0}, has_won{false}, menu{nullptr}, player{nullptr}, running{true}, level{nullptr}, tick_count{0},
-      player_dead_time{0}, pending_level_change{0}, wontimer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
+      player_dead_time{0}, pending_level_change{0}, won_timer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
       input{new Input_handler()}, last_clock{clock()}, clockdiff{0}
 {
 }
@@ -133,13 +134,20 @@ void Game::reset()
     game_time = 0;
     player_dead_time = 0;
     pending_level_change = 0;
-    wontimer = 0;
+    won_timer = 0;
     has_won = false;
     current_level = 3;
+    prev_health = 0;
+    prev_stamina = 0;
 
     // placeholder level
     input->reset();
-    level = new Level(80, 80, 0, nullptr);
+    if (level != nullptr)
+    {
+        delete level;
+        level = nullptr;
+    }
+    level = new Level(80, 80, 0, NULL);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);
@@ -172,6 +180,13 @@ void Game::tick()
 {
     // dbg_printf("TICK START\n");
     tick_count++;
+    if (player != NULL)
+    {
+        if (!player->removed && !has_won)
+        {
+            game_time++;
+        }
+    }
     input->tick();
     if (input->quit->clicked)
     {
@@ -184,16 +199,41 @@ void Game::tick()
     }
     else
     {
+        if (player != nullptr)
+        {
+            if (player->removed)
+            {
+                player_dead_time++;
+                player = nullptr;
+            }
+            /*else if (pending_level_change != 0)
+            {
+
+            }*/
+        }
+        if (player == nullptr && player_dead_time > 0)
+        {
+            player_dead_time++;
+            if (player_dead_time > 60)
+            {
+                set_menu(new Dead_menu(this, input));
+            }
+        }
+        /*if (won_timer > 0)
+        {
+            won_timer--;
+            if (won_timer == 0)
+            {
+                set_menu(new Woon_menu(game, input));
+            }
+
+        }*/
         if (level != nullptr)
         {
             // player->tick(); // player has to be ticked first
             level->tick();
         }
         Tile::tick_count++;
-    }
-    if (player->removed)
-    {
-        player == nullptr;
     }
 }
 
@@ -205,10 +245,6 @@ void Game::render()
         level->render_background(level->x_offset, level->y_offset);
         // player->render(level->x_offset, level->y_offset);
         level->render_sprites(level->x_offset, level->y_offset);
-    }
-    else
-    {
-        gfx_ZeroScreen();
     }
     render_GUI();
 
@@ -224,7 +260,7 @@ void Game::schedule_level_change(int dir)
 void Game::won()
 {
     // dbg_printf("WON\n");
-    wontimer = 60 * 3;
+    won_timer = 60 * 3;
     has_won = true;
 }
 
