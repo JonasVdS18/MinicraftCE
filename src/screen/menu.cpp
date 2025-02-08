@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "../arraylist.hpp"
 #include "../game.hpp"
 #include "../input_handler.hpp"
 #include "../item/item.hpp"
@@ -17,7 +18,7 @@ void Menu::render()
 {
 }
 
-void Menu::render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Linked_list<Item>* list_items,
+void Menu::render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Arraylist<Item>* list_items,
                             int selected)
 {
     bool render_cursor = true; // Renders the ">" "<" arrows between a name.

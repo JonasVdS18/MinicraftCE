@@ -1,6 +1,7 @@
 #include "inventory.hpp"
+#include "../arraylist.hpp"
 
-Inventory::Inventory() : items{new Linked_list<Item>()}
+Inventory::Inventory() : items{new Arraylist<Item>()}
 {
 }
 

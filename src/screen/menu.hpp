@@ -1,6 +1,7 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
+#include "../arraylist.hpp"
 #include "../game.hpp"
 #include "../input_handler.hpp"
 #include "../item/item.hpp"
@@ -20,7 +21,7 @@ class Menu
     virtual ~Menu() = default;
     virtual void tick();
     virtual void render();
-    void render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Linked_list<Item>* list_items,
+    void render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Arraylist<Item>* list_items,
                           int selected);
 };
 #endif

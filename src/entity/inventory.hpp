@@ -1,12 +1,13 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
+#include "../arraylist.hpp"
 #include "../item/item.hpp"
 #include "../linked_list.hpp"
 
 class Inventory
 {
   public:
-    Linked_list<Item>* items;
+    Arraylist<Item>* items;
     Inventory();
     ~Inventory();
     void add(Item* item);
