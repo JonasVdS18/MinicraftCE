@@ -47,7 +47,7 @@ Level::Level(int width, int height, int8_t level, Level* parent_level)
       height_in_chunks{(uint8_t)((height + (int)chunk_size - 1) / (int)chunk_size)}, x_offset{0}, y_offset{0},
       monster_density{8}, entities{new Arraylist<Entity>(64)},
       entities_in_chunks{new Arraylist<Entity>*[width_in_chunks * height_in_chunks]},
-      screen_entities{new Arraylist<Entity>(12)}, depth{level}, tick_timer{0}
+      screen_entities{new Arraylist<Entity>(12)}, player{nullptr}, depth{level}, tick_timer{0}
 {
     // 2D array
     uint8_t** maps = nullptr;
@@ -412,9 +412,11 @@ void Level::tick()
     }
 
     // delete tick_entities;
-
-    x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
-    y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
+    if (player != nullptr)
+    {
+        x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
+        y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
+    }
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/

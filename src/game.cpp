@@ -147,7 +147,7 @@ void Game::reset()
         delete level;
         level = nullptr;
     }
-    level = new Level(80, 80, 0, NULL);
+    level = new Level(80, 80, 0, nullptr);
     player = new Player(this, input);
     player->find_start_pos(level);
     level->add(player);

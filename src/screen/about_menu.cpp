@@ -21,6 +21,7 @@ void About_menu::tick()
 
 void About_menu::render()
 {
+    gfx_ZeroScreen();
     // fontlib_ClearWindow();
     fontlib_SetWindowFullScreen();
     fontlib_HomeUp();

@@ -21,6 +21,7 @@ void Instructions_menu::tick()
 
 void Instructions_menu::render()
 {
+    gfx_ZeroScreen();
     // fontlib_ClearWindow();
     fontlib_SetWindowFullScreen();
     fontlib_HomeUp();
