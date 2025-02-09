@@ -7,15 +7,12 @@
 #include "player.hpp"
 #include <debug.h>
 
-Entity::Entity()
-    : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{nullptr}, nearby_entities{new Arraylist<Entity>(2)},
-      detectable{false}
+Entity::Entity() : x{0}, y{0}, radius_x{12}, radius_y{12}, removed{false}, level{nullptr}
 {
 }
 
 Entity::~Entity()
 {
-    delete nearby_entities;
 }
 
 void Entity::render(int x_scroll, int y_scroll)
@@ -25,16 +22,6 @@ void Entity::render(int x_scroll, int y_scroll)
 void Entity::tick()
 {
     // dbg_printf("ENTITY TICK\n");
-    // update the nearby entities every 16 ticks
-    if (level->tick_timer % 16 == 0 && detectable)
-    {
-        Arraylist<Entity>* tick_entities{level->get_entities(x - 50, y - 50, x + 50, y + 50, true)};
-        nearby_entities->clear();
-        nearby_entities->add_all(tick_entities);
-
-        // nearby_entities->add_all(tick_entities);
-        delete tick_entities;
-    }
 }
 
 void Entity::remove()
@@ -127,74 +114,11 @@ bool Entity::move2(int xa, int ya)
         return false;
     }
 
-    /*
-    Arraylist<Entity>* was_inside =
-        level->get_entities(x - radius_x, y - radius_y, x + radius_x,
-                            y + radius_y); // gets all of the entities that are inside this entity (aka: colliding)
-    */
-
-    /*
-    Arraylist<Entity>* is_inside =
-        level->get_entities(x + xa - radius_x, y + ya - radius_y, x + xa + radius_x,
-                            y + ya + radius_y); // gets the entities that this entity will touch.
-    */
-
-    /*
-    int is_inside_size{is_inside->size()};
-    for (int i = 0; i < is_inside_size; i++)
-    {
-        Entity* entity = is_inside->get(i);
-        if (entity == this)
-        {
-            continue;
-        }
-
-        entity->touched_by(this);
-    }
-    // is_inside->remove_all(was_inside);
-    for (int i = 0; i < is_inside_size; i++)
-    {
-        Entity* entity = is_inside->get(i);
-        if (entity == this)
-        {
-            continue;
-        }
-
-        if (entity->blocks(this))
-        {
-            delete was_inside;
-            delete is_inside;
-            return false;
-        }
-    }
-    */
-
-    /*
-    int is_inside_size{is_inside->size()};
-    for (int i = 0; i < is_inside_size; i++)
-    {
-        Entity* entity = is_inside->get(i);
-        if (entity == this)
-        {
-            continue;
-        }
-
-        entity->touched_by(this);
-
-        if (entity->blocks(this))
-        {
-            // delete was_inside;
-            delete is_inside;
-            return false;
-        }
-    }
-    */
-
-    int size{nearby_entities->size()};
+    int size{level->screen_entities->size()};
     for (int i = 0; i < size; i++)
     {
-        Entity* entity = nearby_entities->get(i);
-        if (entity == this || entity->removed)
+        Entity* entity = level->screen_entities->get(i);
+        if (entity == this)
         {
             continue;
         }

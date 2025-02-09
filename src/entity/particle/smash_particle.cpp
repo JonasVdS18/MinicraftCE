@@ -11,7 +11,6 @@ Smash_particle::~Smash_particle()
 }
 void Smash_particle::tick()
 {
-    Entity::tick();
     time++;
     if (time > 10)
     {

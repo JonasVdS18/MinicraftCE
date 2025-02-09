@@ -244,16 +244,6 @@ void Level::remove(Entity* e)
     remove_entity(chunk_x + chunk_y * width_in_chunks, e);
     screen_entities->remove_element(e);
 
-    // remove the entity from all the entities that might have it in their nearby list
-    // all the entities that are in their nearbylist should also have this entity in their nearby list
-    if (e->detectable)
-    {
-        for (int i = 0; i < e->nearby_entities->size(); i++)
-        {
-            e->nearby_entities->get(i)->nearby_entities->remove_element(e);
-        }
-    }
-
     // delete the entity
     delete e;
 }
@@ -376,7 +366,7 @@ void Level::tick()
     {
         Arraylist<Entity>* tick_entities{
             get_entities(player->x - ENTITY_TICK_RADIUS_X, player->y - ENTITY_TICK_RADIUS_Y,
-                         player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y, false)};
+                         player->x + ENTITY_TICK_RADIUS_X, player->y + ENTITY_TICK_RADIUS_Y)};
         screen_entities->clear();
         screen_entities->add_all(tick_entities);
         delete tick_entities;
@@ -387,6 +377,13 @@ void Level::tick()
     for (int i = 0; i < screen_entities->size(); i++)
     {
         Entity* e = screen_entities->get(i);
+        // Only tick the entities that are on screen
+        if (!e->intersects(player->x - GFX_LCD_WIDTH / 2, player->y - GFX_LCD_HEIGHT / 2, player->x + GFX_LCD_WIDTH / 2,
+                           player->y + GFX_LCD_HEIGHT / 2))
+        {
+            continue;
+        }
+
         uint8_t chunk_x_old = e->x / (32 * chunk_size);
         uint8_t chunk_y_old = e->y / (32 * chunk_size);
         int old_chunk = chunk_x_old + chunk_y_old * width_in_chunks;
@@ -422,7 +419,7 @@ void Level::tick()
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
 // This functions is very expensive
 // also detects entities that are not detectable when only_detectables is true
-Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1, bool only_detectables)
+Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1)
 {
     Arraylist<Entity>* result{new Arraylist<Entity>(4)};
     // dbg_printf("in getentities\n");
@@ -465,11 +462,6 @@ Arraylist<Entity>* Level::get_entities(int x0, int y0, int x1, int y1, bool only
                 for (int k = 0; k < size; k++)
                 {
                     Entity* e = entities->get(k);
-                    // if we only want detectables and the entity is not detecatble we skip it
-                    if (only_detectables && !e->detectable)
-                    {
-                        continue;
-                    }
                     if (e->intersects(x0, y0, x1, y1))
                     {
                         result->add(e);

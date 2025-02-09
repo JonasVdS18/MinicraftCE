@@ -203,11 +203,11 @@ bool Player::use(int x0, int y0, int x1, int y1)
     return false;
     */
 
-    int size{nearby_entities->size()};
+    int size{level->screen_entities->size()};
     for (int i = 0; i < size; i++)
     {
-        Entity* entity = nearby_entities->get(i);
-        if (entity != this && entity->intersects(x0, y0, x1, y1) && !entity->removed)
+        Entity* entity = level->screen_entities->get(i);
+        if (entity != this && entity->intersects(x0, y0, x1, y1))
         {
             if (entity->use(this, attack_dir))
             {
@@ -238,11 +238,11 @@ bool Player::interact(int x0, int y0, int x1, int y1)
     return false;
     */
 
-    int size{nearby_entities->size()};
+    int size{level->screen_entities->size()};
     for (int i = 0; i < size; i++)
     {
-        Entity* entity = nearby_entities->get(i);
-        if (!entity->intersects(x0, y0, x1, y1) || entity->removed)
+        Entity* entity = level->screen_entities->get(i);
+        if (!entity->intersects(x0, y0, x1, y1))
             continue;
         if (entity != this && entity->interact(this, active_item, attack_dir))
         {
@@ -393,11 +393,11 @@ void Player::hurt(int x0, int y0, int x1, int y1)
     delete entities;
     */
 
-    int size{nearby_entities->size()};
+    int size{level->screen_entities->size()};
     for (int i = 0; i < size; i++)
     {
-        Entity* entity = nearby_entities->get(i);
-        if (entity != this && entity->intersects(x0, y0, x1, y1) && !entity->removed)
+        Entity* entity = level->screen_entities->get(i);
+        if (entity != this && entity->intersects(x0, y0, x1, y1))
         {
             entity->hurt(this, get_attack_damage(entity), attack_dir);
         }

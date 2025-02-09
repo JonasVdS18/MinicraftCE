@@ -62,7 +62,7 @@ class Level
     void remove_entity(uint8_t chunk, Entity* e);
     void try_spawn(int count);
     void tick();
-    Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1, bool only_detectables);
+    Arraylist<Entity>* get_entities(int x0, int y0, int x1, int y1);
 
   private:
     int8_t depth;

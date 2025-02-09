@@ -16,8 +16,6 @@ Mob::Mob()
     y = 8;
     radius_x = 8;
     radius_y = 6;
-    // mobs should be detected by nearby_entities because other mobs need to know about this mob
-    detectable = true;
 }
 
 Mob::~Mob()
@@ -27,8 +25,6 @@ Mob::~Mob()
 void Mob::tick()
 {
     // dbg_printf("MOB TICK\n");
-    Entity::tick();
-
     if (level->get_tile(x >> 5, y >> 5) == Tile::lava) // >> 5 = divides by 32
     {
         hurt(this, 4, dir ^ 1);
@@ -190,7 +186,7 @@ bool Mob::find_start_pos(Level* level)
     int r = level->monster_density *
             32; // Get the allowed density of mobs in the level, convert it from a tile to a real coordinate
 
-    Arraylist<Entity>* surrounding_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r, true)};
+    Arraylist<Entity>* surrounding_entities{level->get_entities(xx - r, yy - r, xx + r, yy + r)};
     // delete surrounding_entities;
 
     if (surrounding_entities->size() > 0)
