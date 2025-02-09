@@ -9,6 +9,11 @@ Inventory::Inventory() : items{new Arraylist<Item>()}
 
 Inventory::~Inventory()
 {
+    for (int i = 0; i < items->size(); i++)
+    {
+        delete items->get(i);
+    }
+
     delete items;
 }
 

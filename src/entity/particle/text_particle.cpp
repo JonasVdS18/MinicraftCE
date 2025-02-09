@@ -56,8 +56,8 @@ void Text_particle::render(int x_scroll, int y_scroll)
 {
     if (msg != nullptr)
     {
-        Font::draw(msg, msg_length, x - x_scroll + 2, y - y_scroll - (int)zz + 2, 0, 1);
-        Font::draw(msg, msg_length, x - x_scroll, y - y_scroll - (int)zz, col, 1);
+        Font::draw(msg, x - x_scroll + 2, y - y_scroll - (int)zz + 2, 0, 1);
+        Font::draw(msg, x - x_scroll, y - y_scroll - (int)zz, col, 1);
     }
     else
     {

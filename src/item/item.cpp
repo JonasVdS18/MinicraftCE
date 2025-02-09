@@ -4,6 +4,7 @@
 
 Item::Item()
 {
+    name[0] = '\0';
 }
 
 Item::~Item()
@@ -42,14 +43,9 @@ uint8_t get_attack_damage_bonus(Entity* entity)
     return 0;
 }
 
-const char* Item::get_name()
-{
-    return static_cast<const char*>("");
-}
-
 bool Item::matches(Item* item)
 {
-    return this->get_name() == item->get_name();
+    return this->name == item->name;
 }
 
 bool Item::interact_on(Tile* tile, Level* level, int xt, int yt, Player* player, uint8_t attack_dir)

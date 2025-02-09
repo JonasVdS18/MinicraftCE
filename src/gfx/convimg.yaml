@@ -51,6 +51,31 @@ converts:
       - slime_jump.png
       - smash_particle.png
       - slash.png
+      - axe_wood.png
+      - axe_stone.png
+      - axe_iron.png
+      - axe_gold.png
+      - axe_gem.png
+      - pickaxe_wood.png
+      - pickaxe_stone.png
+      - pickaxe_iron.png
+      - pickaxe_gold.png
+      - pickaxe_gem.png
+      - hoe_wood.png
+      - hoe_stone.png
+      - hoe_iron.png
+      - hoe_gold.png
+      - hoe_gem.png
+      - shovel_wood.png
+      - shovel_stone.png
+      - shovel_iron.png
+      - shovel_gold.png
+      - shovel_gem.png
+      - sword_wood.png
+      - sword_stone.png
+      - sword_iron.png
+      - sword_gold.png
+      - sword_gem.png
 
   - name: rlet_sprites_flipped_y
     prefix: rlet_

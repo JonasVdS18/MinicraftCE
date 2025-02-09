@@ -55,5 +55,6 @@ void Inventory_menu::tick()
 
 void Inventory_menu::render()
 {
-    Font::render_frame("INVENTORY", 9, 16, 16, 11, 10);
+    Font::render_frame("INVENTORY", 9, 1, 1, 12, 11);
+    render_item_list(1, 1, 12, 11, player->inventory->items, selected);
 }

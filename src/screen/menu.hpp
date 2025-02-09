@@ -21,7 +21,6 @@ class Menu
     virtual ~Menu() = default;
     virtual void tick();
     virtual void render();
-    void render_item_list(uint8_t begin_x, uint8_t begin_y, uint8_t box_height, Arraylist<Item>* list_items,
-                          int selected);
+    void render_item_list(int xo, int yo, int x1, int y1, Arraylist<Item>* list_items, int selected);
 };
 #endif

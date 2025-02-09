@@ -270,25 +270,15 @@ void Player::attack()
     {
         attack_time = 10;
         if (dir == 0 && interact(x - 16, y + 8 + y_offset, x + 16, y + range + y_offset))
-        {
             done = true;
-        }
         if (dir == 1 && interact(x - 16, y - range + y_offset, x + 16, y - 8 + y_offset))
-        {
             done = true;
-        }
         if (dir == 3 && interact(x + 8, y - 16 + y_offset, x + range, y + 16 + y_offset))
-        {
             done = true;
-        }
         if (dir == 2 && interact(x - range, y - 16 + y_offset, x - 8, y + 16 + y_offset))
-        {
             done = true;
-        }
         if (done)
-        {
             return;
-        }
 
         if (attack_dir == 0)
         {
@@ -482,15 +472,23 @@ void Player::render(int x_scroll, int y_scroll)
         {
         case 0: // slash down
             gfx_RLETSprite(rlet_slash_flipped_x, x - x_scroll, y - y_scroll + 24);
+            if (attack_item != nullptr)
+                attack_item->render_icon(x - x_scroll + 8, y - y_scroll + 24);
             break;
         case 1: // slash up
             gfx_RLETSprite(rlet_slash, x - x_scroll, y - y_scroll - 8);
+            if (attack_item != nullptr)
+                attack_item->render_icon(x - x_scroll + 8, y - y_scroll - 8);
             break;
         case 2: // slash left
             gfx_RLETSprite(rlet_slash_rotated_270, x - x_scroll - 8, y - y_scroll);
+            if (attack_item != nullptr)
+                attack_item->render_icon(x - x_scroll - 8, y - y_scroll + 8);
             break;
         case 3: // slash right
             gfx_RLETSprite(rlet_slash_rotated_90, x - x_scroll + 24, y - y_scroll);
+            if (attack_item != nullptr)
+                attack_item->render_icon(x - x_scroll + 24, y - y_scroll + 8);
             break;
 
         default:

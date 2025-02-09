@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "gfx/minigfx1.h"
 #include "gfx/minigfx2.h"
+#include "item/tool_item.hpp"
 #include "level/level.hpp"
 #include "screen/dead_menu.hpp"
 #include "screen/font.hpp"
@@ -149,6 +150,7 @@ void Game::reset()
     }
     level = new Level(80, 80, 0, nullptr);
     player = new Player(this, input);
+    player->inventory->add(new Tool_item(Tool_type::sword, 0));
     player->find_start_pos(level);
     level->add(player);
 
