@@ -5,10 +5,8 @@
 #include <debug.h>
 #include <fontlibc.h>
 
-Inventory_menu::Inventory_menu(Player* player) : Menu(player->game, player->input)
+Inventory_menu::Inventory_menu(Player* player) : Menu(player->game, player->input), player{player}, selected{0}
 {
-    // dbg_printf("CREATING NEW INVENTORY MENU\n");
-    this->player = player;
     if (player->active_item != nullptr)
     {
         // dbg_printf("before add\n");
@@ -34,14 +32,18 @@ void Inventory_menu::tick()
         game->set_menu(nullptr);
     }
 
-    if (input->up->clicked && selected > 0)
-    {
+    if (input->up->clicked)
         selected--;
-    }
-    if (input->down->clicked && selected < len)
-    {
+    if (input->down->clicked)
         selected++;
-    }
+
+    if (len == 0)
+        selected = 0;
+
+    if (selected < 0)
+        selected += len;
+    if (selected >= len)
+        selected -= len;
 
     if (input->attack->clicked && len > 0)
     {

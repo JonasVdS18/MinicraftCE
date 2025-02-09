@@ -2,6 +2,8 @@
 #define INVENTORY_HPP
 #include "../arraylist.hpp"
 #include "../item/item.hpp"
+#include "../item/resource/resource.hpp"
+#include "../item/resource_item.hpp"
 #include "../linked_list.hpp"
 
 class Inventory
@@ -12,6 +14,7 @@ class Inventory
     ~Inventory();
     void add(Item* item);
     void add(int slot, Item* item);
+    int count(Item* item);
 };
 
 #endif

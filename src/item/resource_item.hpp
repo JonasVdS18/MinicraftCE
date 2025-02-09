@@ -3,8 +3,8 @@
 
 #include "item.hpp"
 
-class Resource_item : Item
+class Resource_item : public Item
 {
-}
+};
 
 #endif

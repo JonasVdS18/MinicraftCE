@@ -3,6 +3,6 @@
 
 class Resource
 {
-}
+};
 
 #endif
