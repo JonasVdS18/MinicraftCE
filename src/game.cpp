@@ -33,7 +33,7 @@ void Game::set_menu(Menu* menu)
 Game::Game()
     : game_time{0}, has_won{false}, menu{nullptr}, player{nullptr}, running{true}, level{nullptr}, tick_count{0},
       player_dead_time{0}, pending_level_change{0}, won_timer{0}, current_level{3}, prev_health{0}, prev_stamina{0},
-      input{new Input_handler()}, last_clock{clock()}, clockdiff{0}
+      input{new Input_handler()}, last_clock{clock()}, clockdiff{0}, score{0}
 {
 }
 
@@ -143,6 +143,7 @@ void Game::reset()
     current_level = 3;
     prev_health = 0;
     prev_stamina = 0;
+    score = 0;
 
     // placeholder level
     input->reset();
@@ -224,6 +225,7 @@ void Game::tick()
             if (player->removed)
             {
                 player_dead_time++;
+                score = player->score;
                 player = nullptr;
             }
             /*else if (pending_level_change != 0)

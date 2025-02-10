@@ -85,7 +85,7 @@ void Slime::die()
 {
     Mob::die();
 
-    uint8_t count = 2 * (randInt(0, 1) + 1);
+    uint8_t count{static_cast<uint8_t>(randInt(0, 1) + 1)};
     //!!!!!!!!!!
     /*
     for (uint8_t i = 0; i < count; i++)

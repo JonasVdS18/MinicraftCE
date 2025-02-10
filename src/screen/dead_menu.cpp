@@ -45,7 +45,7 @@ void Dead_menu::render()
         Font::draw("S", 208, 80, 6, 5);
     }
     Font::draw("SCORE:", 32, 96, 2, 5);
-    Font::draw(game->player->score, 128, 96, 6, 5);
+    Font::draw(game->score, 128, 96, 6, 5);
     Font::draw("PRESS 2ND", 32, 128, 3, 5);
     Font::draw("TO LOSE", 32, 144, 3, 5);
 }

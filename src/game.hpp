@@ -13,6 +13,7 @@ class Game
 {
   public:
     int game_time;
+    int score;
     bool has_won;
     Menu* menu;
     Player* player;

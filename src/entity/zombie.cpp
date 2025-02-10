@@ -144,4 +144,18 @@ void Zombie::touched_by(Entity* entity)
 void Zombie::die()
 {
     Mob::die();
+
+    uint8_t count{static_cast<uint8_t>(randInt(0, 1) + 1)};
+    /*
+    for (int i = 0; i < count; i++)
+    {
+        level.add(new ItemEntity(new ResourceItem(Resource.cloth), x + random.nextInt(11) - 5,
+                                 y + random.nextInt(11) - 5));
+    }
+    */
+
+    if (level->player != nullptr)
+    {
+        level->player->score += 50 * lvl;
+    }
 }
