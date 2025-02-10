@@ -77,6 +77,27 @@ converts:
       - sword_gold.png
       - sword_gem.png
       - apple.png
+      - wood.png
+      - cloth.png
+      - stone.png
+      - power_gloves.png
+      - acorn.png
+      - cactus.png
+      - flower.png
+      - seeds.png
+      - wheat.png
+      - slime_ball.png
+      - sand.png
+      - dirt.png
+      - coal.png
+      - iron_ore.png
+      - gold_ore.png
+      - gem_ore.png
+      - cloud.png
+      - bread.png
+      - iron.png
+      - gold.png
+      - glass.png
 
   - name: rlet_sprites_flipped_y
     prefix: rlet_

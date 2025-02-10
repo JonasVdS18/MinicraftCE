@@ -171,7 +171,7 @@ void Game::reset()
     player->inventory->add(new Tool_item(Tool_type::sword, 1));*/
     player->inventory->add(new Resource_item(Resource::apple));
     player->inventory->add(new Resource_item(Resource::apple));
-
+    player->inventory->add(new Resource_item(Resource::wood));
     player->find_start_pos(level);
     level->add(player);
 
