@@ -137,6 +137,7 @@ void Player::tick()
             stamina--;
             stamina_recharge = 0;
             attack();
+            dbg_printf("Back from attack\n");
         }
     }
 
@@ -154,6 +155,7 @@ void Player::tick()
     {
         attack_time--;
     }
+    dbg_printf("reached the end of tick\n");
 }
 
 void Player::change_level(int8_t dir)

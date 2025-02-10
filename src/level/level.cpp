@@ -316,6 +316,7 @@ void Level::try_spawn(int count)
 
 void Level::tick()
 {
+    dbg_printf("Begin of tick\n");
     // dbg_printf("Tick Started\n");
     tick_timer++;
     // only spwan every 16 ticks
@@ -334,6 +335,7 @@ void Level::tick()
         get_tile(xt, yt)->tick(this, xt, yt, 1);
         tiles_tick_amount++;
     }
+    dbg_printf("ticked frequent tiles\n");
 
     // Update the tiles that are not visible less frequent but in larger increments.
     const int AMOUNT_OF_TILES_TO_TICK_INFREQUENTLY{(width * height - AMOUNT_OF_TILES_TO_TICK_FREQUENTLY) / 50 /
@@ -357,6 +359,7 @@ void Level::tick()
             tiles_tick_amount++;
         }
     }
+    dbg_printf("ticked infrequent tiles\n");
 
     // dbg_printf("ticking entities\n");
     // dbg_printf("entities size: %i\n", entities->size());
@@ -371,6 +374,7 @@ void Level::tick()
         screen_entities->add_all(tick_entities);
         delete tick_entities;
     }
+    dbg_printf("got the entities\n");
 
     // int amount = entities->size() > 10 ? 10 : entities->size();
     // dbg_printf("screen_entities size: %i\n", screen_entities->size());
@@ -407,6 +411,7 @@ void Level::tick()
             }
         }
     }
+    dbg_printf("ticked entities\n");
 
     // delete tick_entities;
     if (player != nullptr)
@@ -414,6 +419,7 @@ void Level::tick()
         x_offset = player->x - GFX_LCD_WIDTH / 2 + 16;
         y_offset = player->y - GFX_LCD_HEIGHT / 2 + 32;
     }
+    dbg_printf("end of tick\n");
 }
 
 /* Gets all the entities from a square area of 4 points. The pointer that gets returned has to be DELETED!!!*/
