@@ -5,6 +5,7 @@
 #include "../item/item.hpp"
 #include "../linked_list.hpp"
 #include "font.hpp"
+#include <debug.h>
 #include <fontlibc.h>
 
 Menu::Menu(Game* game, Input_handler* input) : game{game}, input{input}

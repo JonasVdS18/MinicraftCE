@@ -261,8 +261,10 @@ void Player::attack()
 
         if ((x_tile >= 0) && (y_tile >= 0) && (x_tile < level->width) && (y_tile < level->height))
         {
+            dbg_printf("going to interact\n");
             if (active_item->interact_on(level->get_tile(x_tile, y_tile), level, x_tile, y_tile, this, attack_dir))
             {
+                dbg_printf("interacted\n");
                 done = true;
             }
             else
@@ -274,17 +276,21 @@ void Player::attack()
             }
             if (active_item->is_depleted())
             {
+                dbg_printf("going to delete\n");
                 delete active_item;
+                dbg_printf("deleted\n");
                 active_item = nullptr;
+                dbg_printf("nullptr\n");
             }
         }
     }
 
     if (done)
     {
+        dbg_printf("done\n");
         return;
     }
-
+    dbg_printf("after done\n");
     if (active_item == nullptr || active_item->can_attack())
     {
         attack_time = 5;

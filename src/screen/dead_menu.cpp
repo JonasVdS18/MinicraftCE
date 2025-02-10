@@ -32,20 +32,20 @@ void Dead_menu::render()
     Font::draw("TIME:", 32, 80, 2, 5);
     if (hours > 0)
     {
-        Font::draw(hours, 1, 112, 80, 6, 5);
+        Font::draw(hours, 112, 80, 6, 5);
         Font::draw("H", 128, 80, 6, 5);
-        Font::draw(minutes, 2, 160, 80, 6, 5);
+        Font::draw(minutes, 160, 80, 6, 5);
         Font::draw("M", 192, 80, 6, 5);
     }
     else
     {
-        Font::draw(minutes, 2, 112, 80, 6, 5);
+        Font::draw(minutes, 112, 80, 6, 5);
         Font::draw("M", 144, 80, 6, 5);
-        Font::draw(seconds, 2, 176, 80, 6, 5);
+        Font::draw(seconds, 176, 80, 6, 5);
         Font::draw("S", 208, 80, 6, 5);
     }
     Font::draw("SCORE:", 32, 96, 2, 5);
-    Font::draw(game->player->score, 3, 128, 96, 6, 5);
+    Font::draw(game->player->score, 128, 96, 6, 5);
     Font::draw("PRESS 2ND", 32, 128, 3, 5);
     Font::draw("TO LOSE", 32, 144, 3, 5);
 }

@@ -76,6 +76,7 @@ converts:
       - sword_iron.png
       - sword_gold.png
       - sword_gem.png
+      - apple.png
 
   - name: rlet_sprites_flipped_y
     prefix: rlet_

@@ -1,6 +1,7 @@
 #include "item.hpp"
 #include "../entity/entity.hpp"
 #include "../entity/player.hpp"
+#include "debug.h"
 
 Item::Item()
 {

@@ -1,6 +1,8 @@
 #include "game.hpp"
 #include "gfx/minigfx1.h"
 #include "gfx/minigfx2.h"
+#include "item/resource/food_resource.hpp"
+#include "item/resource_item.hpp"
 #include "item/tool_item.hpp"
 #include "level/level.hpp"
 #include "screen/dead_menu.hpp"
@@ -91,6 +93,7 @@ bool Game::init()
     {
         return 1;
     }
+    Resource::init_resources();
 
     if (minigfx2_init() == 0)
     {
@@ -150,7 +153,22 @@ void Game::reset()
     }
     level = new Level(80, 80, 0, nullptr);
     player = new Player(this, input);
+    player->inventory->add(new Tool_item(Tool_type::sword, 4));
+    /*player->inventory->add(new Tool_item(Tool_type::sword, 0));
+    player->inventory->add(new Tool_item(Tool_type::sword, 1));
+    player->inventory->add(new Tool_item(Tool_type::sword, 2));
+    player->inventory->add(new Tool_item(Tool_type::sword, 3));
+    player->inventory->add(new Tool_item(Tool_type::sword, 4));
     player->inventory->add(new Tool_item(Tool_type::sword, 0));
+    player->inventory->add(new Tool_item(Tool_type::sword, 1));
+    player->inventory->add(new Tool_item(Tool_type::sword, 4));
+    player->inventory->add(new Tool_item(Tool_type::sword, 2));
+    player->inventory->add(new Tool_item(Tool_type::sword, 4));
+    player->inventory->add(new Tool_item(Tool_type::sword, 3));
+    player->inventory->add(new Tool_item(Tool_type::sword, 0));
+    player->inventory->add(new Tool_item(Tool_type::sword, 0));
+    player->inventory->add(new Tool_item(Tool_type::sword, 1));*/
+    player->inventory->add(new Resource_item(Resource::apple, 1));
     player->find_start_pos(level);
     level->add(player);
 

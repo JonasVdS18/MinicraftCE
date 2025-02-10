@@ -33,8 +33,17 @@ void Font::draw(const char* msg, int x, int y, uint8_t fore_color, uint8_t back_
     fontlib_SetTransparency(false);
 }
 // x and y in screen pixel coordinates, colors mapped with index in convimg.yaml
-void Font::draw(uint8_t number, uint8_t msg_length, int x, int y, uint8_t fore_color, uint8_t back_color)
+void Font::draw(int number, int x, int y, uint8_t fore_color, uint8_t back_color)
 {
+    uint8_t msg_length = 1;
+    if (number > 9)
+    {
+        msg_length = 2;
+    }
+    if (number > 99)
+    {
+        msg_length = 3;
+    }
     if (y < GFX_LCD_HEIGHT - 64)
     {
         if (back_color == 1) // if the background is transparent
