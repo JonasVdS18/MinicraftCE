@@ -15,6 +15,7 @@ class Inventory
     void add(Item* item);
     void add(int slot, Item* item);
     int count(Item* item);
+    Resource_item* find_resource(Resource* resource);
 };
 
 #endif

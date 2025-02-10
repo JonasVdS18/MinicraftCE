@@ -26,8 +26,6 @@ void Inventory::add(int slot, Item* item)
 {
     if (dynamic_cast<Resource_item*>(item) != nullptr)
     {
-        //!!!!!!!!!!
-        /*
         Resource_item* to_take = static_cast<Resource_item*>(item);
         Resource_item* has = find_resource(to_take->resource);
         if (has == nullptr)
@@ -38,7 +36,6 @@ void Inventory::add(int slot, Item* item)
         {
             has->count += to_take->count;
         }
-        */
     }
     else
     {
@@ -51,11 +48,9 @@ int Inventory::count(Item* item)
 {
     if (dynamic_cast<Resource_item*>(item) != nullptr)
     {
-        /*
-        ResourceItem ri = findResource(((ResourceItem)item).resource);
-        if (ri != null)
-            return ri.count;
-            */
+        Resource_item* ri = find_resource((static_cast<Resource_item*>(item))->resource);
+        if (ri != nullptr)
+            return ri->count;
     }
     else
     {
@@ -68,4 +63,18 @@ int Inventory::count(Item* item)
         return count;
     }
     return 0;
+}
+
+Resource_item* Inventory::find_resource(Resource* resource)
+{
+    for (int i = 0; i < items->size(); i++)
+    {
+        if (dynamic_cast<Resource_item*>(items->get(i)) != nullptr)
+        {
+            Resource_item* has = static_cast<Resource_item*>(items->get(i));
+            if (has->resource == resource)
+                return has;
+        }
+    }
+    return nullptr;
 }
